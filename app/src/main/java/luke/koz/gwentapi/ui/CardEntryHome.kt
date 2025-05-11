@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import luke.koz.gwentapi.data.datasource.CardLocalDataSource
+import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.local.database.AppDatabase
 import luke.koz.gwentapi.data.local.database.GwentApplication
 import luke.koz.gwentapi.data.remote.api.ApiClient
@@ -33,8 +35,8 @@ fun CardEntryHome(cardId: Int) {
     val apiService = remember { ApiClient.apiService }
     val repository = remember {
         CardRepository(
-            api = apiService,
-            dao = database.cardDao()
+            remote = CardRemoteDataSource(apiService),
+            local = CardLocalDataSource(database.cardDao())
         )
     }
     val viewModel: CardViewModel = viewModel(
