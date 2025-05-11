@@ -33,9 +33,3 @@ abstract class AppDatabase : RoomDatabase() {
         }
     }
 }
-class GwentApplication : Application() {
-    val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
-    val persistentImageLoader by lazy {
-        PersistentImageLoader.create(this)
-    }
-}

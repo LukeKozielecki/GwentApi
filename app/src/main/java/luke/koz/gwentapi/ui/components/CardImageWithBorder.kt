@@ -15,7 +15,7 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import luke.koz.gwentapi.R
-import luke.koz.gwentapi.data.local.database.GwentApplication
+import luke.koz.gwentapi.application.GwentApplication
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
 @Composable

@@ -18,9 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import luke.koz.gwentapi.application.GwentApplication
 import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
-import luke.koz.gwentapi.data.local.database.GwentApplication
 import luke.koz.gwentapi.data.remote.api.ApiClient
 import luke.koz.gwentapi.data.repository.CardRepository
 import luke.koz.gwentapi.domain.viewModel.CardState
