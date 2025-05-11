@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column (modifier = Modifier.padding(innerPadding)) {
                         Text(text = "debug")
-                        CardEntryHome(cardId = 201727)
+                        CardEntryHome(cardId = 201729)
                     }
                 }
             }

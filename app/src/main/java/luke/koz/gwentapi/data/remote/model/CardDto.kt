@@ -32,3 +32,4 @@ data class CardAttributeDto (
     val provision : Int,
     val factionSecondary : String
 )
+

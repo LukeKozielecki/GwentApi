@@ -14,6 +14,13 @@ interface ApiService {
         @Query("id") cardId: Int,
         @Query("response") response: String = "json"
     ): Call<ApiResponse>
+
+    @GET("cards")
+    fun getAllCards(
+        @Query("key") key: String = "data",
+        @Query("response") response: String = "json",
+        @Query("version") version: String = "13.4.0"
+    ): Call<ApiResponse>
 }
 
 object RetrofitClient {
