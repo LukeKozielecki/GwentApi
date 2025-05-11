@@ -5,6 +5,7 @@ package luke.koz.gwentapi.domain.model
  */
 data class CardGalleryEntry(//todo rework this into general Card class[?]
     val id: Int,
+    val artId: Int,
     val name: String,
     val faction: String,
     val rarity: String,

@@ -7,6 +7,7 @@ import luke.koz.gwentapi.domain.model.CardGalleryEntry
 fun CardEntity.toDomain(): CardGalleryEntry {
     return CardGalleryEntry(
         id = this.cardId,
+        artId = this.artId,
         name = this.name,
         faction = this.faction,
         rarity = this.rarity,
