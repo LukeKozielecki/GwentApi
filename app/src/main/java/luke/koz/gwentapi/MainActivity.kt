@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import luke.koz.gwentapi.ui.CardEntryHome
+import luke.koz.gwentapi.ui.cardgalleryscreen.CardGalleryScreen
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
             GwentApiTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column (modifier = Modifier.padding(innerPadding)) {
-                        CardEntryHome(cardId = 201729)
+                        CardGalleryScreen(cardId = 201729)
                     }
                 }
             }

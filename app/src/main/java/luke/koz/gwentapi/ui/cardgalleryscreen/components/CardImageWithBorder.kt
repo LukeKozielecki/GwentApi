@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.components
+package luke.koz.gwentapi.ui.cardgalleryscreen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
