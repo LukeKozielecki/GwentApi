@@ -23,7 +23,6 @@ class MainActivity : ComponentActivity() {
             GwentApiTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column (modifier = Modifier.padding(innerPadding)) {
-                        Text(text = "debug")
                         CardEntryHome(cardId = 201729)
                     }
                 }

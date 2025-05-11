@@ -13,6 +13,7 @@ fun CardDto.toDomain(): CardGalleryEntry {
         artId = this.id.art,
         name = this.name,
         faction = this.attributes.faction,
+        color = this.attributes.color,
         rarity = this.attributes.rarity,
         power = this.attributes.power,
         flavor = this.flavor

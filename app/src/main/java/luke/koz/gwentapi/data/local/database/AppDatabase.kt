@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import luke.koz.gwentapi.MainActivity
 import luke.koz.gwentapi.data.local.dao.CardDao
 import luke.koz.gwentapi.data.local.entity.CardEntity
+import luke.koz.gwentapi.data.remote.utils.PersistentImageLoader
 
 @Database(
     entities = [CardEntity::class],
@@ -34,4 +35,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 class GwentApplication : Application() {
     val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
+    val persistentImageLoader by lazy {
+        PersistentImageLoader.create(this)
+    }
 }

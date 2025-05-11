@@ -10,6 +10,7 @@ fun CardEntity.toDomain(): CardGalleryEntry {
         artId = this.artId,
         name = this.name,
         faction = this.faction,
+        color = this.color,
         rarity = this.rarity,
         power = this.power,
         flavor = this.flavor

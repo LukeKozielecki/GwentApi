@@ -8,6 +8,7 @@ data class CardGalleryEntry(//todo rework this into general Card class[?]
     val artId: Int,
     val name: String,
     val faction: String,
+    val color: String,
     val rarity: String,
     val power: Int,
     val flavor: String,
