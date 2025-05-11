@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
-import luke.koz.gwentapi.data.local.entity.toDomain
-import luke.koz.gwentapi.data.local.entity.toEntity
+import luke.koz.gwentapi.data.mapper.toDomain
+import luke.koz.gwentapi.data.mapper.toEntity
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
 
 class CardRepository(
