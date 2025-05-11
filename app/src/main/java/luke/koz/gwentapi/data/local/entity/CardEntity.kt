@@ -4,8 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import luke.koz.gwentapi.data.remote.model.CardDto
-import luke.koz.gwentapi.domain.model.CardGalleryEntry
 
 @Entity(
     tableName = "cards",

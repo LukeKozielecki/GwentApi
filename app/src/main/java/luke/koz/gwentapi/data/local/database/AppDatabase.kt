@@ -1,14 +1,11 @@
 package luke.koz.gwentapi.data.local.database
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import luke.koz.gwentapi.MainActivity
 import luke.koz.gwentapi.data.local.dao.CardDao
 import luke.koz.gwentapi.data.local.entity.CardEntity
-import luke.koz.gwentapi.data.remote.utils.PersistentImageLoader
 
 @Database(
     entities = [CardEntity::class],
