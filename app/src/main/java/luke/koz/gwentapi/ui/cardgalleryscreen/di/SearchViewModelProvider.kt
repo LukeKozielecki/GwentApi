@@ -9,11 +9,11 @@ import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.remote.api.ApiClient
 import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.domain.viewModel.CardGalleryViewModel
-import luke.koz.gwentapi.domain.viewModel.CardGalleryViewModelFactory
+import luke.koz.gwentapi.domain.viewModel.SearchViewModel
+import luke.koz.gwentapi.domain.viewModel.SearchViewModelFactory
 
 @Composable
-fun provideCardGalleryViewModel(): CardGalleryViewModel {
+fun provideSearchGalleryViewModel(): SearchViewModel {
     val context = LocalContext.current
     val application = context.applicationContext as GwentApplication
     val repository = remember {
@@ -22,5 +22,5 @@ fun provideCardGalleryViewModel(): CardGalleryViewModel {
             local = CardLocalDataSource(application.database.cardDao())
         )
     }
-    return viewModel(factory = CardGalleryViewModelFactory(repository))
+    return viewModel(factory = SearchViewModelFactory(repository))
 }

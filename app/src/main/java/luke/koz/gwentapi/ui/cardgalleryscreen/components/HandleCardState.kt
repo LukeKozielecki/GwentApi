@@ -1,7 +1,6 @@
 package luke.koz.gwentapi.ui.cardgalleryscreen.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,9 +29,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import luke.koz.gwentapi.R
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
-import luke.koz.gwentapi.domain.viewModel.CardState
-import luke.koz.gwentapi.domain.viewModel.CardViewModel
-import luke.koz.gwentapi.domain.viewModel.SearchState
+import luke.koz.gwentapi.domain.state.CardState
+import luke.koz.gwentapi.domain.state.SearchState
+import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 
 @Composable
 fun HandleCardState(state: CardState) {
@@ -93,7 +91,7 @@ private fun NoCardsAvailable() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
-    viewModel: CardViewModel,
+    viewModel: SearchViewModel,
     searchState: SearchState,
     closeSearch: () -> Unit
 ) {

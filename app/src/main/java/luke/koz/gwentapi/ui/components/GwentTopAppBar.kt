@@ -25,9 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import luke.koz.gwentapi.R
-import luke.koz.gwentapi.domain.viewModel.CardViewModel
+import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 import luke.koz.gwentapi.ui.cardgalleryscreen.components.SearchScreen
-import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideCardGalleryViewModel
+import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,12 +35,12 @@ import luke.koz.gwentapi.ui.theme.GwentApiTheme
 fun GwentTopAppBar(
     onProfileClicked: () -> Unit
 ) {
-    val viewModel: CardViewModel = provideCardGalleryViewModel()
-    val searchState by viewModel.searchState
+    val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
+    val searchState by searchViewModel.searchState
     val isSearchActive = remember { mutableStateOf(false) }
     if(isSearchActive.value) {
         SearchScreen(
-            viewModel = viewModel,
+            viewModel = searchViewModel,
             searchState = searchState,
             closeSearch = { isSearchActive.value = !isSearchActive.value },
         )
