@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
+import luke.koz.gwentapi.data.local.entity.CardEntity
 import luke.koz.gwentapi.data.mapper.toDomain
 import luke.koz.gwentapi.data.mapper.toEntity
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
@@ -34,6 +35,13 @@ class CardRepository(
             local.getCardById(cardId).collect { updated ->
                 updated?.let { emit(it.toDomain()) }
             }
+        }
+    }.flowOn(Dispatchers.IO)
+
+    fun getCardByQuery(query: String) : Flow<List<CardGalleryEntry>> = flow {
+        local.getCardByQuery(query).collect { cachedList ->
+            val domainList = cachedList.map { it.toDomain() }
+            emit(domainList)
         }
     }.flowOn(Dispatchers.IO)
 

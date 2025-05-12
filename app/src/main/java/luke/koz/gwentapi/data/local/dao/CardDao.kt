@@ -13,6 +13,9 @@ interface CardDao{
     @Query("SELECT * FROM cards WHERE card_id = :cardId")
     fun getCardById(cardId: Int): Flow<CardEntity>
 
+    @Query("SELECT * FROM cards WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%'")
+    fun getCardByQuery(query: String): Flow<List<CardEntity>>
+
     @Query("SELECT * FROM cards")
     fun getAllCards(): Flow<List<CardEntity>>
 

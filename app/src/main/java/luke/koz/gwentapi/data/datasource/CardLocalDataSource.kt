@@ -8,5 +8,6 @@ class CardLocalDataSource(private val dao: CardDao) {
     suspend fun upsertCards(cards: List<CardEntity>) = dao.upsertCards(cards)
 
     fun getCardById(cardId: Int) = dao.getCardById(cardId)
+    fun getCardByQuery(query: String) = dao.getCardByQuery(query)
     fun getAllCards() = dao.getAllCards()
 }
