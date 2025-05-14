@@ -28,7 +28,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import luke.koz.gwentapi.R
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
-import luke.koz.gwentapi.ui.cardgalleryscreen.components.SearchScreen
+import luke.koz.gwentapi.navigation.SearchDestination
 import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
@@ -41,11 +41,14 @@ fun GwentTopAppBar(
     val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
     val searchState by searchViewModel.searchState
     val isSearchActive = remember { mutableStateOf(false) }
+    val searchQuery by remember { mutableStateOf(searchViewModel.query) }
     if(isSearchActive.value) {
         SearchScreen(
-            viewModel = searchViewModel,
+            query = searchViewModel.query,
+            updateQuery = { searchViewModel.updateQuery(it) },
+            getCardByQuery = { searchViewModel.getCardByQuery() },
             searchState = searchState,
-            onCardClick = {/*Todo implement onclick*/},
+            onCardClick = {/*Todo implement onclick*/ },
             closeSearch = { isSearchActive.value = !isSearchActive.value },
         )
     }
@@ -77,7 +80,14 @@ fun GwentTopAppBar(
             },
             actions = {
                 IconButton(onClick = {
-                    isSearchActive.value = !isSearchActive.value
+                    val currentRoute = navController.currentBackStackEntry?.destination?.route
+                    val searchRoute = SearchDestination::class.qualifiedName
+                    if (currentRoute != searchRoute) {
+                        navController.navigate(SearchDestination) {
+                            launchSingleTop = true
+                        }
+                    }
+//                    isSearchActive.value = !isSearchActive.value
                     Log.d("TopAppBar", "isSearchActive: $isSearchActive")
                 }) {
                     Icon(

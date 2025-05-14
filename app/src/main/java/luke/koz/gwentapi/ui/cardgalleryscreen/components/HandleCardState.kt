@@ -45,7 +45,7 @@ fun HandleCardState(state: CardState, onCardClick : (Int) -> Unit) {
 }
 
 @Composable
-private fun CardList(cards: List<CardGalleryEntry>, onCardClick : (Int) -> Unit) {
+fun CardList(cards: List<CardGalleryEntry>, onCardClick : (Int) -> Unit) {
     if (cards.isEmpty()) {
         NoCardsAvailable()
     } else {
@@ -91,83 +91,3 @@ private fun NoCardsAvailable() {
     )
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchScreen(
-    viewModel: SearchViewModel,
-    searchState: SearchState,
-    onCardClick : (Int) -> Unit,
-    closeSearch: () -> Unit
-) {
-    val searchQuery by remember { mutableStateOf(viewModel.query) }
-
-    Column {
-        Row {
-            SearchBar(
-                query = searchQuery.value,
-                onQueryChange = {
-                    viewModel.updateQuery(it)
-                    viewModel.getCardByQuery()
-                },
-                placeholder = { Text("Start typing to search...") },
-                onSearch = { /* todo */ },
-                active = true,
-                onActiveChange = {},
-                leadingIcon = {
-                    Image(
-                        painter = painterResource(id = R.drawable.gwent_one_api_favicon_96x96),
-                        contentDescription = "App Logo",
-                        modifier = Modifier.size(32.dp)
-                    )
-                },
-                trailingIcon = {
-                    Row {
-                        ActionIconButton(
-                            action = { viewModel.updateQuery("") },
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Clear query"
-                        )
-                        ActionIconButton(
-                            action = closeSearch,
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = "Close search"
-                        )
-                    }
-                },
-                content = {
-                    when (searchState) {
-                        is SearchState.Idle -> {
-                            CardImageWithBorder(
-                                cardId = -1,
-                                cardColor = "gold"
-                            )
-                        }
-                        is SearchState.Loading -> CircularProgressIndicator()
-                        is SearchState.Empty -> {
-                            Row {
-                                CardImageWithBorder(
-                                    cardId = -1,
-                                    cardColor = "gold"
-                                )
-                                Text("No results found")
-                            }
-                        }
-                        is SearchState.Success -> CardList(searchState.results, onCardClick)
-                        is SearchState.Error -> Text("Error: ${searchState.message}")
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun ActionIconButton(action : () -> Unit, imageVector: ImageVector, contentDescription: String) {
-    IconButton(onClick = action) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = contentDescription,
-        )
-    }
-}

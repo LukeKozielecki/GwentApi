@@ -2,34 +2,32 @@ package luke.koz.gwentapi.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
+import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 import luke.koz.gwentapi.ui.carddetailsscreen.CardDetailScreen
 import luke.koz.gwentapi.ui.cardgalleryscreen.CardGalleryScreen
+import luke.koz.gwentapi.ui.components.SearchScreen
+import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
 
 @Serializable
 object CardGalleryDestination
 
 @Serializable
 data class CardDetailDestination(val cardId: Int)
+
+@Serializable
+object SearchDestination
 
 @Composable
 fun NavigationHost(
@@ -63,6 +61,21 @@ fun NavigationHost(
             CardDetailScreen(
                 cardId = args.cardId,
                 onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<SearchDestination> {
+            val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
+            val searchState by searchViewModel.searchState
+            SearchScreen(
+                query = searchViewModel.query,
+                updateQuery = { searchViewModel.updateQuery(it) },
+                getCardByQuery = { searchViewModel.getCardByQuery() },
+                searchState = searchState,
+                onCardClick = { cardId ->
+                    navController.navigate(CardDetailDestination(cardId))
+                },
+                closeSearch = { navController.popBackStack() }
             )
         }
     }
