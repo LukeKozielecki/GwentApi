@@ -11,7 +11,7 @@ import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideCardGalleryViewModel
 import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
 
 @Composable
-fun CardGalleryScreen(cardId: Int) {
+fun CardGalleryScreen(cardId: Int, onCardClick : (Int) -> Unit) {
     val viewModel: CardGalleryViewModel = provideCardGalleryViewModel()
     val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
     val searchState by searchViewModel.searchState
@@ -22,6 +22,6 @@ fun CardGalleryScreen(cardId: Int) {
     }
     Column {
 //        SearchScreen(viewModel, searchState)
-        HandleCardState(cardState)
+        HandleCardState(cardState, onCardClick)
     }
 }

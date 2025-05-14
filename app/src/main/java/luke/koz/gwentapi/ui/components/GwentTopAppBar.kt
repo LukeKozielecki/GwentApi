@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import luke.koz.gwentapi.R
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 import luke.koz.gwentapi.ui.cardgalleryscreen.components.SearchScreen
@@ -33,7 +35,8 @@ import luke.koz.gwentapi.ui.theme.GwentApiTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GwentTopAppBar(
-    onProfileClicked: () -> Unit
+    onProfileClicked: () -> Unit,
+    navController: NavHostController
 ) {
     val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
     val searchState by searchViewModel.searchState
@@ -42,6 +45,7 @@ fun GwentTopAppBar(
         SearchScreen(
             viewModel = searchViewModel,
             searchState = searchState,
+            onCardClick = {/*Todo implement onclick*/},
             closeSearch = { isSearchActive.value = !isSearchActive.value },
         )
     }
@@ -97,7 +101,8 @@ fun GwentTopAppBar(
 private fun GwentTopAppBarPrev() {
     GwentApiTheme {
         GwentTopAppBar(
-            onProfileClicked = {  }
+            onProfileClicked = {  },
+            navController = rememberNavController()
         )
     }
 }

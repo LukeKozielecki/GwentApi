@@ -1,6 +1,7 @@
 package luke.koz.gwentapi.ui.cardgalleryscreen.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -34,23 +35,23 @@ import luke.koz.gwentapi.domain.state.SearchState
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 
 @Composable
-fun HandleCardState(state: CardState) {
+fun HandleCardState(state: CardState, onCardClick : (Int) -> Unit) {
     when (state) {
         is CardState.Empty -> NoCardsAvailable()
         is CardState.Loading -> CircularProgressIndicator()
-        is CardState.Success -> CardList(cards = state.cards)
+        is CardState.Success -> CardList(cards = state.cards, onCardClick)
         is CardState.Error -> ErrorMessage(message = state.message)
     }
 }
 
 @Composable
-private fun CardList(cards: List<CardGalleryEntry>) {
+private fun CardList(cards: List<CardGalleryEntry>, onCardClick : (Int) -> Unit) {
     if (cards.isEmpty()) {
         NoCardsAvailable()
     } else {
         LazyColumn {
             items(cards) { card ->
-                CardItem(card = card)
+                CardItem(card = card, onCardClick)
                 HorizontalDivider()
             }
         }
@@ -58,8 +59,11 @@ private fun CardList(cards: List<CardGalleryEntry>) {
 }
 
 @Composable
-private fun CardItem(card: CardGalleryEntry) {
-    Row {
+private fun CardItem(card: CardGalleryEntry, onCardClick : (Int) -> Unit) {
+    Row (
+        modifier = Modifier
+            .clickable { onCardClick(card.id) }
+    ) {
         CardImageWithBorder(card.artId, card.color)
         Column(modifier = Modifier.padding(8.dp)) {
             Text(text = card.name, style = MaterialTheme.typography.titleMedium)
@@ -93,6 +97,7 @@ private fun NoCardsAvailable() {
 fun SearchScreen(
     viewModel: SearchViewModel,
     searchState: SearchState,
+    onCardClick : (Int) -> Unit,
     closeSearch: () -> Unit
 ) {
     val searchQuery by remember { mutableStateOf(viewModel.query) }
@@ -148,7 +153,7 @@ fun SearchScreen(
                                 Text("No results found")
                             }
                         }
-                        is SearchState.Success -> CardList(searchState.results)
+                        is SearchState.Success -> CardList(searchState.results, onCardClick)
                         is SearchState.Error -> Text("Error: ${searchState.message}")
                     }
                 }
