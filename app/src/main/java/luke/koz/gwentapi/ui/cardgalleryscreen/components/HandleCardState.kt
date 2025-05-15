@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -35,13 +37,39 @@ import luke.koz.gwentapi.domain.state.SearchState
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 
 @Composable
-fun HandleCardState(state: CardState, onCardClick : (Int) -> Unit) {
+fun CardStateHandler(
+    state: CardState,
+    onEmpty: @Composable () -> Unit,
+    onLoading: @Composable () -> Unit,
+    onSuccess: @Composable (List<CardGalleryEntry>) -> Unit,
+    onError: @Composable (String) -> Unit = { ErrorMessage(message = it) }
+) {
     when (state) {
-        is CardState.Empty -> NoCardsAvailable()
-        is CardState.Loading -> CircularProgressIndicator()
-        is CardState.Success -> CardList(cards = state.cards, onCardClick)
-        is CardState.Error -> ErrorMessage(message = state.message)
+        is CardState.Empty -> onEmpty()
+        is CardState.Loading -> onLoading()
+        is CardState.Success -> onSuccess(state.cards)
+        is CardState.Error -> onError(state.message)
     }
+}
+
+@Composable
+fun HandleCardState(state: CardState, onCardClick : (Int) -> Unit) {
+    CardStateHandler(
+        state = state,
+        onEmpty = { NoCardsAvailable() },
+        onLoading = { CircularProgressIndicator() },
+        onSuccess = { cards -> CardList(cards = cards, onCardClick) }
+    )
+}
+
+@Composable
+fun HandleDetailsCardState(state: CardState, onCardClick: (Int) -> Unit) {
+    CardStateHandler(
+        state = state,
+        onEmpty = { /* Empty composable */ },
+        onLoading = { /* Empty composable */ },
+        onSuccess = { cards -> CardItemDetails(card = cards.first(), onCardClick) }
+    )
 }
 
 @Composable
@@ -69,6 +97,30 @@ private fun CardItem(card: CardGalleryEntry, onCardClick : (Int) -> Unit) {
             Text(text = card.name, style = MaterialTheme.typography.titleMedium)
             Text(text = card.flavor, style = MaterialTheme.typography.bodySmall)
             Text(text = card.artId.toString(), style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+@Composable
+private fun CardItemDetails(card: CardGalleryEntry?, onCardClick : (Int) -> Unit) {//todo this onclick should navigate to CardArtShowcaseScreen
+    Column (
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        //todo SRP cut
+        if (card != null) {
+            CardImageWithBorder(card.artId, card.color)
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(text = card.name, style = MaterialTheme.typography.titleMedium)
+                Text(text = card.flavor, style = MaterialTheme.typography.bodySmall)
+                Text(text = card.faction, style = MaterialTheme.typography.bodySmall)
+                Text(text = card.rarity, style = MaterialTheme.typography.bodySmall)
+            }
+        } else {
+            Column {
+                CardImageWithBorder(-1, "gold")
+                Text("Ops. Something went wrong")
+            }
         }
     }
 }

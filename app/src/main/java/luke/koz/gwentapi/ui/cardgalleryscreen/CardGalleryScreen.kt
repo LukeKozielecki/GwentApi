@@ -18,7 +18,7 @@ fun CardGalleryScreen(cardId: Int, onCardClick : (Int) -> Unit) {
     val searchState by searchViewModel.searchState
     val cardState by viewModel.cardState
 
-    //todo add pull from top to trigger .getAllCards()
+    //todo add pull from top to trigger .getAllCards() Pull to refresh https://developer.android.com/develop/ui/compose/components/pull-to-refresh
     LaunchedEffect(key1 = cardId) {
         if (cardState == CardState.Empty) {
             viewModel.getAllCards()
