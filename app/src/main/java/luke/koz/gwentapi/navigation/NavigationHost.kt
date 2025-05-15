@@ -1,5 +1,7 @@
 package luke.koz.gwentapi.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +39,8 @@ fun NavigationHost(
     NavHost(
         navController = navController,
         startDestination = CardGalleryDestination,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
         modifier = modifier
     ) {
         composable<CardGalleryDestination> {

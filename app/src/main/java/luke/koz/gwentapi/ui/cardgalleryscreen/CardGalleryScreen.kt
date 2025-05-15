@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import luke.koz.gwentapi.domain.state.CardState
 import luke.koz.gwentapi.domain.viewModel.CardGalleryViewModel
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 import luke.koz.gwentapi.ui.cardgalleryscreen.components.HandleCardState
@@ -17,8 +18,11 @@ fun CardGalleryScreen(cardId: Int, onCardClick : (Int) -> Unit) {
     val searchState by searchViewModel.searchState
     val cardState by viewModel.cardState
 
+    //todo add pull from top to trigger .getAllCards()
     LaunchedEffect(key1 = cardId) {
-        viewModel.getAllCards()
+        if (cardState == CardState.Empty) {
+            viewModel.getAllCards()
+        }
     }
     Column {
 //        SearchScreen(viewModel, searchState)
