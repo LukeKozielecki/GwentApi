@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.cardgalleryscreen.di
+package luke.koz.gwentapi.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,11 +9,11 @@ import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.remote.api.ApiClient
 import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.domain.viewModel.SearchViewModel
-import luke.koz.gwentapi.domain.viewModel.SearchViewModelFactory
+import luke.koz.gwentapi.ui.viewmodel.CardGalleryViewModel
+import luke.koz.gwentapi.ui.viewmodel.factory.CardGalleryViewModelFactory
 
 @Composable
-fun provideSearchGalleryViewModel(): SearchViewModel {
+fun provideCardGalleryViewModel(): CardGalleryViewModel {
     val context = LocalContext.current
     val application = context.applicationContext as GwentApplication
     val repository = remember {
@@ -22,5 +22,5 @@ fun provideSearchGalleryViewModel(): SearchViewModel {
             local = CardLocalDataSource(application.database.cardDao())
         )
     }
-    return viewModel(factory = SearchViewModelFactory(repository))
+    return viewModel(factory = CardGalleryViewModelFactory(repository))
 }

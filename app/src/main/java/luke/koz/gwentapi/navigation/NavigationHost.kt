@@ -15,11 +15,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import luke.koz.gwentapi.domain.viewModel.SearchViewModel
-import luke.koz.gwentapi.ui.carddetailsscreen.CardDetailScreen
-import luke.koz.gwentapi.ui.cardgalleryscreen.CardGalleryScreen
-import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
-import luke.koz.gwentapi.ui.components.SearchScreen
+import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
+import luke.koz.gwentapi.ui.screen.carddetails.CardDetailScreen
+import luke.koz.gwentapi.ui.screen.cardgallery.CardGalleryScreen
+import luke.koz.gwentapi.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.ui.screen.search.SearchScreen
 
 @Serializable
 object CardGalleryDestination

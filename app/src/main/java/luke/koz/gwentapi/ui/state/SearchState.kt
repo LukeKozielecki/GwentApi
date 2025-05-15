@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.domain.state
+package luke.koz.gwentapi.ui.state
 
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
 

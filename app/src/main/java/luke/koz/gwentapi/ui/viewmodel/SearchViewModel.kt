@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.domain.viewModel
+package luke.koz.gwentapi.ui.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.domain.state.SearchState
+import luke.koz.gwentapi.ui.state.SearchState
 
 class SearchViewModel (private val repository: CardRepository) : ViewModel() {
 

@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.components
+package luke.koz.gwentapi.ui.screen.search
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
-import luke.koz.gwentapi.domain.state.SearchState
-import luke.koz.gwentapi.ui.cardgalleryscreen.components.CardImageWithBorder
-import luke.koz.gwentapi.ui.cardgalleryscreen.components.CardList
+import luke.koz.gwentapi.ui.state.SearchState
+import luke.koz.gwentapi.ui.screen.sharedcomponents.CardImageWithBorder
+import luke.koz.gwentapi.ui.screen.sharedcomponents.CardList
 
 @Composable
 fun CustomSearchBar(

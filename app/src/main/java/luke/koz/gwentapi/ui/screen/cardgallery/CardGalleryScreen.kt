@@ -1,15 +1,15 @@
-package luke.koz.gwentapi.ui.cardgalleryscreen
+package luke.koz.gwentapi.ui.screen.cardgallery
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import luke.koz.gwentapi.domain.state.CardState
-import luke.koz.gwentapi.domain.viewModel.CardGalleryViewModel
-import luke.koz.gwentapi.domain.viewModel.SearchViewModel
-import luke.koz.gwentapi.ui.cardgalleryscreen.components.HandleCardState
-import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideCardGalleryViewModel
-import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.ui.state.CardState
+import luke.koz.gwentapi.ui.viewmodel.CardGalleryViewModel
+import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
+import luke.koz.gwentapi.ui.screen.sharedcomponents.HandleCardState
+import luke.koz.gwentapi.di.provideCardGalleryViewModel
+import luke.koz.gwentapi.di.provideSearchGalleryViewModel
 
 @Composable
 fun CardGalleryScreen(cardId: Int, onCardClick : (Int) -> Unit) {

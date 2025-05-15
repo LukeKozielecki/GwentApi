@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.domain.viewModel
+package luke.koz.gwentapi.ui.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -7,21 +7,21 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.domain.state.CardState
+import luke.koz.gwentapi.ui.state.CardState
 
-class CardDetailViewModel (private val repository: CardRepository) : ViewModel(){
+class CardGalleryViewModel (private val repository: CardRepository) : ViewModel (){
     private val _cardState = mutableStateOf<CardState>(CardState.Empty)
     val cardState: State<CardState> = _cardState
 
-    fun getCardById(cardId: Int) {
+    fun getAllCards(){
         _cardState.value = CardState.Loading
         viewModelScope.launch {
-            repository.getCard(cardId)
+            repository.getAllCards()
                 .catch { e ->
                     _cardState.value = CardState.Error("Error: ${e.message}")
                 }
-                .collect { card ->
-                    _cardState.value = CardState.Success(listOf(card))
+                .collect { cards ->
+                    _cardState.value = CardState.Success(cards)
                 }
         }
     }

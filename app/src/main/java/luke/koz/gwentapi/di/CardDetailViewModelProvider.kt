@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.cardgalleryscreen.di
+package luke.koz.gwentapi.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,8 +9,8 @@ import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.remote.api.ApiClient
 import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.domain.viewModel.CardDetailViewModel
-import luke.koz.gwentapi.domain.viewModel.CardDetailViewModelFactory
+import luke.koz.gwentapi.ui.viewmodel.CardDetailViewModel
+import luke.koz.gwentapi.ui.viewmodel.factory.CardDetailViewModelFactory
 
 @Composable
 fun provideCardDetailViewModel(): CardDetailViewModel {

@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.cardgalleryscreen.components
+package luke.koz.gwentapi.ui.screen.sharedcomponents
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
-import luke.koz.gwentapi.domain.state.CardState
+import luke.koz.gwentapi.ui.state.CardState
 
 @Composable
 fun CardStateHandler(

@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.components
+package luke.koz.gwentapi.ui.screen.sharedcomponents
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -27,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import luke.koz.gwentapi.R
-import luke.koz.gwentapi.domain.viewModel.SearchViewModel
+import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
 import luke.koz.gwentapi.navigation.SearchDestination
-import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.ui.screen.search.SearchScreen
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
