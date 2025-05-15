@@ -1,19 +1,17 @@
 package luke.koz.gwentapi.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,8 +20,8 @@ import kotlinx.serialization.Serializable
 import luke.koz.gwentapi.domain.viewModel.SearchViewModel
 import luke.koz.gwentapi.ui.carddetailsscreen.CardDetailScreen
 import luke.koz.gwentapi.ui.cardgalleryscreen.CardGalleryScreen
-import luke.koz.gwentapi.ui.components.SearchScreen
 import luke.koz.gwentapi.ui.cardgalleryscreen.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.ui.components.SearchScreen
 
 @Serializable
 object CardGalleryDestination
