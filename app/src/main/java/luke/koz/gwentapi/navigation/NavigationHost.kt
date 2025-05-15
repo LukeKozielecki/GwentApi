@@ -6,8 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -50,9 +48,6 @@ fun NavigationHost(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(onClick = { navController.navigate(CardDetailDestination((201729))) }) {
-                    Text("View Card Details")
-                }
                 CardGalleryScreen(
                     cardId = 201729,
                     onCardClick = { cardId ->
