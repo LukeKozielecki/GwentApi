@@ -25,8 +25,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
 import luke.koz.gwentapi.ui.state.SearchState
-import luke.koz.gwentapi.ui.screen.sharedcomponents.CardImageWithBorder
-import luke.koz.gwentapi.ui.screen.sharedcomponents.CardList
+import luke.koz.gwentapi.ui.screen.components.CardImageWithBorder
+import luke.koz.gwentapi.ui.screen.components.cardlist.CardList
 
 @Composable
 fun CustomSearchBar(

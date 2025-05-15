@@ -6,7 +6,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import luke.koz.gwentapi.ui.state.CardState
 import luke.koz.gwentapi.ui.viewmodel.CardDetailViewModel
-import luke.koz.gwentapi.ui.screen.sharedcomponents.HandleDetailsCardState
 import luke.koz.gwentapi.di.provideCardDetailViewModel
 
 @Composable
@@ -24,7 +23,7 @@ fun CardDetailScreen(
     }
 
     Column {
-        HandleDetailsCardState(
+        CardDetailsStateHandler(
             state = cardState,
             onCardClick = {  }
         )

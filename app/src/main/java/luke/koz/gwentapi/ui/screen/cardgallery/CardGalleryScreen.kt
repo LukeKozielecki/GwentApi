@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import luke.koz.gwentapi.ui.state.CardState
 import luke.koz.gwentapi.ui.viewmodel.CardGalleryViewModel
 import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
-import luke.koz.gwentapi.ui.screen.sharedcomponents.HandleCardState
 import luke.koz.gwentapi.di.provideCardGalleryViewModel
 import luke.koz.gwentapi.di.provideSearchGalleryViewModel
 
@@ -26,6 +25,6 @@ fun CardGalleryScreen(cardId: Int, onCardClick : (Int) -> Unit) {
     }
     Column {
 //        SearchScreen(viewModel, searchState)
-        HandleCardState(cardState, onCardClick)
+        CardGalleryStateHandler(cardState, onCardClick)
     }
 }

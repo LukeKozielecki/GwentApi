@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.screen.sharedcomponents
+package luke.koz.gwentapi.ui.scaffold
 
 import android.util.Log
 import androidx.compose.foundation.Image

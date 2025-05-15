@@ -1,4 +1,4 @@
-package luke.koz.gwentapi.ui.screen.sharedcomponents
+package luke.koz.gwentapi.ui.screen.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

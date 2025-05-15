@@ -10,7 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import luke.koz.gwentapi.navigation.NavigationHost
-import luke.koz.gwentapi.ui.screen.sharedcomponents.GwentTopAppBar
+import luke.koz.gwentapi.ui.scaffold.GwentTopAppBar
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
 //TODO:
