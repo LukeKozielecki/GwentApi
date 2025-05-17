@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
@@ -31,59 +30,47 @@ fun CardImageOverlay(
 ) {
     val context = LocalContext.current
     val imageLoader = (context.applicationContext as GwentApplication).persistentImageLoader
-    Box(modifier = modifier) {
-        // Banner Top Overlay
-        CardImageOverlayElement(
+    val overlays = listOf(
+        CardImageOverlayConfig(
             imageModel = CardImageOverlayModel.BannerTopImageOverlay.Icon,
-            context = context,
-            imageLoader = imageLoader,
-            modifier = modifier
-        )
-
-        // Banner Bottom Overlay
-        CardImageOverlayElement(
+        ),
+        CardImageOverlayConfig(
             imageModel = CardImageOverlayModel.BannerBottomImageOverlay.Icon,
-            context = context,
-            imageLoader = imageLoader,
-            modifier = modifier
-        )
-
-        // Power Overlay
-        card?.power?.let { power ->
-            CardImageOverlayElement(
-                imageModel = CardImageOverlayModel.PowerImageOverlay.WithValue(power.toString()),
-                context = context,
-                imageLoader = imageLoader,
-                modifier = modifier
-            )
-        }
-
-        // Provision Icon
-        CardImageOverlayElement(
+        ),
+        CardImageOverlayConfig(
             imageModel = CardImageOverlayModel.ProvisionImageOverlay.Icon,
-            context = context,
-            imageLoader = imageLoader,
-            modifier = modifier
+        ),
+        CardImageOverlayConfig(
+            imageModel = card?.power?.let {
+                CardImageOverlayModel.PowerImageOverlay.WithValue(it.toString())
+            },
+            condition = card?.power != 0
+        ),
+        CardImageOverlayConfig(
+            imageModel = card?.provision?.let {
+                CardImageOverlayModel.ProvisionImageOverlay.Number(it.toString())
+            },
+            condition = card?.provision != null
+        ),
+        CardImageOverlayConfig(
+            imageModel = card?.rarity?.let {
+                CardImageOverlayModel.RarityImageOverlay.WithValue(it.lowercase())
+            },
+            condition = card?.rarity != null
         )
-
-        // Provision Number
-        card?.provision?.let { provision ->
-            CardImageOverlayElement(
-                imageModel = CardImageOverlayModel.ProvisionImageOverlay.Number(provision.toString()),
-                context = context,
-                imageLoader = imageLoader,
-                modifier = modifier
-            )
-        }
-
-        // Rarity
-        card?.rarity?.let { rarity ->
-            CardImageOverlayElement(
-                imageModel = CardImageOverlayModel.RarityImageOverlay.WithValue(rarity.lowercase()),
-                context = context,
-                imageLoader = imageLoader,
-                modifier = modifier
-            )
+    )
+    Box(modifier = modifier) {
+        overlays.forEach { overlay ->
+            if (overlay.condition) {
+                overlay.imageModel?.let { model ->
+                    CardImageOverlayElement(
+                        imageModel = model,
+                        context = context,
+                        imageLoader = imageLoader,
+                        modifier = modifier
+                    )
+                }
+            }
         }
     }
 }
@@ -108,3 +95,8 @@ private fun CardImageOverlayElement(
         )
     }
 }
+
+private data class CardImageOverlayConfig(
+    val imageModel: CardImageOverlayModel?,
+    val condition: Boolean = true
+)
