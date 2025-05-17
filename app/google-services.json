@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "258233766945",
+    "project_id": "gwent-api-712bc",
+    "storage_bucket": "gwent-api-712bc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258233766945:android:b2263da7f40674a5ca7f60",
+        "android_client_info": {
+          "package_name": "luke.koz.gwentapi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7CiuCWJa5GLunNhVyI2SuDLPevxvL0yo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
