@@ -8,10 +8,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.gwentapi.data.repository.CardRepository
+import luke.koz.gwentapi.data.repository.CardGalleryRepository
 import luke.koz.gwentapi.ui.state.SearchState
 
-class SearchViewModel (private val repository: CardRepository) : ViewModel() {
+class SearchViewModel (private val repository: CardGalleryRepository) : ViewModel() {
 
     private val _searchState = mutableStateOf<SearchState>(SearchState.Idle)
     val searchState: State<SearchState> = _searchState

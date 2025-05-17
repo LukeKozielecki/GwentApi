@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import luke.koz.gwentapi.ui.state.CardState
+import luke.koz.gwentapi.ui.state.CardDetailsState
 import luke.koz.gwentapi.ui.viewmodel.CardDetailViewModel
 import luke.koz.gwentapi.di.provideCardDetailViewModel
 
@@ -17,7 +17,7 @@ fun CardDetailScreen(
     val cardState by viewModel.cardState
 
     LaunchedEffect(key1 = cardId) {
-        if (cardState == CardState.Empty) {
+        if (cardState == CardDetailsState.Empty) {
             viewModel.getCardById(cardId)
         }
     }

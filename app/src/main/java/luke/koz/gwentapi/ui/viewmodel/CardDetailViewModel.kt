@@ -6,22 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.gwentapi.data.repository.CardRepository
-import luke.koz.gwentapi.ui.state.CardState
+import luke.koz.gwentapi.data.repository.CardDetailsRepository
+import luke.koz.gwentapi.ui.state.CardDetailsState
 
-class CardDetailViewModel (private val repository: CardRepository) : ViewModel(){
-    private val _cardState = mutableStateOf<CardState>(CardState.Empty)
-    val cardState: State<CardState> = _cardState
+class CardDetailViewModel (private val repository: CardDetailsRepository) : ViewModel(){
+    private val _cardState = mutableStateOf<CardDetailsState>(CardDetailsState.Empty)
+    val cardState: State<CardDetailsState> = _cardState
 
     fun getCardById(cardId: Int) {
-        _cardState.value = CardState.Loading
+        _cardState.value = CardDetailsState.Loading
         viewModelScope.launch {
-            repository.getCard(cardId)
+            repository.getCardDetails(cardId)
                 .catch { e ->
-                    _cardState.value = CardState.Error("Error: ${e.message}")
+                    _cardState.value = CardDetailsState.Error("Error: ${e.message}")
                 }
                 .collect { card ->
-                    _cardState.value = CardState.Success(listOf(card))
+                    _cardState.value = CardDetailsState.Success(listOf(card))
                 }
         }
     }

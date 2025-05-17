@@ -8,7 +8,7 @@ import luke.koz.gwentapi.application.GwentApplication
 import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.remote.api.ApiClient
-import luke.koz.gwentapi.data.repository.CardRepository
+import luke.koz.gwentapi.data.repository.CardDetailsRepository
 import luke.koz.gwentapi.ui.viewmodel.CardDetailViewModel
 import luke.koz.gwentapi.ui.viewmodel.factory.CardDetailViewModelFactory
 
@@ -17,7 +17,7 @@ fun provideCardDetailViewModel(): CardDetailViewModel {
     val context = LocalContext.current
     val application = context.applicationContext as GwentApplication
     val repository = remember {
-        CardRepository(
+        CardDetailsRepository(
             remote = CardRemoteDataSource(ApiClient.apiService),
             local = CardLocalDataSource(application.database.cardDao())
         )

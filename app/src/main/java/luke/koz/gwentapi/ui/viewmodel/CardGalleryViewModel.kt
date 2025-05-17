@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.gwentapi.data.repository.CardRepository
+import luke.koz.gwentapi.data.repository.CardGalleryRepository
 import luke.koz.gwentapi.ui.state.CardState
 
-class CardGalleryViewModel (private val repository: CardRepository) : ViewModel (){
+class CardGalleryViewModel (private val repository: CardGalleryRepository) : ViewModel (){
     private val _cardState = mutableStateOf<CardState>(CardState.Empty)
     val cardState: State<CardState> = _cardState
 
