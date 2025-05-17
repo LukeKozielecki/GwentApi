@@ -42,6 +42,31 @@ sealed class CardImageOverlayModel {
         }
     }
 
+    sealed class TypeImageOverlay : CardImageOverlayModel(){
+        object IconSpecial : TypeImageOverlay() {
+            override val basePath: String = "card/other/low"
+            override val imageName: String = "trinket_special"
+        }
+
+        object IconArtifact : TypeImageOverlay() {
+            override val basePath: String = "card/other/low"
+            override val imageName: String = "trinket_artifact"
+        }
+    }
+
+    sealed class ArmourImageOverlay : CardImageOverlayModel(){
+        object Icon : ArmourImageOverlay() {
+            override val basePath: String = "card/other/low"
+            override val imageName: String = "trinket_armor"
+        }
+
+        data class Number(val value: String) : ArmourImageOverlay() {
+            override val basePath: String = "card/number/low"
+            override val imageName: String = "armor"
+            override val dynamicValue: String = value
+        }
+    }
+
     sealed class BannerTopImageOverlay : CardImageOverlayModel(){
         object Icon : BannerTopImageOverlay() {
             override val basePath: String = "card/banner/low"

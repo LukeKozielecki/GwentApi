@@ -12,6 +12,7 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import luke.koz.gwentapi.application.GwentApplication
+import luke.koz.gwentapi.domain.model.CardAttributeType
 import luke.koz.gwentapi.domain.model.CardDetailsEntry
 import luke.koz.gwentapi.ui.model.carddetails.CardImageOverlayModel
 import luke.koz.gwentapi.ui.theme.Dimens
@@ -41,6 +42,18 @@ fun CardImageOverlay(
             imageModel = CardImageOverlayModel.ProvisionImageOverlay.Icon,
         ),
         CardImageOverlayConfig(
+            imageModel = CardImageOverlayModel.ArmourImageOverlay.Icon,
+            condition = card?.armor != 0
+        ),
+        CardImageOverlayConfig(
+            imageModel = CardImageOverlayModel.TypeImageOverlay.IconSpecial,
+            condition = card?.type == CardAttributeType.SPECIAL.type
+        ),
+        CardImageOverlayConfig(
+            imageModel = CardImageOverlayModel.TypeImageOverlay.IconArtifact,
+            condition = card?.type == CardAttributeType.ARTIFACT.type
+        ),
+        CardImageOverlayConfig(
             imageModel = card?.power?.let {
                 CardImageOverlayModel.PowerImageOverlay.WithValue(it.toString())
             },
@@ -51,6 +64,12 @@ fun CardImageOverlay(
                 CardImageOverlayModel.ProvisionImageOverlay.Number(it.toString())
             },
             condition = card?.provision != null
+        ),
+        CardImageOverlayConfig(
+            imageModel = card?.provision?.let {
+                CardImageOverlayModel.ArmourImageOverlay.Number(it.toString())
+            },
+            condition = card?.armor != 0
         ),
         CardImageOverlayConfig(
             imageModel = card?.rarity?.let {
