@@ -1,0 +1,56 @@
+package luke.koz.gwentapi.ui.screen.auth
+
+import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import luke.koz.gwentapi.di.provideAuthViewModel
+import luke.koz.gwentapi.ui.screen.auth.components.AuthContainer
+import luke.koz.gwentapi.ui.screen.auth.components.AuthHeader
+import luke.koz.gwentapi.ui.viewmodel.AuthState
+import luke.koz.gwentapi.ui.viewmodel.AuthViewModel
+
+@Composable
+fun AuthScreen(
+    onAuthSuccess: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val viewModel: AuthViewModel = provideAuthViewModel()
+    val authState = viewModel.authState.value
+    val context = LocalContext.current
+
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.Success -> onAuthSuccess()
+            is AuthState.Error -> {
+                Log.d("AuthGwent", authState.message)
+                Toast.makeText(context, authState.message, Toast.LENGTH_SHORT).show()
+                viewModel.resetAuthState()
+            }
+
+            AuthState.Loading, AuthState.Idle -> { /* Do nothing */ }
+        }
+    }
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
+        AuthHeader(Modifier.padding(16.dp))
+        AuthContainer(
+            email = viewModel.email,
+            onEmailChange = viewModel::onEmailChange,
+            password = viewModel.password,
+            onPasswordChange = viewModel::onPasswordChange,
+            isEmailValid = viewModel.isEmailValid,
+            isPasswordValid = viewModel.isPasswordValid,
+            isFormValid = viewModel.isFormValid,
+            login = viewModel::login,
+            register = viewModel::register,
+            authState = authState
+        )
+    }
+}

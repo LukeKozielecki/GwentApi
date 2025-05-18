@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
 import luke.koz.gwentapi.ui.screen.carddetails.CardDetailScreen
 import luke.koz.gwentapi.ui.screen.cardgallery.CardGalleryScreen
 import luke.koz.gwentapi.di.provideSearchGalleryViewModel
+import luke.koz.gwentapi.ui.screen.auth.AuthScreen
 import luke.koz.gwentapi.ui.screen.search.SearchScreen
 
 @Serializable
@@ -29,6 +31,9 @@ data class CardDetailDestination(val cardId: Int)
 
 @Serializable
 object SearchDestination
+
+@Serializable
+object AuthDestination
 
 @Composable
 fun NavigationHost(
@@ -42,6 +47,13 @@ fun NavigationHost(
         exitTransition = { fadeOut(animationSpec = tween(200)) },
         modifier = modifier
     ) {
+        //todo this probably is added to backstack, it should not be, fix later
+        composable<AuthDestination> {
+            AuthScreen(
+                onAuthSuccess = { navController.navigate(CardGalleryDestination) },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
         composable<CardGalleryDestination> {
             Column(
                 modifier = Modifier.fillMaxSize(),

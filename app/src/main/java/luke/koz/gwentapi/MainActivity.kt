@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import luke.koz.gwentapi.navigation.AuthDestination
 import luke.koz.gwentapi.navigation.NavigationHost
 import luke.koz.gwentapi.ui.scaffold.GwentTopAppBar
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
@@ -28,8 +29,12 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
+                        //todo this should be moved down to navhost, along with val navcontroller
                         GwentTopAppBar(
-                            onProfileClicked = { /* TODO: Handle profile/login */ },
+                            onProfileClicked = {
+                                //todo this should have conditional destination based on if logged in
+                                navController.navigate(AuthDestination)
+                                               },
                             navController = navController
                         )
                     }
