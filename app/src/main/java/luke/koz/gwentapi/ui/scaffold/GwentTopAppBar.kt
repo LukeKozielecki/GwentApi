@@ -51,6 +51,7 @@ fun GwentTopAppBar(
             searchState = searchState,
             onCardClick = {/*Todo implement onclick*/ },
             closeSearch = { isSearchActive.value = !isSearchActive.value },
+            navController = navController
         )
     }
     else {

@@ -4,6 +4,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -11,7 +12,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import luke.koz.gwentapi.di.provideAuthViewModel
+import luke.koz.gwentapi.ui.scaffold.DefaultScaffold
+import luke.koz.gwentapi.ui.scaffold.components.ScaffoldWrapper
 import luke.koz.gwentapi.ui.screen.auth.components.AuthContainer
 import luke.koz.gwentapi.ui.screen.auth.components.AuthHeader
 import luke.koz.gwentapi.ui.viewmodel.AuthState
@@ -20,7 +24,11 @@ import luke.koz.gwentapi.ui.viewmodel.AuthViewModel
 @Composable
 fun AuthScreen(
     onAuthSuccess: () -> Unit,
-    modifier: Modifier = Modifier
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    scaffold: @Composable (NavHostController, @Composable (PaddingValues) -> Unit) -> Unit = { _, content ->
+        content(PaddingValues())
+    }
 ) {
     val viewModel: AuthViewModel = provideAuthViewModel()
     val authState = viewModel.authState.value
@@ -38,19 +46,25 @@ fun AuthScreen(
             AuthState.Loading, AuthState.Idle -> { /* Do nothing */ }
         }
     }
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
-        AuthHeader(Modifier.padding(16.dp))
-        AuthContainer(
-            email = viewModel.email,
-            onEmailChange = viewModel::onEmailChange,
-            password = viewModel.password,
-            onPasswordChange = viewModel::onPasswordChange,
-            isEmailValid = viewModel.isEmailValid,
-            isPasswordValid = viewModel.isPasswordValid,
-            isFormValid = viewModel.isFormValid,
-            login = viewModel::login,
-            register = viewModel::register,
-            authState = authState
-        )
+
+    ScaffoldWrapper(
+        navController = navController,
+        scaffold = scaffold
+    ) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.Center) {
+            AuthHeader(Modifier.padding(16.dp))
+            AuthContainer(
+                email = viewModel.email,
+                onEmailChange = viewModel::onEmailChange,
+                password = viewModel.password,
+                onPasswordChange = viewModel::onPasswordChange,
+                isEmailValid = viewModel.isEmailValid,
+                isPasswordValid = viewModel.isPasswordValid,
+                isFormValid = viewModel.isFormValid,
+                login = viewModel::login,
+                register = viewModel::register,
+                authState = authState
+            )
+        }
     }
 }

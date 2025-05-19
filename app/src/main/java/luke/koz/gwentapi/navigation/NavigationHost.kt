@@ -3,10 +3,12 @@ package luke.koz.gwentapi.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
@@ -37,20 +40,21 @@ object AuthDestination
 
 @Composable
 fun NavigationHost(
-    navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = CardGalleryDestination,
         enterTransition = { fadeIn(animationSpec = tween(200)) },
-        exitTransition = { fadeOut(animationSpec = tween(200)) },
-        modifier = modifier
+        exitTransition = { fadeOut(animationSpec = tween(200, delayMillis = 30)) },
+        modifier = modifier.background(MaterialTheme.colorScheme.background)
     ) {
         //todo this probably is added to backstack, it should not be, fix later
         composable<AuthDestination> {
             AuthScreen(
                 onAuthSuccess = { navController.navigate(CardGalleryDestination) },
+                navController = navController,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -64,7 +68,8 @@ fun NavigationHost(
                     cardId = 201729,
                     onCardClick = { cardId ->
                         navController.navigate(CardDetailDestination(cardId))
-                    }
+                    },
+                    navController = navController
                 )
             }
         }
@@ -72,7 +77,8 @@ fun NavigationHost(
             val args = backStackEntry.toRoute<CardDetailDestination>()
             CardDetailScreen(
                 cardId = args.cardId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                navController = navController
             )
         }
 
@@ -87,7 +93,8 @@ fun NavigationHost(
                 onCardClick = { cardId ->
                     navController.navigate(CardDetailDestination(cardId))
                 },
-                closeSearch = { navController.popBackStack() }
+                closeSearch = { navController.popBackStack() },
+                navController = navController
             )
         }
     }

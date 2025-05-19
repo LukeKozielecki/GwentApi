@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -24,25 +25,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val navController = rememberNavController()
             GwentApiTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        //todo this should be moved down to navhost, along with val navcontroller
-                        GwentTopAppBar(
-                            onProfileClicked = {
-                                //todo this should have conditional destination based on if logged in
-                                navController.navigate(AuthDestination)
-                                               },
-                            navController = navController
-                        )
-                    }
-                ) { innerPadding ->
-                    NavigationHost(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Box(Modifier.fillMaxSize()) {
+                    NavigationHost()
                 }
             }
         }
