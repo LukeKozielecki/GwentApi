@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flowOn
 import luke.koz.gwentapi.data.datasource.CardLocalDataSource
 import luke.koz.gwentapi.data.datasource.CardRemoteDataSource
 import luke.koz.gwentapi.data.mapper.toCardDetailsEntry
-import luke.koz.gwentapi.data.mapper.toEntity
+import luke.koz.gwentapi.data.mapper.toCardEntity
 import luke.koz.gwentapi.domain.model.CardDetailsEntry
 
 class CardDetailsRepository(
@@ -23,7 +23,7 @@ class CardDetailsRepository(
                 try {
                     Log.d("HarassApi", "Data was requested from remote source")
                     val cardDto = remote.getCardById(cardId)
-                    local.upsertCard(cardDto.toEntity())
+                    local.upsertCard(cardDto.toCardEntity())
                 } catch (e: Exception) {
                     Log.e("CardDetailsRepo", "API error", e)
                     throw e

@@ -7,7 +7,7 @@ import luke.koz.gwentapi.data.local.entity.CardEntity
 import luke.koz.gwentapi.data.remote.model.CardDto
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
 
-fun CardDto.toDomain(): CardGalleryEntry {
+fun CardDto.toCardGalleryEntry(): CardGalleryEntry {
     return CardGalleryEntry(
         id = this.id.card,
         artId = this.id.art,
@@ -20,7 +20,7 @@ fun CardDto.toDomain(): CardGalleryEntry {
     )
 }
 
-fun CardDto.toEntity(): CardEntity {
+fun CardDto.toCardEntity(): CardEntity {
     return CardEntity(
         // CardIdDto mapping
         cardId = this.id.card,

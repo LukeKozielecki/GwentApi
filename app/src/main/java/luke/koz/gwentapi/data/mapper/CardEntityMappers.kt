@@ -4,8 +4,7 @@ import luke.koz.gwentapi.data.local.entity.CardEntity
 import luke.koz.gwentapi.domain.model.CardDetailsEntry
 import luke.koz.gwentapi.domain.model.CardGalleryEntry
 
-//todo rename this to toCardGalleryEntry()
-fun CardEntity.toDomain(): CardGalleryEntry {
+fun CardEntity.toCardGalleryEntry(): CardGalleryEntry {
     return CardGalleryEntry(
         id = this.cardId,
         artId = this.artId,
@@ -17,7 +16,7 @@ fun CardEntity.toDomain(): CardGalleryEntry {
         flavor = this.flavor
     )
 }
-// todo incorporate this across Details feature
+
 fun CardEntity.toCardDetailsEntry(): CardDetailsEntry {
     return CardDetailsEntry(
         cardId = this.cardId,
