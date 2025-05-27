@@ -69,7 +69,7 @@ fun NavigationHost(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 CardGalleryScreen(
-                    cardId = 201729,
+//                    cardId = 201729,
                     onCardClick = { cardId ->
                         navController.navigate(CardDetailDestination(cardId))
                     },

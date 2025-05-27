@@ -9,12 +9,29 @@ import luke.koz.gwentapi.ui.screen.components.cardstate.ErrorMessage
 import luke.koz.gwentapi.ui.state.CardState
 
 @Composable
-fun CardGalleryStateHandler(state: CardState, onCardClick : (Int) -> Unit) {
+fun CardGalleryStateHandler(
+    state: CardState,
+    onCardClick: (Int) -> Unit,
+    onToggleLike: (Int, Boolean) -> Unit,
+    onRefreshClick : () -> Unit
+) {
     CardGalleryStateHandlerInternal(
         state = state,
         onEmpty = { EmptyState() },
         onLoading = { CircularProgressIndicator() },
-        onSuccess = { cards -> CardList(cards = cards, onCardClick) }
+        onSuccess = { cards ->
+            CardList(
+                cards = cards,
+                onCardClick = onCardClick,
+                onToggleLike = onToggleLike
+            )
+        },
+        onError = {
+            ErrorMessage(
+                message = it,
+                onRefreshClick = onRefreshClick
+            )
+        }
     )
 }
 
@@ -24,7 +41,7 @@ private fun CardGalleryStateHandlerInternal(
     onEmpty: @Composable () -> Unit,
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (List<CardGalleryEntry>) -> Unit,
-    onError: @Composable (String) -> Unit = { ErrorMessage(message = it) }
+    onError: @Composable (String) -> Unit = { ErrorMessage(message = it) {} }
 ) {
     when (state) {
         is CardState.Empty -> onEmpty()

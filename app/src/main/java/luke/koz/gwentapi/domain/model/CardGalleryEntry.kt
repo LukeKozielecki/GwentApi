@@ -12,4 +12,7 @@ data class CardGalleryEntry(//todo rework this into general Card class[?]
     val rarity: String,
     val power: Int,
     val flavor: String,
+
+    val isLiked: Boolean = false,
+    val likeCount: Int = 0
 )

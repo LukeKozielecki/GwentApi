@@ -21,7 +21,7 @@ private fun CardDetailsStateHandlerInternal(
     onEmpty: @Composable () -> Unit,
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (List<CardDetailsEntry>) -> Unit,
-    onError: @Composable (String) -> Unit = { ErrorMessage(message = it) }
+    onError: @Composable (String) -> Unit = { ErrorMessage(message = it, onRefreshClick = {}) }
 ) {
     when (state) {
         is CardDetailsState.Empty -> onEmpty()

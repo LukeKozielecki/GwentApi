@@ -15,11 +15,6 @@ import luke.koz.gwentapi.navigation.NavigationHost
 import luke.koz.gwentapi.ui.scaffold.GwentTopAppBar
 import luke.koz.gwentapi.ui.theme.GwentApiTheme
 
-//TODO:
-// - create scaffold topappbar. give it its own file
-// - need to implement topappbar. need logo on the left, perhaps name of app to the right
-//   and perhaps fancy ALL-THREE app feats to the left of icon. and to the left search icon
-//   that fills bar with search bar when clicked and to the right user icon for loggin in.
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

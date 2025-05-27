@@ -129,7 +129,14 @@ private fun LoadingIndicator() {
 
 @Composable
 private fun SuccessStateContent(cards: List<CardGalleryEntry>, onCardClick: (Int) -> Unit) {
-    CardList(cards, onCardClick)
+    //todo rework this to not have this button
+    CardList(
+        cards = cards,
+        onCardClick = onCardClick,
+        onToggleLike = {_, _ ->
+
+        }
+    )
 }
 
 @Composable

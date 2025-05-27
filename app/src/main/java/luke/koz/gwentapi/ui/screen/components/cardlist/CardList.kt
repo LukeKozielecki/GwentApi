@@ -9,13 +9,21 @@ import luke.koz.gwentapi.ui.screen.components.cardstate.EmptyState
 
 
 @Composable
-fun CardList(cards: List<CardGalleryEntry>, onCardClick : (Int) -> Unit) {
+fun CardList(
+    cards: List<CardGalleryEntry>,
+    onCardClick: (Int) -> Unit,
+    onToggleLike: (Int, Boolean) -> Unit
+) {
     if (cards.isEmpty()) {
         EmptyState()
     } else {
         LazyColumn {
             items(cards) { card ->
-                CardItem(card = card, onCardClick)
+                CardItem(
+                    card = card,
+                    onCardClick = onCardClick,
+                    onToggleLike = onToggleLike
+                )
                 HorizontalDivider()
             }
         }

@@ -16,10 +16,20 @@ import luke.koz.gwentapi.ui.viewmodel.factory.SearchViewModelFactory
 fun provideSearchGalleryViewModel(): SearchViewModel {
     val context = LocalContext.current
     val application = context.applicationContext as GwentApplication
+
+    val firebaseUserLikesDataSource = remember {
+        application.userLikesDataSource
+    }
+    val firebaseAuthInstance = remember {
+        application.firebaseAuth
+    }
+
     val repository = remember {
         CardGalleryRepository(
             remote = CardRemoteDataSource(ApiClient.apiService),
-            local = CardLocalDataSource(application.database.cardDao())
+            local = CardLocalDataSource(application.database.cardDao()),
+            userLikesDataSource = firebaseUserLikesDataSource,
+            auth = firebaseAuthInstance
         )
     }
     return viewModel(factory = SearchViewModelFactory(repository))

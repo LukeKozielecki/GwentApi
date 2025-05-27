@@ -20,7 +20,6 @@ import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
 
 @Composable
 fun CardGalleryScreen(
-    cardId: Int,
     onCardClick: (Int) -> Unit,
     navController: NavHostController,
     scaffold: @Composable (NavHostController, @Composable (PaddingValues) -> Unit) -> Unit = { nav, content ->
@@ -33,16 +32,21 @@ fun CardGalleryScreen(
     val cardState by viewModel.cardState
 
     //todo add pull from top to trigger .getAllCards() Pull to refresh https://developer.android.com/develop/ui/compose/components/pull-to-refresh
-    LaunchedEffect(key1 = cardId) {
-        if (cardState == CardState.Empty) {
-            viewModel.getAllCards()
-        }
-    }
+//    LaunchedEffect() {
+//        if (cardState == CardState.Empty) {
+//            viewModel.getAllCards()
+//        }
+//    }
 
     ScaffoldWrapper(
         navController = navController,
         scaffold = scaffold
     ) {
-        CardGalleryStateHandler(cardState, onCardClick)
+        CardGalleryStateHandler(
+            state = cardState,
+            onCardClick = onCardClick,
+            onToggleLike = viewModel::toggleLike,
+            onRefreshClick = viewModel::getAllCards
+        )
     }
 }
