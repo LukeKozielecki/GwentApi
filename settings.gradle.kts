@@ -21,3 +21,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "Gwent Api"
 include(":app")
+include(":feature:cardgallery")
+include(":core:presentation")
+include(":domain")
+include(":feature:search")
+include(":feature:auth")
+include(":feature:carddetails")
+include(":data")
+include(":infrastructure")
+include(":di")
+include(":core:di")
+include(":navigation")

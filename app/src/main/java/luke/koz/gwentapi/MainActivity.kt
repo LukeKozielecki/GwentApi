@@ -6,14 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import luke.koz.gwentapi.navigation.AuthDestination
 import luke.koz.gwentapi.navigation.NavigationHost
-import luke.koz.gwentapi.ui.scaffold.GwentTopAppBar
-import luke.koz.gwentapi.ui.theme.GwentApiTheme
+import luke.koz.presentation.theme.GwentApiTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

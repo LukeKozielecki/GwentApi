@@ -1,37 +1,49 @@
 package luke.koz.gwentapi.application
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import luke.koz.gwentapi.data.datasource.FirebaseUserLikesDataSource
-import luke.koz.gwentapi.data.datasource.UserLikesDataSource
-import luke.koz.gwentapi.data.local.database.AppDatabase
-import luke.koz.gwentapi.data.remote.utils.PersistentImageLoader
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import coil3.ImageLoader
+import luke.koz.auth.AuthViewModel
+import luke.koz.auth.AuthViewModelFactory
+import luke.koz.carddetails.CardDetailViewModel
+import luke.koz.carddetails.CardDetailViewModelFactory
+import luke.koz.cardgallery.CardGalleryViewModelFactory
+import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
+import luke.koz.di.AppContainer
+import luke.koz.di.AppDependencyProvider
+import luke.koz.search.SearchViewModel
+import luke.koz.search.SearchViewModelFactory
 
-private const val FIREBASE_BASE_URL = "https://gwent-api-712bc-default-rtdb.europe-west1.firebasedatabase.app"
-
-class GwentApplication : Application() {
-    val database: AppDatabase by lazy {
-        AppDatabase.getDatabase(this)
+class GwentApplication : Application(), AppDependencyProvider {
+    override fun <T : ViewModel> getViewModelFactory(clazz: Class<T>): ViewModelProvider.Factory {
+        return when {
+            clazz.isAssignableFrom(SearchViewModel::class.java) ->
+                SearchViewModelFactory(appContainer.cardGalleryRepository)
+            clazz.isAssignableFrom(CardDetailViewModel::class.java) ->
+                CardDetailViewModelFactory(appContainer.cardDetailsRepository)
+            clazz.isAssignableFrom(CardGalleryViewModel::class.java) ->
+                CardGalleryViewModelFactory(
+                    repository = appContainer.cardGalleryRepository,
+                    userLikesDataSource = appContainer.userLikesDataSource,
+                    auth = appContainer.firebaseAuth
+                )
+            clazz.isAssignableFrom(AuthViewModel::class.java) ->
+                AuthViewModelFactory(appContainer.authRepository)
+            // todo add other ViewModel factories
+            else -> throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
-    val persistentImageLoader by lazy {
-        PersistentImageLoader.create(this)
+    override fun getImageLoader(): ImageLoader {
+        return appContainer.imageLoader
     }
-    lateinit var firebaseDatabase: FirebaseDatabase
-        private set
 
-    lateinit var firebaseAuth: FirebaseAuth
-        private set
-
-    lateinit var userLikesDataSource: UserLikesDataSource
+    lateinit var appContainer: AppContainer
         private set
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseApp.initializeApp(this)
-        firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_BASE_URL)
-        firebaseAuth = FirebaseAuth.getInstance()
-        userLikesDataSource = FirebaseUserLikesDataSource(firebaseDatabase, firebaseAuth)
+        appContainer = AppContainer(this)
     }
+
 }

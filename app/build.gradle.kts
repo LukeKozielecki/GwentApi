@@ -85,4 +85,16 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
     implementation("com.google.firebase:firebase-database-ktx")
+
+    implementation(project(":feature:carddetails"))
+    implementation(project(":feature:cardgallery"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:search"))
+    implementation(project(":domain"))
+    implementation(project(":infrastructure"))
+    implementation(project(":navigation"))
+    implementation(project(":di"))
+    implementation(project(":data"))
+    implementation(project(":core:presentation"))
+    implementation(project(":core:di"))
 }
