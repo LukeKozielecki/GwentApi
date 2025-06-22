@@ -12,35 +12,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import kotlinx.serialization.Serializable
-import luke.koz.gwentapi.di.provideSearchGalleryViewModel
-import luke.koz.gwentapi.ui.screen.auth.AuthScreen
-import luke.koz.gwentapi.ui.screen.carddetails.CardDetailScreen
-import luke.koz.gwentapi.ui.screen.cardgallery.CardGalleryScreen
-import luke.koz.gwentapi.ui.screen.search.SearchScreen
-import luke.koz.gwentapi.ui.viewmodel.SearchViewModel
-
-@Serializable
-object CardGalleryDestination
-
-@Serializable
-data class CardDetailDestination(val cardId: Int)
-
-@Serializable
-object SearchDestination
-
-@Serializable
-object AuthDestination
+import luke.koz.search.provideSearchGalleryViewModel
+import luke.koz.auth.AuthScreen
+import luke.koz.carddetails.CardDetailScreen
+import luke.koz.cardgallery.CardGalleryScreen
+import luke.koz.gwentapi.application.GwentApplication
+import luke.koz.navigation.AuthDestination
+import luke.koz.navigation.CardDetailDestination
+import luke.koz.navigation.CardGalleryDestination
+import luke.koz.navigation.SearchDestination
+import luke.koz.search.SearchScreen
+import luke.koz.search.SearchViewModel
 
 @Composable
 fun NavigationHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val appDependencyProvider = context.applicationContext as GwentApplication
+    val imageLoader = appDependencyProvider.getImageLoader()
     NavHost(
         navController = navController,
         startDestination = CardGalleryDestination,
@@ -73,7 +69,8 @@ fun NavigationHost(
                     onCardClick = { cardId ->
                         navController.navigate(CardDetailDestination(cardId))
                     },
-                    navController = navController
+                    navController = navController,
+                    imageLoader = imageLoader
                 )
             }
         }
@@ -82,12 +79,14 @@ fun NavigationHost(
             CardDetailScreen(
                 cardId = args.cardId,
                 onBack = { navController.popBackStack() },
-                navController = navController
+                navController = navController,
+                imageLoader = imageLoader
             )
         }
 
         composable<SearchDestination> {
-            val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
+            val searchViewModel: SearchViewModel =
+                provideSearchGalleryViewModel()
             val searchState by searchViewModel.searchState
             SearchScreen(
                 query = searchViewModel.query,
@@ -98,6 +97,7 @@ fun NavigationHost(
                     navController.navigate(CardDetailDestination(cardId))
                 },
                 closeSearch = { navController.popBackStack() },
+                imageLoader = imageLoader,
                 navController = navController
             )
         }
