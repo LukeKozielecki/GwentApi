@@ -6,6 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luke.koz.domain.auth.AuthResult
 import luke.koz.domain.auth.LoginUseCase
@@ -18,6 +21,16 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
+
+    private val _currentUser = MutableStateFlow<AuthUserModel?>(null)
+    val currentUser: StateFlow<AuthUserModel?> = _currentUser.asStateFlow()
+
+    private val _isUserCheckComplete = MutableStateFlow(false)
+    val isUserCheckComplete: StateFlow<Boolean> = _isUserCheckComplete.asStateFlow()
+
+    init {
+        checkCurrentUserOnInit()
+    }
 
     var email by mutableStateOf("")
         private set
@@ -40,6 +53,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         if (!isFormValid) return
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+            //todo usecase should come via dependency
             val result = LoginUseCase(authRepository).invoke(email, password)
             handleAuthResult(result)
         }
@@ -48,6 +62,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         if (!isFormValid) return
         viewModelScope.launch {
             _authState.value = AuthState.Loading
+            //todo usecase should come via dependency
             val result = RegisterUseCase(authRepository).invoke(email, password)
             handleAuthResult(result)
         }
@@ -63,8 +78,26 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun resetAuthState() {
         _authState.value = AuthState.Idle
     }
+
+
+    private fun checkCurrentUserOnInit() {
+        viewModelScope.launch {
+            _currentUser.value = authRepository.getCurrentUser()
+            _isUserCheckComplete.value = true
+        }
+    }
+
+    //todo implement logging out
+    fun logout() {
+
+        viewModelScope.launch {
+            _currentUser.value = null
+            _authState.value = AuthState.Idle
+        }
+    }
 }
 
+//todo extract AuthState to model
 sealed class AuthState {
     object Idle : AuthState()
     object Loading : AuthState()
