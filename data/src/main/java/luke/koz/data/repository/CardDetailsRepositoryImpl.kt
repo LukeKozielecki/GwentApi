@@ -10,7 +10,7 @@ import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.mapper.toCardDetailsEntry
 import luke.koz.data.mapper.toCardEntity
 import luke.koz.domain.model.CardDetailsEntry
-import luke.koz.domain.model.CardDetailsRepository
+import luke.koz.domain.repository.CardDetailsRepository
 
 class CardDetailsRepositoryImpl(
     private val remote: CardRemoteDataSource,

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.domain.model.CardDetailsRepository
+import luke.koz.domain.repository.CardDetailsRepository
 
 class CardDetailViewModel (private val repository: CardDetailsRepository) : ViewModel(){
     private val _cardState = mutableStateOf<luke.koz.presentation.CardDetailsState>(luke.koz.presentation.CardDetailsState.Empty)

@@ -2,7 +2,7 @@ package luke.koz.carddetails.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import luke.koz.domain.model.CardDetailsRepository
+import luke.koz.domain.repository.CardDetailsRepository
 
 class CardDetailViewModelFactory(
     private val repository: CardDetailsRepository

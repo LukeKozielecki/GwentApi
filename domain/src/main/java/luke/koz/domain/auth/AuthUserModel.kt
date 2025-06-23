@@ -1,4 +1,4 @@
-package luke.koz.domain.model
+package luke.koz.domain.auth
 
 /**
  * Represents a simplified user model for authentication purposes.

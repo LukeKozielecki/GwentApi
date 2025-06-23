@@ -12,7 +12,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import luke.koz.domain.model.UserLikesDataSource
+import luke.koz.domain.repository.UserLikesDataSource
 import java.io.IOException
 
 private const val USER_LIKES_NODE = "userLikes"

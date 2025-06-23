@@ -1,7 +1,7 @@
 package luke.koz.domain.auth.usecase
 
 import luke.koz.domain.auth.AuthResult
-import luke.koz.domain.model.AuthOperationResult
+import luke.koz.domain.auth.AuthOperationResult
 import luke.koz.domain.repository.AuthRepository
 
 /**

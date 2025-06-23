@@ -28,7 +28,7 @@ import luke.koz.auth.components.AuthHeader
 import luke.koz.auth.viewmodel.AuthState
 import luke.koz.auth.viewmodel.AuthViewModel
 import luke.koz.auth.viewmodel.provideAuthViewModel
-import luke.koz.domain.model.AuthUserModel
+import luke.koz.domain.auth.AuthUserModel
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 
 @Composable

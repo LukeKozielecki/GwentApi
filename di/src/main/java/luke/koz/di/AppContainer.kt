@@ -18,9 +18,9 @@ import luke.koz.domain.auth.usecase.LoginUseCaseImpl
 import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
 import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.usecase.RegisterUseCaseImpl
-import luke.koz.domain.model.CardDetailsRepository
-import luke.koz.domain.model.CardGalleryRepository
-import luke.koz.domain.model.UserLikesDataSource
+import luke.koz.domain.repository.CardDetailsRepository
+import luke.koz.domain.repository.CardGalleryRepository
+import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.domain.repository.AuthRepository
 import luke.koz.infrastructure.PersistentImageLoader
 import retrofit2.Retrofit

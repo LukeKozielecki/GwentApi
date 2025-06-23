@@ -17,7 +17,7 @@ import luke.koz.domain.auth.LogoutResult
 import luke.koz.domain.auth.usecase.LogoutUseCase
 import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.Validation
-import luke.koz.domain.model.AuthUserModel
+import luke.koz.domain.auth.AuthUserModel
 import luke.koz.domain.repository.AuthRepository
 
 class AuthViewModel(

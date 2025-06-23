@@ -14,8 +14,8 @@ import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.mapper.toCardEntity
 import luke.koz.data.mapper.toCardGalleryEntry
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.domain.model.CardGalleryRepository
-import luke.koz.domain.model.UserLikesDataSource
+import luke.koz.domain.repository.CardGalleryRepository
+import luke.koz.domain.repository.UserLikesDataSource
 
 /**
  * Implementation of the [CardGalleryRepository] interface. This class is part of the

@@ -2,7 +2,7 @@ package luke.koz.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import luke.koz.domain.model.CardGalleryRepository
+import luke.koz.domain.repository.CardGalleryRepository
 
 class SearchViewModelFactory(
     private val repository: CardGalleryRepository

@@ -1,6 +1,7 @@
-package luke.koz.domain.model
+package luke.koz.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import luke.koz.domain.model.CardDetailsEntry
 
 /**
  * Interface for the Card Details Repository, defining the contract for fetching

@@ -1,7 +1,7 @@
 package luke.koz.data.mapper
 
 import com.google.firebase.auth.FirebaseUser
-import luke.koz.domain.model.AuthUserModel
+import luke.koz.domain.auth.AuthUserModel
 
 /**
  * Object for FirebaseUser mappers.
