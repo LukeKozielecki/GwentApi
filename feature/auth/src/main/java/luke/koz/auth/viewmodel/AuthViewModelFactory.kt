@@ -1,4 +1,4 @@
-package luke.koz.auth
+package luke.koz.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,4 +1,4 @@
-package luke.koz.auth
+package luke.koz.auth.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

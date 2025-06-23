@@ -15,6 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import luke.koz.auth.components.AuthContainer
 import luke.koz.auth.components.AuthHeader
+import luke.koz.auth.viewmodel.AuthState
+import luke.koz.auth.viewmodel.AuthViewModel
+import luke.koz.auth.viewmodel.provideAuthViewModel
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 
 @Composable
