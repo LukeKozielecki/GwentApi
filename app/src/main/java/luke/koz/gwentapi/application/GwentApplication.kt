@@ -29,7 +29,12 @@ class GwentApplication : Application(), AppDependencyProvider {
                     auth = appContainer.firebaseAuth
                 )
             clazz.isAssignableFrom(AuthViewModel::class.java) ->
-                AuthViewModelFactory(appContainer.authRepository)
+                AuthViewModelFactory(
+                    appContainer.authRepository,
+                    appContainer.loginUseCase,
+                    appContainer.registerUseCase,
+                    appContainer.logoutUseCase
+                )
             // todo add other ViewModel factories
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }

@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.domain.model.CardGalleryRepository
-import luke.koz.domain.model.UserLikesDataSource
+import luke.koz.domain.repository.CardGalleryRepository
+import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.presentation.CardState
 
 class CardGalleryViewModel (

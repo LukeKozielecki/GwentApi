@@ -1,23 +1,44 @@
 package luke.koz.auth.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luke.koz.domain.auth.AuthResult
-import luke.koz.domain.auth.LoginUseCase
-import luke.koz.domain.auth.RegisterUseCase
+import luke.koz.domain.auth.usecase.LoginUseCase
+import luke.koz.domain.auth.LogoutResult
+import luke.koz.domain.auth.usecase.LogoutUseCase
+import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.Validation
-import luke.koz.domain.model.AuthUserModel
+import luke.koz.domain.auth.AuthUserModel
 import luke.koz.domain.repository.AuthRepository
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel(
+    private val authRepository: AuthRepository,
+    private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
+    private val logoutUseCase: LogoutUseCase
+) : ViewModel() {
 
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
+
+    private val _currentUser = MutableStateFlow<AuthUserModel?>(null)
+    val currentUser: StateFlow<AuthUserModel?> = _currentUser.asStateFlow()
+
+    private val _isUserCheckComplete = MutableStateFlow(false)
+    val isUserCheckComplete: StateFlow<Boolean> = _isUserCheckComplete.asStateFlow()
+
+    init {
+        checkCurrentUserOnInit()
+    }
 
     var email by mutableStateOf("")
         private set
@@ -40,7 +61,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         if (!isFormValid) return
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            val result = LoginUseCase(authRepository).invoke(email, password)
+            //todo usecase should come via dependency
+            val result = loginUseCase.invoke(email, password)
             handleAuthResult(result)
         }
     }
@@ -48,7 +70,8 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         if (!isFormValid) return
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            val result = RegisterUseCase(authRepository).invoke(email, password)
+            //todo usecase should come via dependency
+            val result = registerUseCase.invoke(email, password)
             handleAuthResult(result)
         }
     }
@@ -63,8 +86,33 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     fun resetAuthState() {
         _authState.value = AuthState.Idle
     }
+
+
+    private fun checkCurrentUserOnInit() {
+        viewModelScope.launch {
+            _currentUser.value = authRepository.getCurrentUser()
+            _isUserCheckComplete.value = true
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            when (val result = logoutUseCase.invoke()) {
+                is LogoutResult.Success -> {
+                    _currentUser.value = null
+                    _authState.value = AuthState.Idle
+                    Log.d("AuthViewModel", "User logged out successfully.")
+                }
+                is LogoutResult.Error -> {
+                    Log.e("AuthViewModel", "Logout failed: ${result.message}")
+                    _authState.value = AuthState.Error(result.message)
+                }
+            }
+        }
+    }
 }
 
+//todo extract AuthState to model
 sealed class AuthState {
     object Idle : AuthState()
     object Loading : AuthState()

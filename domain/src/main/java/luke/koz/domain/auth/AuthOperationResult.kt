@@ -1,4 +1,4 @@
-package luke.koz.domain.model
+package luke.koz.domain.auth
 
 /**
  * A sealed class representing the result of an asynchronous authentication operation.

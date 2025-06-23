@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.domain.model.CardGalleryRepository
+import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.presentation.state.SearchState
 
 class SearchViewModel (private val repository: CardGalleryRepository) : ViewModel() {

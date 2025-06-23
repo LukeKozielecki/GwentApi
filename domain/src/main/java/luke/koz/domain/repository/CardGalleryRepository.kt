@@ -1,6 +1,7 @@
-package luke.koz.domain.model
+package luke.koz.domain.repository
 
 import kotlinx.coroutines.flow.Flow
+import luke.koz.domain.model.CardGalleryEntry
 
 /**
  * Interface for the Card Gallery Repository, defining the contract for data operations

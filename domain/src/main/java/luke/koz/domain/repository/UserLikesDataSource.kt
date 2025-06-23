@@ -1,4 +1,4 @@
-package luke.koz.domain.model
+package luke.koz.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 

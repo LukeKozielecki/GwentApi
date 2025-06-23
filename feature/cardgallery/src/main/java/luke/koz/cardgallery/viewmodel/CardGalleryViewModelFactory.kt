@@ -3,8 +3,8 @@ package luke.koz.cardgallery.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import luke.koz.domain.model.CardGalleryRepository
-import luke.koz.domain.model.UserLikesDataSource
+import luke.koz.domain.repository.CardGalleryRepository
+import luke.koz.domain.repository.UserLikesDataSource
 
 class CardGalleryViewModelFactory(
     private val repository: CardGalleryRepository,
