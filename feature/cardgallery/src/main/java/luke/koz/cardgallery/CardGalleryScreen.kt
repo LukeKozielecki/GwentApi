@@ -6,7 +6,9 @@ import androidx.compose.runtime.getValue
 import coil3.ImageLoader
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
+import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 import luke.koz.search.SearchViewModel

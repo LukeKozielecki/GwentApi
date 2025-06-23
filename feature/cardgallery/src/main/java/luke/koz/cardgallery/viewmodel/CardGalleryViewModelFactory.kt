@@ -1,9 +1,8 @@
-package luke.koz.cardgallery
+package luke.koz.cardgallery.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.domain.model.CardGalleryRepository
 import luke.koz.domain.model.UserLikesDataSource
 

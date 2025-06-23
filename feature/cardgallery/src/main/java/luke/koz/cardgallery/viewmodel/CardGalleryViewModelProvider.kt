@@ -1,9 +1,8 @@
-package luke.koz.cardgallery
+package luke.koz.cardgallery.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.di.AppDependencyProvider
 
 @Composable

@@ -1,4 +1,4 @@
-package luke.koz.cardgallery
+package luke.koz.cardgallery.components
 
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
