@@ -34,6 +34,10 @@ class AuthRepositoryImpl : AuthRepository {
     override suspend fun getCurrentUser(): AuthUserModel? {
         return Firebase.auth.currentUser?.let { FirebaseUserMappers.toAuthUserModel(it) }
     }
+
+    override suspend fun signOut() {
+        Firebase.auth.signOut()
+    }
 }
 
 

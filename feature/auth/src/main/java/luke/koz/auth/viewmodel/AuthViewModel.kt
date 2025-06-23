@@ -1,5 +1,6 @@
 package luke.koz.auth.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luke.koz.domain.auth.AuthResult
 import luke.koz.domain.auth.LoginUseCase
+import luke.koz.domain.auth.LogoutResult
+import luke.koz.domain.auth.LogoutUseCase
 import luke.koz.domain.auth.RegisterUseCase
 import luke.koz.domain.auth.Validation
 import luke.koz.domain.model.AuthUserModel
@@ -87,12 +90,19 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         }
     }
 
-    //todo implement logging out
     fun logout() {
-
         viewModelScope.launch {
-            _currentUser.value = null
-            _authState.value = AuthState.Idle
+            when (val result = LogoutUseCase(authRepository).invoke()) {
+                is LogoutResult.Success -> {
+                    _currentUser.value = null
+                    _authState.value = AuthState.Idle
+                    Log.d("AuthViewModel", "User logged out successfully.")
+                }
+                is LogoutResult.Error -> {
+                    Log.e("AuthViewModel", "Logout failed: ${result.message}")
+                    _authState.value = AuthState.Error(result.message)
+                }
+            }
         }
     }
 }
