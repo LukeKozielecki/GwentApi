@@ -33,6 +33,9 @@ class FirebaseUserLikesDataSource(
     }
 
     //todo fix: when user turns off wifi, toggles like, and connect wifi it will emit the change and add like no matter what
+    /**
+     * @see UserLikesDataSource.toggleCardLike
+     */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean) {
         Log.d(LOG_TAG_AUTH, firebaseAuth.currentUser?.uid.toString())
 
@@ -53,6 +56,9 @@ class FirebaseUserLikesDataSource(
         }
     }
 
+    /**
+     * @see UserLikesDataSource.observeLikesForAllCards
+     */
     override fun observeLikesForAllCards(): Flow<Map<Int, Set<String>>> = callbackFlow {
         val listener = userLikesRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -79,6 +85,9 @@ class FirebaseUserLikesDataSource(
         awaitClose { userLikesRef.removeEventListener(listener) }
     }
 
+    /**
+     * @see UserLikesDataSource.getLikedCardIdsForUser
+     */
     override suspend fun getLikedCardIdsForUser(userId: String): Set<Int> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch liked cards for user: $userId")
         return try {
@@ -104,6 +113,9 @@ class FirebaseUserLikesDataSource(
         }
     }
 
+    /**
+     * @see UserLikesDataSource.getLikesForAllCards
+     */
     override suspend fun getLikesForAllCards(): Map<Int, Set<String>> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch likes for all cards (one-time)")
         return try {

@@ -1,5 +1,8 @@
 package luke.koz.domain.model
 
+/**
+ * Represents a card entry for purpose of showcasing card details
+ */
 class CardDetailsEntry(
     //Not displayed
     val cardId: Int,

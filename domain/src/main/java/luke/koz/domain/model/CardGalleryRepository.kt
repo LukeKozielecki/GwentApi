@@ -4,8 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * Interface for the Card Gallery Repository, defining the contract for data operations
- * related to Gwent cards. This interface belongs to the domain layer, ensuring that
- * the business logic is independent of data source implementations.
+ * related to Gwent cards.
  */
 interface CardGalleryRepository {
 
@@ -20,7 +19,7 @@ interface CardGalleryRepository {
 
     /**
      * Retrieves a list of cards that match a given query string.
-     * This typically fetches from the local cache.
+     * The implementation should fetch cards that [CardGalleryEntry.name] matches query.
      *
      * @param query The search query string.
      * @return A [Flow] emitting a [List] of [CardGalleryEntry] that match the query.
@@ -39,6 +38,7 @@ interface CardGalleryRepository {
 
     /**
      * Retrieves the set of card IDs liked by a specific user.
+     * This is used to determine ui state that should be displayed to the user.
      *
      * @param userId The ID of the user.
      * @return A [Set] of [Int] representing the IDs of cards liked by the user.
