@@ -20,7 +20,12 @@ import luke.koz.domain.auth.Validation
 import luke.koz.domain.model.AuthUserModel
 import luke.koz.domain.repository.AuthRepository
 
-class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
+class AuthViewModel(
+    private val authRepository: AuthRepository,
+    private val loginUseCase: LoginUseCase,
+    private val registerUseCase: RegisterUseCase,
+    private val logoutUseCase: LogoutUseCase
+) : ViewModel() {
 
     private val _authState = mutableStateOf<AuthState>(AuthState.Idle)
     val authState: State<AuthState> = _authState
@@ -57,7 +62,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             //todo usecase should come via dependency
-            val result = LoginUseCase(authRepository).invoke(email, password)
+            val result = loginUseCase.invoke(email, password)
             handleAuthResult(result)
         }
     }
@@ -66,7 +71,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
             //todo usecase should come via dependency
-            val result = RegisterUseCase(authRepository).invoke(email, password)
+            val result = registerUseCase.invoke(email, password)
             handleAuthResult(result)
         }
     }
@@ -92,7 +97,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
     fun logout() {
         viewModelScope.launch {
-            when (val result = LogoutUseCase(authRepository).invoke()) {
+            when (val result = logoutUseCase.invoke()) {
                 is LogoutResult.Success -> {
                     _currentUser.value = null
                     _authState.value = AuthState.Idle

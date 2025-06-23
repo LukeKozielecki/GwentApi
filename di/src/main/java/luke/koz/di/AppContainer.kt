@@ -13,6 +13,11 @@ import luke.koz.data.remote.api.ApiService
 import luke.koz.data.repository.AuthRepositoryImpl
 import luke.koz.data.repository.CardDetailsRepositoryImpl
 import luke.koz.data.repository.CardGalleryRepositoryImpl
+import luke.koz.domain.auth.LoginUseCase
+import luke.koz.domain.auth.LoginUseCaseImpl
+import luke.koz.domain.auth.LogoutUseCaseImpl
+import luke.koz.domain.auth.RegisterUseCase
+import luke.koz.domain.auth.RegisterUseCaseImpl
 import luke.koz.domain.model.CardDetailsRepository
 import luke.koz.domain.model.CardGalleryRepository
 import luke.koz.domain.model.UserLikesDataSource
@@ -81,6 +86,18 @@ class AppContainer(private val applicationContext: Context) {
 
     val cardRemoteDataSource: CardRemoteDataSource by lazy {
         CardRemoteDataSource(apiService)
+    }
+
+    val loginUseCase: LoginUseCase by lazy {
+        LoginUseCaseImpl(authRepository)
+    }
+
+    val registerUseCase: RegisterUseCase by lazy {
+        RegisterUseCaseImpl(authRepository)
+    }
+
+    val logoutUseCase : LogoutUseCaseImpl by lazy {
+        LogoutUseCaseImpl(authRepository)
     }
 
     // --- Repository Implementation (Data Layer) ---
