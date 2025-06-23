@@ -17,7 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import luke.koz.search.provideSearchGalleryViewModel
+import luke.koz.search.viewmodel.provideSearchGalleryViewModel
 import luke.koz.auth.AuthScreen
 import luke.koz.carddetails.CardDetailScreen
 import luke.koz.cardgallery.CardGalleryScreen
@@ -27,7 +27,7 @@ import luke.koz.navigation.CardDetailDestination
 import luke.koz.navigation.CardGalleryDestination
 import luke.koz.navigation.SearchDestination
 import luke.koz.search.SearchScreen
-import luke.koz.search.SearchViewModel
+import luke.koz.search.viewmodel.SearchViewModel
 
 @Composable
 fun NavigationHost(

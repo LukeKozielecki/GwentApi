@@ -19,6 +19,7 @@ import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 import luke.koz.presentation.state.SearchState
+import luke.koz.search.components.CustomSearchBar
 
 /* todo change this scaffold, so that custom search app bar is inside the scaffold
     refactor CustomSearchBar to have only result

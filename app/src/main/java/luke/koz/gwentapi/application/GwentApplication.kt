@@ -12,8 +12,8 @@ import luke.koz.cardgallery.viewmodel.CardGalleryViewModelFactory
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.di.AppContainer
 import luke.koz.di.AppDependencyProvider
-import luke.koz.search.SearchViewModel
-import luke.koz.search.SearchViewModelFactory
+import luke.koz.search.viewmodel.SearchViewModel
+import luke.koz.search.viewmodel.SearchViewModelFactory
 
 class GwentApplication : Application(), AppDependencyProvider {
     override fun <T : ViewModel> getViewModelFactory(clazz: Class<T>): ViewModelProvider.Factory {

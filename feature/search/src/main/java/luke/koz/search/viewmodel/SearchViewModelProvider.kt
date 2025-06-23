@@ -1,4 +1,4 @@
-package luke.koz.search
+package luke.koz.search.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

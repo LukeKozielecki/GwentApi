@@ -1,4 +1,4 @@
-package luke.koz.search
+package luke.koz.search.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

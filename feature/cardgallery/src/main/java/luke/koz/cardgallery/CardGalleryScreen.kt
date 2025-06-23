@@ -11,8 +11,8 @@ import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
-import luke.koz.search.SearchViewModel
-import luke.koz.search.provideSearchGalleryViewModel
+import luke.koz.search.viewmodel.SearchViewModel
+import luke.koz.search.viewmodel.provideSearchGalleryViewModel
 
 @Composable
 fun CardGalleryScreen(

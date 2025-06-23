@@ -1,4 +1,4 @@
-package luke.koz.search
+package luke.koz.search.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
