@@ -10,6 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import coil3.ImageLoader
+import luke.koz.carddetails.components.CardDetailsStateHandler
+import luke.koz.carddetails.viewmodel.CardDetailViewModel
+import luke.koz.carddetails.viewmodel.provideCardDetailViewModel
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 

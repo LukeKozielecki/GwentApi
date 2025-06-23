@@ -1,4 +1,4 @@
-package luke.koz.carddetails
+package luke.koz.carddetails.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardDetailsEntry
-import luke.koz.carddetails.components.CardImageOverlay
 
 //todo onCardClick should navigate to ~FullscreenCardWithAuthorShowcase
 @OptIn(ExperimentalLayoutApi::class)

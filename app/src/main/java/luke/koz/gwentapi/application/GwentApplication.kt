@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import coil3.ImageLoader
 import luke.koz.auth.AuthViewModel
 import luke.koz.auth.AuthViewModelFactory
-import luke.koz.carddetails.CardDetailViewModel
-import luke.koz.carddetails.CardDetailViewModelFactory
+import luke.koz.carddetails.viewmodel.CardDetailViewModel
+import luke.koz.carddetails.viewmodel.CardDetailViewModelFactory
 import luke.koz.cardgallery.CardGalleryViewModelFactory
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.di.AppContainer

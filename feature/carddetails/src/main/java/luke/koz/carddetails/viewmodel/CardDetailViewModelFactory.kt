@@ -1,4 +1,4 @@
-package luke.koz.carddetails
+package luke.koz.carddetails.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

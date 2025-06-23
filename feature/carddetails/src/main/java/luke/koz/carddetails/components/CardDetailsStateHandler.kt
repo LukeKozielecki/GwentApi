@@ -1,4 +1,4 @@
-package luke.koz.carddetails
+package luke.koz.carddetails.components
 
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader

@@ -1,4 +1,4 @@
-package luke.koz.carddetails
+package luke.koz.carddetails.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
