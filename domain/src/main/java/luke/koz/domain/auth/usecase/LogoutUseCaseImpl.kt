@@ -1,10 +1,7 @@
-package luke.koz.domain.auth
+package luke.koz.domain.auth.usecase
 
+import luke.koz.domain.auth.LogoutResult
 import luke.koz.domain.repository.AuthRepository
-
-interface LogoutUseCase {
-    suspend operator fun invoke(): LogoutResult
-}
 
 /**
  * Contains the business logic for user logging out.

@@ -13,11 +13,11 @@ import luke.koz.data.remote.api.ApiService
 import luke.koz.data.repository.AuthRepositoryImpl
 import luke.koz.data.repository.CardDetailsRepositoryImpl
 import luke.koz.data.repository.CardGalleryRepositoryImpl
-import luke.koz.domain.auth.LoginUseCase
-import luke.koz.domain.auth.LoginUseCaseImpl
-import luke.koz.domain.auth.LogoutUseCaseImpl
-import luke.koz.domain.auth.RegisterUseCase
-import luke.koz.domain.auth.RegisterUseCaseImpl
+import luke.koz.domain.auth.usecase.LoginUseCase
+import luke.koz.domain.auth.usecase.LoginUseCaseImpl
+import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
+import luke.koz.domain.auth.usecase.RegisterUseCase
+import luke.koz.domain.auth.usecase.RegisterUseCaseImpl
 import luke.koz.domain.model.CardDetailsRepository
 import luke.koz.domain.model.CardGalleryRepository
 import luke.koz.domain.model.UserLikesDataSource

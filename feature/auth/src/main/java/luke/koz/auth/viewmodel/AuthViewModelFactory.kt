@@ -2,9 +2,9 @@ package luke.koz.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import luke.koz.domain.auth.LoginUseCase
-import luke.koz.domain.auth.LogoutUseCase
-import luke.koz.domain.auth.RegisterUseCase
+import luke.koz.domain.auth.usecase.LoginUseCase
+import luke.koz.domain.auth.usecase.LogoutUseCase
+import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.repository.AuthRepository
 
 class AuthViewModelFactory(

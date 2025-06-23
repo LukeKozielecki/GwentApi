@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import luke.koz.domain.auth.AuthResult
-import luke.koz.domain.auth.LoginUseCase
+import luke.koz.domain.auth.usecase.LoginUseCase
 import luke.koz.domain.auth.LogoutResult
-import luke.koz.domain.auth.LogoutUseCase
-import luke.koz.domain.auth.RegisterUseCase
+import luke.koz.domain.auth.usecase.LogoutUseCase
+import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.Validation
 import luke.koz.domain.model.AuthUserModel
 import luke.koz.domain.repository.AuthRepository

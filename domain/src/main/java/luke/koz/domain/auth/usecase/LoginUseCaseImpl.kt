@@ -1,11 +1,8 @@
-package luke.koz.domain.auth
+package luke.koz.domain.auth.usecase
 
+import luke.koz.domain.auth.AuthResult
 import luke.koz.domain.model.AuthOperationResult
 import luke.koz.domain.repository.AuthRepository
-
-interface LoginUseCase {
-    suspend operator fun invoke(email: String, password: String): AuthResult
-}
 
 /**
  * Contains the business logic for user logging in. Orchestrates the authentication process
