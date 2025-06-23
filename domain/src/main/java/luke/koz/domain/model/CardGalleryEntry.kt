@@ -1,9 +1,10 @@
 package luke.koz.domain.model
+
+//todo rework this into general Card class[?]
 /**
- * Represents a card entry in the gallery.
- * @see luke.koz.gwentapi.data.remote.model.CardDtoMappers.toDomain
+ * Represents a card entry in the gallery
  */
-data class CardGalleryEntry(//todo rework this into general Card class[?]
+data class CardGalleryEntry(
     val id: Int,
     val artId: Int,
     val name: String,
