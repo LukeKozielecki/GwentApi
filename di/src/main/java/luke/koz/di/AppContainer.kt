@@ -6,7 +6,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import luke.koz.data.datasource.CardLocalDataSource
+import luke.koz.data.datasource.CardLocalDataSourceImpl
 import luke.koz.data.datasource.CardRemoteDataSource
+import luke.koz.data.datasource.CardRemoteDataSourceImpl
 import luke.koz.data.datasource.FirebaseUserLikesDataSource
 import luke.koz.data.local.database.AppDatabase
 import luke.koz.data.remote.api.ApiService
@@ -71,7 +73,7 @@ class AppContainer(private val applicationContext: Context) {
     val cardDao = appDatabase.cardDao()
 
     val cardLocalDataSource: CardLocalDataSource by lazy {
-        CardLocalDataSource(cardDao)
+        CardLocalDataSourceImpl(cardDao)
     }
 
     // Retrofit related
@@ -87,7 +89,7 @@ class AppContainer(private val applicationContext: Context) {
     }
 
     val cardRemoteDataSource: CardRemoteDataSource by lazy {
-        CardRemoteDataSource(apiService)
+        CardRemoteDataSourceImpl(apiService)
     }
 
     val loginUseCase: LoginUseCase by lazy {

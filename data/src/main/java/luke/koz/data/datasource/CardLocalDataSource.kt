@@ -1,13 +1,13 @@
 package luke.koz.data.datasource
 
-import luke.koz.data.local.dao.CardDao
+import kotlinx.coroutines.flow.Flow
 import luke.koz.data.local.entity.CardEntity
 
-class CardLocalDataSource(private val dao: CardDao) {
-    suspend fun upsertCard(card: CardEntity) = dao.upsertCard(card)
-    suspend fun upsertCards(cards: List<CardEntity>) = dao.upsertCards(cards)
+interface CardLocalDataSource {
+    suspend fun upsertCard(card: CardEntity)
+    suspend fun upsertCards(cards: List<CardEntity>)
 
-    fun getCardById(cardId: Int) = dao.getCardById(cardId)
-    fun getCardByQuery(query: String) = dao.getCardByQuery(query)
-    fun getAllCards() = dao.getAllCards()
+    fun getCardById(cardId: Int): Flow<CardEntity>
+    fun getCardByQuery(query: String): Flow<List<CardEntity>>
+    fun getAllCards(): Flow<List<CardEntity>>
 }
