@@ -5,7 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -16,6 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import luke.koz.domain.model.CardGalleryEntry
+import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.presentation.CardState
@@ -23,7 +23,7 @@ import luke.koz.presentation.CardState
 class CardGalleryViewModel (
     private val repository: CardGalleryRepository,
     private val userLikesDataSource: UserLikesDataSource,
-    private val auth: FirebaseAuth
+    private val authStatusRepository: AuthStatusRepository
 ) : ViewModel (){
     private val _cardState = mutableStateOf<CardState>(CardState.Empty)
     val cardState: State<CardState> = _cardState
@@ -32,8 +32,15 @@ class CardGalleryViewModel (
     private val _likedCardIdsFlow = MutableStateFlow<Set<Int>>(emptySet())
     private val _allCardLikesFlow = MutableStateFlow<Map<Int, Set<String>>>(emptyMap())
 
+//    private val authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+//        val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+//        Log.d("CardGalleryVM", "FirebaseAuth state changed. User: ${firebaseUser?.email ?: "null"}")
+//        refreshLikesForCurrentUser()
+//    }
+
+    private val _currentUserId = MutableStateFlow<String?>(null)
+
     init {
-        // Always start with Loading state
         _cardState.value = CardState.Loading
 
         _rawCardsFlow
@@ -72,6 +79,13 @@ class CardGalleryViewModel (
             }
             .launchIn(viewModelScope)
 
+        authStatusRepository.observeCurrentUser()
+            .onEach { authUserModel ->
+                _currentUserId.value = authUserModel?.id
+                Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
+                refreshLikesForCurrentUser(authUserModel?.id)
+            }
+            .launchIn(viewModelScope)
         getAllCards()
     }
 
@@ -89,24 +103,9 @@ class CardGalleryViewModel (
                     }
                 }
 
-                // Fetch likes
-                Log.d("CardGalleryVM", "Fetch likes")
-                val likesJob = launch {
-                    val currentUserId = auth.currentUser?.uid
-                    _likedCardIdsFlow.value = currentUserId?.let {
-                        userLikesDataSource.getLikedCardIdsForUser(it).also {
-                            Log.d("CardGalleryVM", "Liked IDs fetched: ${it.size}")
-                        }
-                    } ?: emptySet()
-
-                    userLikesDataSource.getLikesForAllCards().also { allLikes ->
-                        Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
-                        _allCardLikesFlow.value = allLikes
-                    }
-                }
-
                 cardsJob.join()
-                likesJob.join()
+
+                refreshLikesForCurrentUser(_currentUserId.value)
 
             } catch (e: Exception) {
                 _cardState.value = CardState.Error(e.message ?: "Failed to load cards")
@@ -114,8 +113,30 @@ class CardGalleryViewModel (
         }
     }
 
+    private fun refreshLikesForCurrentUser(currentUserId: String? = null) {
+        Log.d("CardGalleryVM", "refreshLikesForCurrentUser called.")
+        viewModelScope.launch {
+            try {
+                Log.d("CardGalleryVM","Current user ID for likes refresh: ${currentUserId ?: "null"}")
+
+                _likedCardIdsFlow.value = currentUserId?.let {
+                    userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
+                        Log.d("CardGalleryVM", "Liked IDs fetched: ${likedIds.size}")
+                    }
+                } ?: emptySet()
+
+                userLikesDataSource.getLikesForAllCards().also { allLikes ->
+                    Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
+                    _allCardLikesFlow.value = allLikes
+                }
+            } catch (e: Exception) {
+                Log.e("CardGalleryVM", "Error refreshing likes: ${e.message}", e)
+            }
+        }
+    }
+
     fun toggleLike(cardId: Int, isCurrentlyLiked: Boolean) {
-        val userId = auth.currentUser?.uid ?: run {
+        val userId = _currentUserId.value ?: run {
             _cardState.value = CardState.Error("Authentication required")
             return
         }

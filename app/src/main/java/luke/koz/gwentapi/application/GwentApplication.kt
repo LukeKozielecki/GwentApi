@@ -26,7 +26,7 @@ class GwentApplication : Application(), AppDependencyProvider {
                 CardGalleryViewModelFactory(
                     repository = appContainer.cardGalleryRepository,
                     userLikesDataSource = appContainer.userLikesDataSource,
-                    auth = appContainer.firebaseAuth
+                    authStatusRepository = appContainer.authStatusRepository
                 )
             clazz.isAssignableFrom(AuthViewModel::class.java) ->
                 AuthViewModelFactory(
