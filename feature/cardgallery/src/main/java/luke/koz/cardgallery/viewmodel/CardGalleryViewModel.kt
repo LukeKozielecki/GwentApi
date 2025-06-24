@@ -5,8 +5,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -17,6 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import luke.koz.domain.model.CardGalleryEntry
+import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.presentation.CardState
@@ -24,7 +23,7 @@ import luke.koz.presentation.CardState
 class CardGalleryViewModel (
     private val repository: CardGalleryRepository,
     private val userLikesDataSource: UserLikesDataSource,
-    private val auth: FirebaseAuth
+    private val authStatusRepository: AuthStatusRepository
 ) : ViewModel (){
     private val _cardState = mutableStateOf<CardState>(CardState.Empty)
     val cardState: State<CardState> = _cardState
@@ -33,11 +32,13 @@ class CardGalleryViewModel (
     private val _likedCardIdsFlow = MutableStateFlow<Set<Int>>(emptySet())
     private val _allCardLikesFlow = MutableStateFlow<Map<Int, Set<String>>>(emptyMap())
 
-    private val authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-        val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
-        Log.d("CardGalleryVM", "FirebaseAuth state changed. User: ${firebaseUser?.email ?: "null"}")
-        refreshLikesForCurrentUser()
-    }
+//    private val authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+//        val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+//        Log.d("CardGalleryVM", "FirebaseAuth state changed. User: ${firebaseUser?.email ?: "null"}")
+//        refreshLikesForCurrentUser()
+//    }
+
+    private val _currentUserId = MutableStateFlow<String?>(null)
 
     init {
         _cardState.value = CardState.Loading
@@ -77,7 +78,14 @@ class CardGalleryViewModel (
                 _cardState.value = CardState.Error("Error: ${e.message}")
             }
             .launchIn(viewModelScope)
-        auth.addAuthStateListener(authStateListener)
+
+        authStatusRepository.observeCurrentUser()
+            .onEach { authUserModel ->
+                _currentUserId.value = authUserModel?.id
+                Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
+                refreshLikesForCurrentUser(authUserModel?.id)
+            }
+            .launchIn(viewModelScope)
         getAllCards()
     }
 
@@ -97,18 +105,19 @@ class CardGalleryViewModel (
 
                 cardsJob.join()
 
+                refreshLikesForCurrentUser(_currentUserId.value)
+
             } catch (e: Exception) {
                 _cardState.value = CardState.Error(e.message ?: "Failed to load cards")
             }
         }
     }
 
-    private fun refreshLikesForCurrentUser() {
+    private fun refreshLikesForCurrentUser(currentUserId: String? = null) {
         Log.d("CardGalleryVM", "refreshLikesForCurrentUser called.")
         viewModelScope.launch {
             try {
-                val currentUserId = auth.currentUser?.uid
-                Log.d("CardGalleryVM", "Current user ID for likes refresh: ${currentUserId ?: "null"}")
+                Log.d("CardGalleryVM","Current user ID for likes refresh: ${currentUserId ?: "null"}")
 
                 _likedCardIdsFlow.value = currentUserId?.let {
                     userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
@@ -127,7 +136,7 @@ class CardGalleryViewModel (
     }
 
     fun toggleLike(cardId: Int, isCurrentlyLiked: Boolean) {
-        val userId = auth.currentUser?.uid ?: run {
+        val userId = _currentUserId.value ?: run {
             _cardState.value = CardState.Error("Authentication required")
             return
         }

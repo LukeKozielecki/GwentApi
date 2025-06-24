@@ -11,6 +11,7 @@ import luke.koz.data.datasource.FirebaseUserLikesDataSource
 import luke.koz.data.local.database.AppDatabase
 import luke.koz.data.remote.api.ApiService
 import luke.koz.data.repository.AuthRepositoryImpl
+import luke.koz.data.repository.AuthStatusRepositoryImpl
 import luke.koz.data.repository.CardDetailsRepositoryImpl
 import luke.koz.data.repository.CardGalleryRepositoryImpl
 import luke.koz.domain.auth.usecase.LoginUseCase
@@ -22,6 +23,7 @@ import luke.koz.domain.repository.CardDetailsRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.domain.repository.AuthRepository
+import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.infrastructure.PersistentImageLoader
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -101,6 +103,10 @@ class AppContainer(private val applicationContext: Context) {
     }
 
     // --- Repository Implementation (Data Layer) ---
+
+    val authStatusRepository: AuthStatusRepository by lazy {
+        AuthStatusRepositoryImpl(firebaseAuth = firebaseAuth)
+    }
 
     val cardGalleryRepository: CardGalleryRepository by lazy {
         CardGalleryRepositoryImpl(

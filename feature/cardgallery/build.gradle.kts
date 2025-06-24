@@ -57,11 +57,6 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
-    implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
-    implementation("com.google.firebase:firebase-database-ktx")
-
     implementation(project(":core:presentation"))
     implementation(project(":core:di"))
     implementation(project(":domain"))

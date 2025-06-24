@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+//todo: as of now, on initial load user should get `No cards found` screen EmptyState.kt
+// from `:core:presentation`;
+// this composable is called when user tries to like but is not logged in;
+// this [ErrorMessage] should be: refactored into toast or the user should be navigated
+// to logging in / register screen with a toast telling them what is going on
 @Composable
 fun ErrorMessage(message: String, onRefreshClick : () -> Unit) {
     Column(
