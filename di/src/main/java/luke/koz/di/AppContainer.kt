@@ -11,11 +11,13 @@ import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.datasource.CardRemoteDataSourceImpl
 import luke.koz.data.datasource.FirebaseUserLikesDataSource
 import luke.koz.data.local.database.AppDatabase
+import luke.koz.data.network.NetworkConnectivityCheckerImpl
 import luke.koz.data.remote.api.ApiService
 import luke.koz.data.repository.AuthRepositoryImpl
 import luke.koz.data.repository.AuthStatusRepositoryImpl
 import luke.koz.data.repository.CardDetailsRepositoryImpl
 import luke.koz.data.repository.CardGalleryRepositoryImpl
+import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.auth.usecase.LoginUseCase
 import luke.koz.domain.auth.usecase.LoginUseCaseImpl
 import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
@@ -62,7 +64,11 @@ class AppContainer(private val applicationContext: Context) {
     }
 
     val userLikesDataSource: UserLikesDataSource by lazy {
-        FirebaseUserLikesDataSource(firebaseDatabase, firebaseAuth)
+        FirebaseUserLikesDataSource(firebaseDatabase, firebaseAuth, networkConnectivityChecker)
+    }
+
+    val networkConnectivityChecker : NetworkConnectivityChecker by lazy {
+        NetworkConnectivityCheckerImpl(applicationContext)
     }
 
     // Room Database related
