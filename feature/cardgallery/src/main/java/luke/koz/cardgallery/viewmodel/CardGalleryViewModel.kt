@@ -67,12 +67,7 @@ class CardGalleryViewModel (
             _allCardLikesFlow,
             _isInitialLoadingComplete
         ) { rawCards, likedIds, allLikes, isInitialLoadingComplete ->
-            val cardsWithLikes = rawCards.map { card ->
-                card.copy(
-                    isLiked = likedIds.contains(card.id),
-                    likeCount = allLikes[card.id]?.size ?: 0
-                )
-            }
+            val cardsWithLikes = mapCardsToGalleryEntries(rawCards, likedIds, allLikes)
             Pair(cardsWithLikes, isInitialLoadingComplete)
         }
             .flowOn(Dispatchers.Default)
@@ -87,6 +82,19 @@ class CardGalleryViewModel (
                 _cardState.value = CardState.Error("Error: ${e.message}")
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun mapCardsToGalleryEntries(
+        rawCards: List<CardGalleryEntry>,
+        likedIds: Set<Int>,
+        allLikes: Map<Int, Set<String>>
+    ): List<CardGalleryEntry> {
+        return rawCards.map { card ->
+            card.copy(
+                isLiked = likedIds.contains(card.id),
+                likeCount = allLikes[card.id]?.size ?: 0
+            )
+        }
     }
 
     private fun observeAuthenticationStatus() {
@@ -138,20 +146,28 @@ class CardGalleryViewModel (
         Log.d("CardGalleryVM", "refreshLikesForCurrentUser called.")
         try {
             Log.d("CardGalleryVM","Current user ID for likes refresh: ${currentUserId ?: "null"}")
-
-            _likedCardIdsFlow.value = currentUserId?.let {
-                userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
-                    Log.d("CardGalleryVM", "Liked IDs fetched: ${likedIds.size}")
-                }
-            } ?: emptySet()
-
-            userLikesDataSource.getLikesForAllCards().also { allLikes ->
-                Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
-                _allCardLikesFlow.value = allLikes
-            }
+            fetchLikedCardsByUser(currentUserId)
+            fetchAllCardLikes()
         } catch (e: Exception) {
             Log.e("CardGalleryVM", "Error refreshing likes: ${e.message}", e)
             throw e
+        }
+    }
+
+    private suspend fun fetchLikedCardsByUser(currentUserId: String?) {
+        // fetch liked cards by user
+        _likedCardIdsFlow.value = currentUserId?.let {
+            userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
+                Log.d("CardGalleryVM", "Liked IDs fetched: ${likedIds.size}")
+            }
+        } ?: emptySet()
+    }
+
+    private suspend fun fetchAllCardLikes() {
+        // fetch total likes
+        userLikesDataSource.getLikesForAllCards().also { allLikes ->
+            Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
+            _allCardLikesFlow.value = allLikes
         }
     }
 
@@ -161,6 +177,7 @@ class CardGalleryViewModel (
             return
         }
 
+        //todo(bug): optimistic commit should not happen in UI when there is no internet connection
         viewModelScope.launch {
             // Optimistic update
             _likedCardIdsFlow.update { ids ->
