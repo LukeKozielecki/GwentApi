@@ -11,12 +11,14 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.repository.CardGalleryRepository
@@ -27,7 +29,9 @@ import java.io.IOException
 class CardGalleryViewModel (
     private val repository: CardGalleryRepository,
     private val userLikesDataSource: UserLikesDataSource,
-    private val authStatusRepository: AuthStatusRepository
+    private val authStatusRepository: AuthStatusRepository,
+    private val networkConnectivityChecker: NetworkConnectivityChecker
+
 ) : ViewModel (){
     private val _cardState = mutableStateOf<CardState>(CardState.Empty)
     val cardState: State<CardState> = _cardState
@@ -39,11 +43,13 @@ class CardGalleryViewModel (
 
     private val _currentUserId = MutableStateFlow<String?>(null)
 
+    //todo(bug): this calls firebase for likes at least twice on initial setup. refactor to work more optimally
     init {
         _cardState.value = CardState.Loading
         setupDebuggingObservers()
         configureCardStateUpdates()
         observeAuthenticationStatus()
+        observeInternetAndRefreshLikes()
         getAllCards()
     }
 
@@ -105,6 +111,17 @@ class CardGalleryViewModel (
                 Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
 
                 refreshLikesForCurrentUser(authUserModel?.id)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun observeInternetAndRefreshLikes() {
+        networkConnectivityChecker.observeInternetAvailability()
+            .filter { isAvailable -> isAvailable }
+            .onEach {
+                _currentUserId.value?.let { userId ->
+                    refreshLikesForCurrentUser(userId)
+                }
             }
             .launchIn(viewModelScope)
     }

@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
 import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.repository.UserLikesDataSource
@@ -28,6 +29,7 @@ class FirebaseUserLikesDataSource(
     private val userLikesRef: DatabaseReference = firebaseDatabase
         .reference
         .child(USER_LIKES_NODE)
+    private val isInternetAvailable = networkConnectivityChecker.observeInternetAvailability()
 
     companion object {
         private const val LIKES_CHILD_NODE = "likes"
@@ -39,7 +41,7 @@ class FirebaseUserLikesDataSource(
      */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean) {
         Log.d(LOG_TAG_AUTH, firebaseAuth.currentUser?.uid.toString())
-        if (!networkConnectivityChecker.isInternetAvailable()) {
+        if (!isInternetAvailable.first()) {
             Log.w(LOG_TAG_FIREBASE, "No internet connection. Halt performing action")
             return
         }
@@ -95,7 +97,7 @@ class FirebaseUserLikesDataSource(
     override suspend fun getLikedCardIdsForUser(userId: String): Set<Int> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch liked cards for user: $userId")
 
-        if (!networkConnectivityChecker.isInternetAvailable()) {
+        if (!isInternetAvailable.first()) {
             Log.w(LOG_TAG_FIREBASE, "No internet connection. Returning empty set for liked card IDs.")
             return emptySet()
         }
@@ -129,7 +131,7 @@ class FirebaseUserLikesDataSource(
     override suspend fun getLikesForAllCards(): Map<Int, Set<String>> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch likes for all cards (one-time)")
 
-        if (!networkConnectivityChecker.isInternetAvailable()) {
+        if (!isInternetAvailable.first()) {
             Log.w(LOG_TAG_FIREBASE, "No internet connection. Returning empty map for all likes.")
             return emptyMap()
         }

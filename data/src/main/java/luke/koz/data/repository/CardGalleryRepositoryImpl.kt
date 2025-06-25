@@ -38,6 +38,8 @@ class CardGalleryRepositoryImpl(
     private val auth: FirebaseAuth
 ) : CardGalleryRepository {
 
+    private val isInternetAvailable = networkConnectivityChecker.observeInternetAvailability()
+
     /**
      * @see CardGalleryRepository.getCard
      */
@@ -128,7 +130,7 @@ class CardGalleryRepositoryImpl(
      * @see CardGalleryRepository.toggleCardLike
      */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean): Result<Unit> {
-        if (!networkConnectivityChecker.isInternetAvailable()) {
+        if (!isInternetAvailable.first()) {
             Log.w("RepoDebug", "No internet connection. Cannot toggle like for card $cardId.")
             return Result.failure(IOException("No internet connection to toggle like."))
         }
