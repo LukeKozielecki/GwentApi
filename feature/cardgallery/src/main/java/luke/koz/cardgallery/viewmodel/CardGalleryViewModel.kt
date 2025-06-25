@@ -22,6 +22,7 @@ import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.presentation.CardState
+import java.io.IOException
 
 class CardGalleryViewModel (
     private val repository: CardGalleryRepository,
@@ -177,37 +178,31 @@ class CardGalleryViewModel (
             return
         }
 
-        //todo(bug): optimistic commit should not happen in UI when there is no internet connection
         viewModelScope.launch {
-            // Optimistic update
-            _likedCardIdsFlow.update { ids ->
-                if (isCurrentlyLiked) ids - cardId else ids + cardId
-            }
-
-            _allCardLikesFlow.update { likesMap ->
-                likesMap.toMutableMap().apply {
-                    val users = getOrPut(cardId) { mutableSetOf() }.toMutableSet()
-                    if (isCurrentlyLiked) users.remove(userId) else users.add(userId)
-                    if (users.isEmpty()) remove(cardId) else put(cardId, users)
-                }
-            }
-
-            // Database operation
-            try {
-                repository.toggleCardLike(userId, cardId, !isCurrentlyLiked)
-            } catch (e: Exception) {
-                _likedCardIdsFlow.update { ids ->
-                    if (isCurrentlyLiked) ids + cardId else ids - cardId
-                }
-                _allCardLikesFlow.update { likesMap ->
-                    likesMap.toMutableMap().apply {
-                        val users = getOrPut(cardId) { mutableSetOf() }.toMutableSet()
-                        if (isCurrentlyLiked) users.add(userId) else users.remove(userId)
-                        if (users.isEmpty()) remove(cardId) else put(cardId, users)
+            //todo: removed optimistic update, perhaps should have VM for managing UI being enabled
+            //  observing InternetConnection
+            repository.toggleCardLike(userId, cardId, !isCurrentlyLiked)
+                .onSuccess {
+                    Log.d("CardGalleryVM", "Like toggle successful for card $cardId.")
+                    _likedCardIdsFlow.update { ids ->
+                        if (isCurrentlyLiked) ids - cardId else ids + cardId
+                    }
+                    _allCardLikesFlow.update { likesMap ->
+                        likesMap.toMutableMap().apply {
+                            val users = getOrPut(cardId) { mutableSetOf() }.toMutableSet()
+                            if (isCurrentlyLiked) users.remove(userId) else users.add(userId)
+                            if (users.isEmpty()) remove(cardId) else put(cardId, users)
+                        }
                     }
                 }
-                _cardState.value = CardState.Error("Like update failed: ${e.message}")
-            }
+                .onFailure { e ->
+                    //todo communicate error to user with toast
+                    val errorMessage = when (e) {
+                        is IOException -> "No internet connection. Please check your network."
+                        else -> "Failed to update like: ${e.message ?: "Unknown error"}"
+                    }
+                    Log.e("CardGalleryVM", "Like update for card $cardId failed: $errorMessage", e)
+                }
         }
     }
 }

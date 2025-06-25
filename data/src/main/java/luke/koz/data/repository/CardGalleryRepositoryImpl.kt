@@ -13,9 +13,11 @@ import luke.koz.data.datasource.CardLocalDataSource
 import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.mapper.toCardEntity
 import luke.koz.data.mapper.toCardGalleryEntry
+import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
+import java.io.IOException
 
 /**
  * Implementation of the [CardGalleryRepository] interface. This class is part of the
@@ -32,6 +34,7 @@ class CardGalleryRepositoryImpl(
     private val remote: CardRemoteDataSource,
     private val local: CardLocalDataSource,
     private val userLikesDataSource: UserLikesDataSource,
+    private val networkConnectivityChecker: NetworkConnectivityChecker,
     private val auth: FirebaseAuth
 ) : CardGalleryRepository {
 
@@ -125,6 +128,10 @@ class CardGalleryRepositoryImpl(
      * @see CardGalleryRepository.toggleCardLike
      */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean): Result<Unit> {
+        if (!networkConnectivityChecker.isInternetAvailable()) {
+            Log.w("RepoDebug", "No internet connection. Cannot toggle like for card $cardId.")
+            return Result.failure(IOException("No internet connection to toggle like."))
+        }
         return try {
             userLikesDataSource.toggleCardLike(userId, cardId, isLiking)
             Result.success(Unit)

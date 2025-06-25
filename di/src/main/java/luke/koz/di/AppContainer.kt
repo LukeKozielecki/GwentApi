@@ -121,6 +121,7 @@ class AppContainer(private val applicationContext: Context) {
             remote = cardRemoteDataSource,
             local = cardLocalDataSource,
             userLikesDataSource = userLikesDataSource,
+            networkConnectivityChecker = networkConnectivityChecker,
             auth = firebaseAuth
         )
     }
