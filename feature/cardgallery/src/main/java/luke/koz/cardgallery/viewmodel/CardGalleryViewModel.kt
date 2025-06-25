@@ -40,7 +40,13 @@ class CardGalleryViewModel (
 
     init {
         _cardState.value = CardState.Loading
+        setupDebuggingObservers()
+        configureCardStateUpdates()
+        observeAuthenticationStatus()
+        getAllCards()
+    }
 
+    private fun setupDebuggingObservers() {
         _rawCardsFlow
             .onEach { Log.d("FlowDebug", "Raw cards updated: ${it.size} entries") }
             .launchIn(viewModelScope)
@@ -52,7 +58,9 @@ class CardGalleryViewModel (
         _allCardLikesFlow
             .onEach { Log.d("FlowDebug", "All likes updated: $it") }
             .launchIn(viewModelScope)
+    }
 
+    private fun configureCardStateUpdates() {
         combine(
             _rawCardsFlow,
             _likedCardIdsFlow,
@@ -79,15 +87,17 @@ class CardGalleryViewModel (
                 _cardState.value = CardState.Error("Error: ${e.message}")
             }
             .launchIn(viewModelScope)
+    }
 
+    private fun observeAuthenticationStatus() {
         authStatusRepository.observeCurrentUser()
             .onEach { authUserModel ->
                 _currentUserId.value = authUserModel?.id
                 Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
+
                 refreshLikesForCurrentUser(authUserModel?.id)
             }
             .launchIn(viewModelScope)
-        getAllCards()
     }
 
     fun getAllCards(forceRefresh: Boolean = false) {
