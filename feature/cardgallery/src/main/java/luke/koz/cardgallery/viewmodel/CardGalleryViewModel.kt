@@ -6,9 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,12 +34,7 @@ class CardGalleryViewModel (
     private val _rawCardsFlow = MutableStateFlow<List<CardGalleryEntry>>(emptyList())
     private val _likedCardIdsFlow = MutableStateFlow<Set<Int>>(emptySet())
     private val _allCardLikesFlow = MutableStateFlow<Map<Int, Set<String>>>(emptyMap())
-
-//    private val authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
-//        val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
-//        Log.d("CardGalleryVM", "FirebaseAuth state changed. User: ${firebaseUser?.email ?: "null"}")
-//        refreshLikesForCurrentUser()
-//    }
+    private val _isInitialLoadingComplete = MutableStateFlow(false)
 
     private val _currentUserId = MutableStateFlow<String?>(null)
 
@@ -58,20 +56,23 @@ class CardGalleryViewModel (
         combine(
             _rawCardsFlow,
             _likedCardIdsFlow,
-            _allCardLikesFlow
-        ) { rawCards, likedIds, allLikes ->
-            rawCards.map { card ->
+            _allCardLikesFlow,
+            _isInitialLoadingComplete
+        ) { rawCards, likedIds, allLikes, isInitialLoadingComplete ->
+            val cardsWithLikes = rawCards.map { card ->
                 card.copy(
                     isLiked = likedIds.contains(card.id),
                     likeCount = allLikes[card.id]?.size ?: 0
                 )
             }
+            Pair(cardsWithLikes, isInitialLoadingComplete)
         }
             .flowOn(Dispatchers.Default)
-            .onEach { combined ->
+            .onEach { (combinedCards, isInitialLoadingComplete) ->
                 _cardState.value = when {
-                    combined.isEmpty() -> CardState.Empty
-                    else -> CardState.Success(combined)
+                    !isInitialLoadingComplete -> CardState.Loading
+                    combinedCards.isEmpty() -> CardState.Empty
+                    else -> CardState.Success(combinedCards)
                 }
             }
             .catch { e ->
@@ -93,45 +94,54 @@ class CardGalleryViewModel (
         Log.d("CardGalleryVM", "viewModelScope.launch: getAllCards")
         viewModelScope.launch {
             _cardState.value = CardState.Loading
+            _isInitialLoadingComplete.value = false
+
             try {
-                // Fetch cards
-                Log.d("CardGalleryVM", "Fetch cards first")
-                val cardsJob = launch {
-                    repository.getAllCards(forceRefresh).collect { cards ->
-                        Log.d("CardGalleryVM", "Cards collected: ${cards.size}")
-                        _rawCardsFlow.value = cards
-                    }
+                val initialCardsLoad = async {
+                    repository.getAllCards(forceRefresh)
+                        .onEach { cards ->
+                            _rawCardsFlow.value = cards
+                            Log.d("CardGalleryVM", "Initial cards emitted and updated: ${cards.size}")
+                        }
+                        .first()
+                    Log.d("CardGalleryVM", "Initial cards collection completed for awaitAll.")
                 }
 
-                cardsJob.join()
+                val likesDeferred = async {
+                    refreshLikesForCurrentUser(_currentUserId.value)
+                }
 
-                refreshLikesForCurrentUser(_currentUserId.value)
+                awaitAll(initialCardsLoad, likesDeferred)
+
+                _isInitialLoadingComplete.value = true
+                Log.d("CardGalleryVM", "_isInitialLoadingComplete set to true.")
 
             } catch (e: Exception) {
                 _cardState.value = CardState.Error(e.message ?: "Failed to load cards")
+                _isInitialLoadingComplete.value = true
+                Log.e("CardGalleryVM", "Error in getAllCards: ${e.message}", e)
             }
         }
     }
 
-    private fun refreshLikesForCurrentUser(currentUserId: String? = null) {
+    private suspend fun refreshLikesForCurrentUser(currentUserId: String? = null) {
         Log.d("CardGalleryVM", "refreshLikesForCurrentUser called.")
-        viewModelScope.launch {
-            try {
-                Log.d("CardGalleryVM","Current user ID for likes refresh: ${currentUserId ?: "null"}")
+        try {
+            Log.d("CardGalleryVM","Current user ID for likes refresh: ${currentUserId ?: "null"}")
 
-                _likedCardIdsFlow.value = currentUserId?.let {
-                    userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
-                        Log.d("CardGalleryVM", "Liked IDs fetched: ${likedIds.size}")
-                    }
-                } ?: emptySet()
-
-                userLikesDataSource.getLikesForAllCards().also { allLikes ->
-                    Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
-                    _allCardLikesFlow.value = allLikes
+            _likedCardIdsFlow.value = currentUserId?.let {
+                userLikesDataSource.getLikedCardIdsForUser(it).also { likedIds ->
+                    Log.d("CardGalleryVM", "Liked IDs fetched: ${likedIds.size}")
                 }
-            } catch (e: Exception) {
-                Log.e("CardGalleryVM", "Error refreshing likes: ${e.message}", e)
+            } ?: emptySet()
+
+            userLikesDataSource.getLikesForAllCards().also { allLikes ->
+                Log.d("CardGalleryVM", "All likes fetched: ${allLikes.size}")
+                _allCardLikesFlow.value = allLikes
             }
+        } catch (e: Exception) {
+            Log.e("CardGalleryVM", "Error refreshing likes: ${e.message}", e)
+            throw e
         }
     }
 
