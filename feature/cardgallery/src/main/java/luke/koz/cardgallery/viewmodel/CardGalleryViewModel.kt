@@ -42,14 +42,14 @@ class CardGalleryViewModel (
     private val _isInitialLoadingComplete = MutableStateFlow(false)
 
     private val _currentUserId = MutableStateFlow<String?>(null)
+    private val _hasInitialAuthResolved = MutableStateFlow(false)
+    private val _wasInternetInitiallyUnavailable = MutableStateFlow(false)
 
-    //todo(bug): this calls firebase for likes at least twice on initial setup. refactor to work more optimally
     init {
         _cardState.value = CardState.Loading
         setupDebuggingObservers()
         configureCardStateUpdates()
-        observeAuthenticationStatus()
-        observeInternetAndRefreshLikes()
+        observeAuthAndInternetChanges()
         getAllCards()
     }
 
@@ -104,35 +104,105 @@ class CardGalleryViewModel (
         }
     }
 
-    private fun observeAuthenticationStatus() {
-        authStatusRepository.observeCurrentUser()
-            .onEach { authUserModel ->
-                _currentUserId.value = authUserModel?.id
-                Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
 
-                refreshLikesForCurrentUser(authUserModel?.id)
+    private fun observeAuthAndInternetChanges() {
+        combine(
+            authStatusRepository.observeCurrentUser(),
+            networkConnectivityChecker.observeInternetAvailability()
+        ) { authUserModel, isInternetAvailable ->
+            val previousUserId = _currentUserId.value
+            _currentUserId.value = authUserModel?.id
+            Log.d("CardGalleryVM", "Combined observer: User: ${authUserModel?.email ?: "null"}, Internet: $isInternetAvailable")
+
+            // Prevent triggering refresh if initial load isn't yet complete
+            if (!_isInitialLoadingComplete.value) {
+                Log.d("CardGalleryVM", "Combined observer: Initial loading not complete, skipping refresh logic.")
+                return@combine // Break
             }
-            .launchIn(viewModelScope)
-    }
 
-    private fun observeInternetAndRefreshLikes() {
-        networkConnectivityChecker.observeInternetAvailability()
-            .filter { isAvailable -> isAvailable }
-            .onEach {
-                _currentUserId.value?.let { userId ->
-                    refreshLikesForCurrentUser(userId)
+            // Handle internet re-connection after initial offline state
+            if (_wasInternetInitiallyUnavailable.value && isInternetAvailable && _isInitialLoadingComplete.value) {
+                _wasInternetInitiallyUnavailable.value = false // Reset the flag once handled
+                Log.d("CardGalleryVM", "Internet reconnected after initial offline state, triggering refresh.")
+                refreshLikesForCurrentUser(_currentUserId.value)
+                return@combine // Break
+            }
+
+            // Only consider refreshing if initial auth state has been resolved and initial loading is complete
+            if (_hasInitialAuthResolved.value && _isInitialLoadingComplete.value) {
+                val currentUserId = authUserModel?.id
+
+                val shouldRefresh = when {
+                    //todo this COULD be stored locally and in case no internet load last relevatn
+                    //  snapshot from memory. this doesn't seem too `too` important
+                    previousUserId != null && currentUserId == null -> { // Case for user logging out **without internet** (because of course)
+                        fetchLikedCardsByUser(null)// Only refresh User-specific ui, preserve previous snapshot of likes numbers
+                        false // Don't refresh likes totals
+                    }
+                    !isInternetAvailable -> false // No internet, don't refresh
+                    currentUserId != previousUserId -> true // User changed (login/logout)
+                    isInternetAvailable && previousUserId != null -> { // Internet available AND user is logged in
+                        // This handles cases where internet drops and comes back for an already logged-in user
+                        true
+                    }
+                    else -> false
+                }
+
+                if (shouldRefresh) {
+                    Log.d("CardGalleryVM", "Triggering refreshLikesForCurrentUser due to combined observer change.")
+                    refreshLikesForCurrentUser(currentUserId)
                 }
             }
-            .launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
+
+//    private fun observeAuthenticationStatus() {
+//        authStatusRepository.observeCurrentUser()
+//            .onEach { authUserModel ->
+//                _currentUserId.value = authUserModel?.id
+//                Log.d("CardGalleryVM", "Auth status changed via repo. User: ${authUserModel?.email ?: "null"}")
+//
+//                refreshLikesForCurrentUser(authUserModel?.id)
+//            }
+//            .launchIn(viewModelScope)
+//    }
+//
+//    private fun observeInternetAndRefreshLikes() {
+//        networkConnectivityChecker.observeInternetAvailability()
+//            .filter { isAvailable -> isAvailable }
+//            .onEach {
+//                _currentUserId.value?.let { userId ->
+//                    refreshLikesForCurrentUser(userId)
+//                }
+//            }
+//            .launchIn(viewModelScope)
+//    }
 
     fun getAllCards(forceRefresh: Boolean = false) {
         Log.d("CardGalleryVM", "viewModelScope.launch: getAllCards")
         viewModelScope.launch {
             _cardState.value = CardState.Loading
             _isInitialLoadingComplete.value = false
+            if (!forceRefresh) {
+                _cardState.value = CardState.Loading
+                _isInitialLoadingComplete.value = false
+            }
 
             try {
+                // Determine if internet is available at the start of getAllCards
+                val initialInternetStatus = networkConnectivityChecker.observeInternetAvailability().first()
+                if (!initialInternetStatus) {
+                    _wasInternetInitiallyUnavailable.value = true
+                    Log.d("CardGalleryVM", "Initial internet status: OFFLINE. Setting _wasInternetInitiallyUnavailable to true.")
+                } else {
+                    _wasInternetInitiallyUnavailable.value = false
+                }
+
+
+                val initialAuthUser = authStatusRepository.observeCurrentUser().first()
+                _currentUserId.value = initialAuthUser?.id
+                _hasInitialAuthResolved.value = true
+                Log.d("CardGalleryVM", "Initial auth user resolved in getAllCards: ${initialAuthUser?.email ?: "null"}")
                 val initialCardsLoad = async {
                     repository.getAllCards(forceRefresh)
                         .onEach { cards ->
