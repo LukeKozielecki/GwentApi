@@ -24,8 +24,9 @@ class GwentApplication : Application(), AppDependencyProvider {
                 CardDetailViewModelFactory(appContainer.cardDetailsRepository)
             clazz.isAssignableFrom(CardGalleryViewModel::class.java) ->
                 CardGalleryViewModelFactory(
-                    repository = appContainer.cardGalleryRepository,
-                    userLikesDataSource = appContainer.userLikesDataSource,
+                    getCardGalleryDataUseCase = appContainer.getCardGalleryDataUseCase,
+                    refreshCardGalleryDataUseCase = appContainer.refreshCardGalleryDataUseCase,
+                    toggleCardLikeUseCase = appContainer.toggleCardLikeUseCase,
                     authStatusRepository = appContainer.authStatusRepository,
                     networkConnectivityChecker = appContainer.networkConnectivityChecker
                 )

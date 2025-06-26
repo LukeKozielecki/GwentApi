@@ -4,11 +4,9 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import luke.koz.data.datasource.CardLocalDataSource
 import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.mapper.toCardEntity
@@ -80,35 +78,48 @@ class CardGalleryRepositoryImpl(
     override fun getAllCards(forceRefresh: Boolean): Flow<List<CardGalleryEntry>> = flow {
         // Emit cached cards immediately for a fast initial display
         val cachedCards = local.getAllCards().first().map { it.toCardGalleryEntry() }
-        emit(cachedCards)
 
-        // If forceRefresh is true or cache is empty, attempt to fetch from remote
+        // If forceRefresh is true or cache is empty, attempt to fetch from remote and update local
         if (forceRefresh || cachedCards.isEmpty()) {
             try {
                 Log.d("RepoDebug", "Attempting to refresh all cards from remote.")
                 val remoteCards = remote.getAllCards()
                 local.upsertCards(remoteCards.map { it.toCardEntity() })
+                // After successful remote fetch and upsert, the local database is updated
+                val updatedLocalCards = local.getAllCards().first().map { it.toCardGalleryEntry() }
+                val userId = auth.currentUser?.uid ?: ""
+                val allLikes = userLikesDataSource.getLikesForAllCards()
+                val combinedUpdatedCards = updatedLocalCards.map { card ->
+                    card.copy(
+                        isLiked = allLikes[card.id]?.contains(userId) ?: false,
+                        likeCount = allLikes[card.id]?.size ?: 0
+                    )
+                }
+                emit(combinedUpdatedCards)
             } catch (e: Exception) {
                 Log.e("RepoDebug", "Remote fetch failed for all cards", e)
+                // If remote fetch fails, still emit the cached cards if available
+                val userId = auth.currentUser?.uid ?: ""
+                val allLikes = userLikesDataSource.getLikesForAllCards()
+                val combinedCachedCards = cachedCards.map { card ->
+                    card.copy(
+                        isLiked = allLikes[card.id]?.contains(userId) ?: false,
+                        likeCount = allLikes[card.id]?.size ?: 0
+                    )
+                }
+                emit(combinedCachedCards)
             }
-        }
-
-        val cardsFlow = local.getAllCards().map { entities ->
-            entities.map { it.toCardGalleryEntry() }
-        }
-
-        val likesFlow = userLikesDataSource.observeLikesForAllCards()
-
-        cardsFlow.combine(likesFlow) { cards, allLikes ->
+        } else {
+            // If no refresh is needed, just emit the existing cached cards combined with likes
             val userId = auth.currentUser?.uid ?: ""
-            cards.map { card ->
+            val allLikes = userLikesDataSource.getLikesForAllCards()
+            val combinedCachedCards = cachedCards.map { card ->
                 card.copy(
                     isLiked = allLikes[card.id]?.contains(userId) ?: false,
                     likeCount = allLikes[card.id]?.size ?: 0
                 )
             }
-        }.collect { combined ->
-            emit(combined)
+            emit(combinedCachedCards)
         }
     }.flowOn(Dispatchers.IO)
 

@@ -23,6 +23,12 @@ import luke.koz.domain.auth.usecase.LoginUseCaseImpl
 import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
 import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.usecase.RegisterUseCaseImpl
+import luke.koz.domain.cardgallery.GetCardGalleryDataUseCase
+import luke.koz.domain.cardgallery.GetCardGalleryDataUseCaseImpl
+import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
+import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCaseImpl
+import luke.koz.domain.cardgallery.ToggleCardLikeUseCase
+import luke.koz.domain.cardgallery.ToggleCardLikeUseCaseImpl
 import luke.koz.domain.repository.CardDetailsRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
@@ -134,6 +140,31 @@ class AppContainer(private val applicationContext: Context) {
         CardDetailsRepositoryImpl(
             remote = cardRemoteDataSource,
             local = cardLocalDataSource
+        )
+    }
+
+    // --- CardGalleryUseCases ---
+
+    val getCardGalleryDataUseCase: GetCardGalleryDataUseCase by lazy {
+        GetCardGalleryDataUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository,
+            userLikesDataSource = userLikesDataSource,
+            authStatusRepository = authStatusRepository
+        )
+    }
+
+    val refreshCardGalleryDataUseCase: RefreshCardGalleryDataUseCase by lazy {
+        RefreshCardGalleryDataUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository,
+            userLikesDataSource = userLikesDataSource,
+            authStatusRepository = authStatusRepository,
+            networkConnectivityChecker = networkConnectivityChecker
+        )
+    }
+
+    val toggleCardLikeUseCase: ToggleCardLikeUseCase by lazy {
+        ToggleCardLikeUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository
         )
     }
 }
