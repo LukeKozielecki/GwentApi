@@ -21,12 +21,14 @@ class GwentApplication : Application(), AppDependencyProvider {
             clazz.isAssignableFrom(SearchViewModel::class.java) ->
                 SearchViewModelFactory(appContainer.cardGalleryRepository)
             clazz.isAssignableFrom(CardDetailViewModel::class.java) ->
-                CardDetailViewModelFactory(appContainer.cardDetailsRepository)
+                CardDetailViewModelFactory(appContainer.getCardDetailUseCase)
             clazz.isAssignableFrom(CardGalleryViewModel::class.java) ->
                 CardGalleryViewModelFactory(
-                    repository = appContainer.cardGalleryRepository,
-                    userLikesDataSource = appContainer.userLikesDataSource,
-                    authStatusRepository = appContainer.authStatusRepository
+                    getCardGalleryDataUseCase = appContainer.getCardGalleryDataUseCase,
+                    refreshCardGalleryDataUseCase = appContainer.refreshCardGalleryDataUseCase,
+                    toggleCardLikeUseCase = appContainer.toggleCardLikeUseCase,
+                    authStatusRepository = appContainer.authStatusRepository,
+                    networkConnectivityChecker = appContainer.networkConnectivityChecker
                 )
             clazz.isAssignableFrom(AuthViewModel::class.java) ->
                 AuthViewModelFactory(

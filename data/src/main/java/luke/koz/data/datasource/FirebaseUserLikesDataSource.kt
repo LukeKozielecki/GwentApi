@@ -11,7 +11,9 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.tasks.await
+import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.repository.UserLikesDataSource
 import java.io.IOException
 
@@ -21,24 +23,28 @@ private const val LOG_TAG_AUTH = "FirebaseAuth"
 
 class FirebaseUserLikesDataSource(
     private val firebaseDatabase: FirebaseDatabase,
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val networkConnectivityChecker: NetworkConnectivityChecker
 ) : UserLikesDataSource {
     private val userLikesRef: DatabaseReference = firebaseDatabase
         .reference
         .child(USER_LIKES_NODE)
+    private val isInternetAvailable = networkConnectivityChecker.observeInternetAvailability()
 
     companion object {
         private const val LIKES_CHILD_NODE = "likes"
         private const val USERS_CHILD_NODE = "users"
     }
 
-    //todo fix: when user turns off wifi, toggles like, and connect wifi it will emit the change and add like no matter what
     /**
      * @see UserLikesDataSource.toggleCardLike
      */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean) {
         Log.d(LOG_TAG_AUTH, firebaseAuth.currentUser?.uid.toString())
-
+        if (!isInternetAvailable.first()) {
+            Log.w(LOG_TAG_FIREBASE, "No internet connection. Halt performing action")
+            return
+        }
         val cardRef = userLikesRef.child(cardId.toString())
         val likesCounterRef = cardRef.child(LIKES_CHILD_NODE)
         val userLikeRef = cardRef.child(USERS_CHILD_NODE).child(userId)
@@ -90,6 +96,12 @@ class FirebaseUserLikesDataSource(
      */
     override suspend fun getLikedCardIdsForUser(userId: String): Set<Int> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch liked cards for user: $userId")
+
+        if (!isInternetAvailable.first()) {
+            Log.w(LOG_TAG_FIREBASE, "No internet connection. Returning empty set for liked card IDs.")
+            return emptySet()
+        }
+
         return try {
             val snapshot = userLikesRef.get().await()
 
@@ -118,6 +130,12 @@ class FirebaseUserLikesDataSource(
      */
     override suspend fun getLikesForAllCards(): Map<Int, Set<String>> {
         Log.d(LOG_TAG_FIREBASE, "Attempting to fetch likes for all cards (one-time)")
+
+        if (!isInternetAvailable.first()) {
+            Log.w(LOG_TAG_FIREBASE, "No internet connection. Returning empty map for all likes.")
+            return emptyMap()
+        }
+
         return try {
             val snapshot = userLikesRef.get().await()
             val result = mutableMapOf<Int, Set<String>>()

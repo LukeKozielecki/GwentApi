@@ -6,21 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import luke.koz.domain.repository.CardDetailsRepository
+import luke.koz.domain.cardgallery.GetCardDetailUseCase
+import luke.koz.presentation.CardDetailsState
 
-class CardDetailViewModel (private val repository: CardDetailsRepository) : ViewModel(){
-    private val _cardState = mutableStateOf<luke.koz.presentation.CardDetailsState>(luke.koz.presentation.CardDetailsState.Empty)
-    val cardState: State<luke.koz.presentation.CardDetailsState> = _cardState
+class CardDetailViewModel (private val getCardDetailUseCase: GetCardDetailUseCase) : ViewModel(){
+    private val _cardState = mutableStateOf<CardDetailsState>(CardDetailsState.Empty)
+    val cardState: State<CardDetailsState> = _cardState
 
     fun getCardById(cardId: Int) {
-        _cardState.value = luke.koz.presentation.CardDetailsState.Loading
+        _cardState.value = CardDetailsState.Loading
         viewModelScope.launch {
-            repository.getCardDetails(cardId)
+            getCardDetailUseCase(cardId)
                 .catch { e ->
-                    _cardState.value = luke.koz.presentation.CardDetailsState.Error("Error: ${e.message}")
+                    _cardState.value = CardDetailsState.Error("Error: ${e.message}")
                 }
                 .collect { card ->
-                    _cardState.value = luke.koz.presentation.CardDetailsState.Success(listOf(card))
+                    _cardState.value = CardDetailsState.Success(listOf(card))
                 }
         }
     }

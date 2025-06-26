@@ -11,16 +11,26 @@ import luke.koz.data.datasource.CardRemoteDataSource
 import luke.koz.data.datasource.CardRemoteDataSourceImpl
 import luke.koz.data.datasource.FirebaseUserLikesDataSource
 import luke.koz.data.local.database.AppDatabase
+import luke.koz.data.network.NetworkConnectivityCheckerImpl
 import luke.koz.data.remote.api.ApiService
 import luke.koz.data.repository.AuthRepositoryImpl
 import luke.koz.data.repository.AuthStatusRepositoryImpl
 import luke.koz.data.repository.CardDetailsRepositoryImpl
 import luke.koz.data.repository.CardGalleryRepositoryImpl
+import luke.koz.domain.NetworkConnectivityChecker
 import luke.koz.domain.auth.usecase.LoginUseCase
 import luke.koz.domain.auth.usecase.LoginUseCaseImpl
 import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
 import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.usecase.RegisterUseCaseImpl
+import luke.koz.domain.cardgallery.GetCardDetailUseCase
+import luke.koz.domain.cardgallery.GetCardDetailUseCaseImpl
+import luke.koz.domain.cardgallery.GetCardGalleryDataUseCase
+import luke.koz.domain.cardgallery.GetCardGalleryDataUseCaseImpl
+import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
+import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCaseImpl
+import luke.koz.domain.cardgallery.ToggleCardLikeUseCase
+import luke.koz.domain.cardgallery.ToggleCardLikeUseCaseImpl
 import luke.koz.domain.repository.CardDetailsRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
@@ -62,7 +72,11 @@ class AppContainer(private val applicationContext: Context) {
     }
 
     val userLikesDataSource: UserLikesDataSource by lazy {
-        FirebaseUserLikesDataSource(firebaseDatabase, firebaseAuth)
+        FirebaseUserLikesDataSource(firebaseDatabase, firebaseAuth, networkConnectivityChecker)
+    }
+
+    val networkConnectivityChecker : NetworkConnectivityChecker by lazy {
+        NetworkConnectivityCheckerImpl(applicationContext)
     }
 
     // Room Database related
@@ -115,6 +129,7 @@ class AppContainer(private val applicationContext: Context) {
             remote = cardRemoteDataSource,
             local = cardLocalDataSource,
             userLikesDataSource = userLikesDataSource,
+            networkConnectivityChecker = networkConnectivityChecker,
             auth = firebaseAuth
         )
     }
@@ -127,6 +142,37 @@ class AppContainer(private val applicationContext: Context) {
         CardDetailsRepositoryImpl(
             remote = cardRemoteDataSource,
             local = cardLocalDataSource
+        )
+    }
+
+    // --- CardGalleryUseCases ---
+
+    val getCardGalleryDataUseCase: GetCardGalleryDataUseCase by lazy {
+        GetCardGalleryDataUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository,
+            userLikesDataSource = userLikesDataSource,
+            authStatusRepository = authStatusRepository
+        )
+    }
+
+    val refreshCardGalleryDataUseCase: RefreshCardGalleryDataUseCase by lazy {
+        RefreshCardGalleryDataUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository,
+            userLikesDataSource = userLikesDataSource,
+            authStatusRepository = authStatusRepository,
+            networkConnectivityChecker = networkConnectivityChecker
+        )
+    }
+
+    val toggleCardLikeUseCase: ToggleCardLikeUseCase by lazy {
+        ToggleCardLikeUseCaseImpl(
+            cardGalleryRepository = cardGalleryRepository
+        )
+    }
+
+    val getCardDetailUseCase: GetCardDetailUseCase by lazy {
+        GetCardDetailUseCaseImpl(
+            cardGalleryRepository = cardDetailsRepository
         )
     }
 }
