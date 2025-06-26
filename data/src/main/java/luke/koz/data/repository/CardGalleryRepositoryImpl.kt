@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -77,49 +78,18 @@ class CardGalleryRepositoryImpl(
      */
     override fun getAllCards(forceRefresh: Boolean): Flow<List<CardGalleryEntry>> = flow {
         // Emit cached cards immediately for a fast initial display
-        val cachedCards = local.getAllCards().first().map { it.toCardGalleryEntry() }
+        val cachedCards = getCachedCards()
 
         // If forceRefresh is true or cache is empty, attempt to fetch from remote and update local
         if (forceRefresh || cachedCards.isEmpty()) {
             try {
-                Log.d("RepoDebug", "Attempting to refresh all cards from remote.")
-                val remoteCards = remote.getAllCards()
-                local.upsertCards(remoteCards.map { it.toCardEntity() })
-                // After successful remote fetch and upsert, the local database is updated
-                val updatedLocalCards = local.getAllCards().first().map { it.toCardGalleryEntry() }
-                val userId = auth.currentUser?.uid ?: ""
-                val allLikes = userLikesDataSource.getLikesForAllCards()
-                val combinedUpdatedCards = updatedLocalCards.map { card ->
-                    card.copy(
-                        isLiked = allLikes[card.id]?.contains(userId) ?: false,
-                        likeCount = allLikes[card.id]?.size ?: 0
-                    )
-                }
-                emit(combinedUpdatedCards)
+                handleRemoteRefreshSuccess(this)
             } catch (e: Exception) {
-                Log.e("RepoDebug", "Remote fetch failed for all cards", e)
-                // If remote fetch fails, still emit the cached cards if available
-                val userId = auth.currentUser?.uid ?: ""
-                val allLikes = userLikesDataSource.getLikesForAllCards()
-                val combinedCachedCards = cachedCards.map { card ->
-                    card.copy(
-                        isLiked = allLikes[card.id]?.contains(userId) ?: false,
-                        likeCount = allLikes[card.id]?.size ?: 0
-                    )
-                }
-                emit(combinedCachedCards)
+                handleRemoteRefreshFailure(cachedCards, e, this)
             }
         } else {
             // If no refresh is needed, just emit the existing cached cards combined with likes
-            val userId = auth.currentUser?.uid ?: ""
-            val allLikes = userLikesDataSource.getLikesForAllCards()
-            val combinedCachedCards = cachedCards.map { card ->
-                card.copy(
-                    isLiked = allLikes[card.id]?.contains(userId) ?: false,
-                    likeCount = allLikes[card.id]?.size ?: 0
-                )
-            }
-            emit(combinedCachedCards)
+            emitCombinedCards(cachedCards, this)
         }
     }.flowOn(Dispatchers.IO)
 
@@ -142,7 +112,7 @@ class CardGalleryRepositoryImpl(
      */
     override suspend fun toggleCardLike(userId: String, cardId: Int, isLiking: Boolean): Result<Unit> {
         if (!isInternetAvailable.first()) {
-            Log.w("RepoDebug", "No internet connection. Cannot toggle like for card $cardId.")
+            Log.w("RepoDebug", "No internet connection. Cannot toggle like for card $cardId")
             return Result.failure(IOException("No internet connection to toggle like."))
         }
         return try {
@@ -152,5 +122,64 @@ class CardGalleryRepositoryImpl(
             Log.e("RepoDebug", "Failed to toggle like for card $cardId by user $userId", e)
             Result.failure(e)
         }
+    }
+
+    /**
+     * Retrieves the current list of cached cards from the local data source.
+     */
+    private suspend fun getCachedCards(): List<CardGalleryEntry> {
+        return local.getAllCards().first().map { it.toCardGalleryEntry() }
+    }
+
+    /**
+     * Handles the successful remote refresh of all cards.
+     * Fetches from remote, updates local cache, then emits the combined, updated cards.
+     *
+     * @param collector The FlowCollector to emit items to.
+     */
+    private suspend fun handleRemoteRefreshSuccess(collector: FlowCollector<List<CardGalleryEntry>>) {
+        Log.d("RepoDebug", "Attempting to refresh all cards from remote.")
+        val remoteCards = remote.getAllCards()
+        local.upsertCards(remoteCards.map { it.toCardEntity() })
+        val updatedLocalCards = getCachedCards()
+        emitCombinedCards(updatedLocalCards, collector)
+    }
+
+    /**
+     * Handles the failure of remote refresh.
+     * Logs the error and emits the existing cached cards combined with likes.
+     *
+     * @param cachedCards The list of cards currently in cache.
+     * @param e The exception that occurred during remote fetch.
+     * @param collector The FlowCollector to emit items to.
+     */
+    private suspend fun handleRemoteRefreshFailure(
+        cachedCards: List<CardGalleryEntry>,
+        e: Exception,
+        collector: FlowCollector<List<CardGalleryEntry>>
+    ) {
+        Log.e("RepoDebug", "Remote fetch failed for all cards", e)
+        emitCombinedCards(cachedCards, collector)
+    }
+
+    /**
+     * Combines a given list of cards with user like status and emits them.
+     *
+     * @param cards The list of cards to combine and emit.
+     * @param collector The FlowCollector to emit items to.
+     */
+    private suspend fun emitCombinedCards(
+        cards: List<CardGalleryEntry>,
+        collector: FlowCollector<List<CardGalleryEntry>>
+    ) {
+        val userId = auth.currentUser?.uid ?: ""
+        val allLikes = userLikesDataSource.getLikesForAllCards()
+        val combinedCards = cards.map { card ->
+            card.copy(
+                isLiked = allLikes[card.id]?.contains(userId) ?: false,
+                likeCount = allLikes[card.id]?.size ?: 0
+            )
+        }
+        collector.emit(combinedCards)
     }
 }
