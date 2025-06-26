@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.CardList
+import luke.koz.presentation.CardLoadingScreen
 import luke.koz.presentation.CardState
 import luke.koz.presentation.EmptyState
 import luke.koz.presentation.ErrorMessage
@@ -20,7 +21,7 @@ fun CardGalleryStateHandler(
     CardGalleryStateHandlerInternal(
         state = state,
         onEmpty = { EmptyState() },
-        onLoading = { CircularProgressIndicator() },
+        onLoading = { CardLoadingScreen() },
         onSuccess = { cards ->
             CardList(
                 cards = cards,
