@@ -21,7 +21,7 @@ class GwentApplication : Application(), AppDependencyProvider {
             clazz.isAssignableFrom(SearchViewModel::class.java) ->
                 SearchViewModelFactory(appContainer.cardGalleryRepository)
             clazz.isAssignableFrom(CardDetailViewModel::class.java) ->
-                CardDetailViewModelFactory(appContainer.cardDetailsRepository)
+                CardDetailViewModelFactory(appContainer.getCardDetailUseCase)
             clazz.isAssignableFrom(CardGalleryViewModel::class.java) ->
                 CardGalleryViewModelFactory(
                     getCardGalleryDataUseCase = appContainer.getCardGalleryDataUseCase,

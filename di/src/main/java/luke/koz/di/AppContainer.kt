@@ -23,6 +23,8 @@ import luke.koz.domain.auth.usecase.LoginUseCaseImpl
 import luke.koz.domain.auth.usecase.LogoutUseCaseImpl
 import luke.koz.domain.auth.usecase.RegisterUseCase
 import luke.koz.domain.auth.usecase.RegisterUseCaseImpl
+import luke.koz.domain.cardgallery.GetCardDetailUseCase
+import luke.koz.domain.cardgallery.GetCardDetailUseCaseImpl
 import luke.koz.domain.cardgallery.GetCardGalleryDataUseCase
 import luke.koz.domain.cardgallery.GetCardGalleryDataUseCaseImpl
 import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
@@ -165,6 +167,12 @@ class AppContainer(private val applicationContext: Context) {
     val toggleCardLikeUseCase: ToggleCardLikeUseCase by lazy {
         ToggleCardLikeUseCaseImpl(
             cardGalleryRepository = cardGalleryRepository
+        )
+    }
+
+    val getCardDetailUseCase: GetCardDetailUseCase by lazy {
+        GetCardDetailUseCaseImpl(
+            cardGalleryRepository = cardDetailsRepository
         )
     }
 }
