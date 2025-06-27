@@ -113,7 +113,7 @@ private fun SearchContent(
         is SearchState.Idle -> PlaceholderContent(imageLoader = imageLoader)
         is SearchState.Loading -> LoadingIndicator()
         is SearchState.Empty -> PlaceholderContent(imageLoader = imageLoader)
-        is SearchState.Success -> SuccessStateContent(searchState.results, onCardClick)
+        is SearchState.Success -> SuccessStateContent(searchState.results, onCardClick, imageLoader)
         is SearchState.Error -> Text("Error: ${searchState.message}")
     }
 }
@@ -135,8 +135,11 @@ private fun LoadingIndicator() {
 }
 
 @Composable
-private fun SuccessStateContent(cards: List<CardGalleryEntry>, onCardClick: (Int) -> Unit) {
-    val previewImageLoader = ImageLoader.Builder(LocalContext.current).build()
+private fun SuccessStateContent(
+    cards: List<CardGalleryEntry>,
+    onCardClick: (Int) -> Unit,
+    imageLoader: ImageLoader
+) {
     //todo rework this to not have this button
     CardList(
         cards = cards,
@@ -144,7 +147,7 @@ private fun SuccessStateContent(cards: List<CardGalleryEntry>, onCardClick: (Int
         onToggleLike = { _, _ ->
 
         },
-        imageLoader = previewImageLoader
+        imageLoader = imageLoader
     )
 }
 
