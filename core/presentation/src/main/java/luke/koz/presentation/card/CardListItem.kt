@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.card
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
-
 
 @Composable
 internal fun CardItem(

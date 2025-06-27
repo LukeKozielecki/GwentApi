@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardDetailsEntry
+import luke.koz.presentation.card.CardImageWithBorder
 
 //todo onCardClick should navigate to ~FullscreenCardWithAuthorShowcase
 @OptIn(ExperimentalLayoutApi::class)
@@ -38,7 +39,7 @@ fun CardItemDetails(
         if (card != null) {
             // Clickable card image
             Box(Modifier.clickable { onCardClick(card.cardId) }) {
-                luke.koz.presentation.CardImageWithBorder(
+                CardImageWithBorder(
                     card.artId,
                     card.color,
                     imageLoader
@@ -146,7 +147,7 @@ fun CardItemDetails(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                luke.koz.presentation.CardImageWithBorder(-1, "gold", imageLoader = imageLoader)
+                CardImageWithBorder(-1, "gold", imageLoader = imageLoader)
                 Text(
                     text = "Card information not available",
                     style = MaterialTheme.typography.bodyMedium,

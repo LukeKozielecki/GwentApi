@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -15,6 +15,7 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import luke.koz.presentation.R
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable

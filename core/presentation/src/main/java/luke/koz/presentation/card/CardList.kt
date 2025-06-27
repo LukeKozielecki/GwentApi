@@ -6,7 +6,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.presentation.CardItem
 
 @Composable
 fun CardList(
@@ -15,12 +14,6 @@ fun CardList(
     onToggleLike: (Int, Boolean) -> Unit,
     imageLoader: ImageLoader
 ) {
-//    if (cards.isEmpty()) { //this geniunely should never reach no cards state
-//        NoDataStatusScreen(
-//            emptyStateDescription = "No cards found",
-//            toastMessage = "Please try checking internet connection"
-//        )
-//    } else {
     LazyColumn {
         items(cards) { card ->
             CardItem(
@@ -32,5 +25,4 @@ fun CardList(
             HorizontalDivider()
         }
     }
-//    }
 }
