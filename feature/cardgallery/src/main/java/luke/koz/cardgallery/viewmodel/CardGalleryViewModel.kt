@@ -119,6 +119,12 @@ class CardGalleryViewModel (
 
                 // Handle internet re-connection after initial offline state
                 if (_wasInternetInitiallyUnavailable.value && isInternetAvailable) {
+                    /*In case of initial boot up of the app without internet, user gets CardState.Empty
+                    * Then if they reconnect to the Internet, this block prevents abrupt CardState switch from
+                    * CardState.Empty -> CardState.Success with middle step of CardState.Loading
+                    */
+                    if (_cardState.value == CardState.Empty) { _cardState.value = CardState.Loading }
+
                     _wasInternetInitiallyUnavailable.value = false
                     Log.d("CardGalleryVM", "Internet reconnected after initial offline state, triggering refresh.")
                     triggerDataRefresh()
