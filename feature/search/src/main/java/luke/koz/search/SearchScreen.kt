@@ -19,6 +19,7 @@ import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 import luke.koz.presentation.state.SearchState
+import luke.koz.presentation.theme.GwentApiTheme
 import luke.koz.search.components.CustomSearchBar
 
 /* todo change this scaffold, so that custom search app bar is inside the scaffold
@@ -73,7 +74,7 @@ private fun ActionIconButton(action : () -> Unit, imageVector: ImageVector, cont
 private fun PreviewSearchScreen() {
     val mockNavController: NavHostController = rememberNavController()
     val previewImageLoader = ImageLoader.Builder(LocalContext.current).build()
-    luke.koz.presentation.theme.GwentApiTheme {
+    GwentApiTheme {
         val mockQuery = remember { mutableStateOf("Ciri") }
         SearchScreen(
             query = mockQuery,

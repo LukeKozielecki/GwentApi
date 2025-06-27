@@ -36,6 +36,7 @@ import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
 import luke.koz.domain.repository.AuthRepository
 import luke.koz.domain.repository.AuthStatusRepository
+import luke.koz.domain.search.SearchCardsUseCaseImpl
 import luke.koz.infrastructure.PersistentImageLoader
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -116,6 +117,10 @@ class AppContainer(private val applicationContext: Context) {
 
     val logoutUseCase : LogoutUseCaseImpl by lazy {
         LogoutUseCaseImpl(authRepository)
+    }
+
+    val searchCardsUseCase : SearchCardsUseCaseImpl by lazy {
+        SearchCardsUseCaseImpl(cardGalleryRepository)
     }
 
     // --- Repository Implementation (Data Layer) ---

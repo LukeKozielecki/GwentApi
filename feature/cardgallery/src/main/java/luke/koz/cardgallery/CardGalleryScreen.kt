@@ -8,16 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import coil3.ImageLoader
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import coil3.ImageLoader
 import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
-import luke.koz.search.viewmodel.SearchViewModel
-import luke.koz.search.viewmodel.provideSearchGalleryViewModel
 
 @Composable
 fun CardGalleryScreen(
@@ -29,16 +26,9 @@ fun CardGalleryScreen(
     imageLoader: ImageLoader
 ) {
     val viewModel: CardGalleryViewModel = provideCardGalleryViewModel()
-    val searchViewModel: SearchViewModel = provideSearchGalleryViewModel()
-    val searchState by searchViewModel.searchState
     val cardState by viewModel.cardState
 
     //todo add pull from top to trigger .getAllCards() Pull to refresh https://developer.android.com/develop/ui/compose/components/pull-to-refresh
-//    LaunchedEffect() {
-//        if (cardState == CardState.Empty) {
-//            viewModel.getAllCards()
-//        }
-//    }
 
     ScaffoldWrapper(
         navController = navController,
@@ -58,10 +48,4 @@ fun CardGalleryScreen(
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun CardGalleryScreenPrev() {
-
 }
