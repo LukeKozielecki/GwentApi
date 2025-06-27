@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardDetailsEntry
 import luke.koz.presentation.CardDetailsState
+import luke.koz.presentation.CardLoadingScreen
 import luke.koz.presentation.ErrorMessage
 
 @Composable
@@ -15,7 +16,7 @@ fun CardDetailsStateHandler(
     CardDetailsStateHandlerInternal(
         state = state,
         onEmpty = { /* Empty composable */ },
-        onLoading = { /* Empty composable */ },
+        onLoading = { CardLoadingScreen() },
         onSuccess = { cards -> CardItemDetails(card = cards.first(), onCardClick, imageLoader) }
     )
 }
