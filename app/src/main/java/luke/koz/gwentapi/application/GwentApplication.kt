@@ -19,7 +19,7 @@ class GwentApplication : Application(), AppDependencyProvider {
     override fun <T : ViewModel> getViewModelFactory(clazz: Class<T>): ViewModelProvider.Factory {
         return when {
             clazz.isAssignableFrom(SearchViewModel::class.java) ->
-                SearchViewModelFactory(appContainer.cardGalleryRepository)
+                SearchViewModelFactory(appContainer.searchCardsUseCase)
             clazz.isAssignableFrom(CardDetailViewModel::class.java) ->
                 CardDetailViewModelFactory(appContainer.getCardDetailUseCase)
             clazz.isAssignableFrom(CardGalleryViewModel::class.java) ->

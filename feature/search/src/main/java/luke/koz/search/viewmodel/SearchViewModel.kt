@@ -7,45 +7,46 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import luke.koz.domain.repository.CardGalleryRepository
+import luke.koz.domain.search.SearchCardsUseCase
 import luke.koz.presentation.state.SearchState
 
-class SearchViewModel (private val repository: CardGalleryRepository) : ViewModel() {
+class SearchViewModel (
+    private val searchCardsUseCase: SearchCardsUseCase
+) : ViewModel() {
 
     private val _searchState = mutableStateOf<SearchState>(SearchState.Idle)
     val searchState: State<SearchState> = _searchState
 
-    private var searchJob: Job? = null
-
     private val _query = mutableStateOf<String>("")
     val query: State<String> = _query
-    fun updateQuery(query: String){
-        if(_query.value.isNotBlank()){
+
+    fun updateQuery(newQuery: String){
+        _query.value = newQuery
+        if(newQuery.isNotBlank()){
             getCardByQuery()
+        } else {
+            _searchState.value = SearchState.Idle
         }
-        _query.value = query
     }
+
     fun getCardByQuery() {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
+        viewModelScope.launch {
             _searchState.value = SearchState.Loading
-            delay(500)
-            if(_query.value.isEmpty()) {
-                _searchState.value = SearchState.Idle
-            } else {
-                repository.getCardByQuery(_query.value)
-                    .catch { e ->
-                        _searchState.value = SearchState.Error("Search error: ${e.message}")
+
+            searchCardsUseCase(_query.value)
+                .catch { e ->
+                    _searchState.value = SearchState.Error("Search error: ${e.message}")
+                }
+                .collectLatest { results ->
+                    _searchState.value = if (results.isEmpty() || _query.value.isEmpty()){
+                        SearchState.Empty
+                    } else {
+                        SearchState.Success(results)
                     }
-                    .collect { results ->
-                        _searchState.value = if (results.isEmpty()) {
-                            SearchState.Empty
-                        } else {
-                            SearchState.Success(results)
-                        }
-                    }
-            }
+                }
         }
     }
 }
