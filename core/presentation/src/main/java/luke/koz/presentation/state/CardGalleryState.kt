@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.state
 
 import luke.koz.domain.model.CardGalleryEntry
 

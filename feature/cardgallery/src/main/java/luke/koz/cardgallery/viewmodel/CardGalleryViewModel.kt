@@ -21,7 +21,7 @@ import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
 import luke.koz.domain.cardgallery.ToggleCardLikeUseCase
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.domain.repository.AuthStatusRepository
-import luke.koz.presentation.CardGalleryState
+import luke.koz.presentation.state.CardGalleryState
 import java.io.IOException
 
 class CardGalleryViewModel (

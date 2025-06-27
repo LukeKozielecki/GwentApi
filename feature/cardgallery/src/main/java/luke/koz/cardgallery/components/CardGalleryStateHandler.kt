@@ -6,7 +6,7 @@ import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.statusscreen.CardListNew
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
-import luke.koz.presentation.CardGalleryState
+import luke.koz.presentation.state.CardGalleryState
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.ErrorStatusScreen
 

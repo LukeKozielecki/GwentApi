@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import luke.koz.domain.cardgallery.GetCardDetailUseCase
-import luke.koz.presentation.CardDetailsState
+import luke.koz.presentation.state.CardDetailsState
 
 class CardDetailViewModel (private val getCardDetailUseCase: GetCardDetailUseCase) : ViewModel(){
     private val _cardState = mutableStateOf<CardDetailsState>(CardDetailsState.Empty)

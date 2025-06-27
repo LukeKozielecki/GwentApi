@@ -18,6 +18,7 @@ import luke.koz.carddetails.viewmodel.CardDetailViewModel
 import luke.koz.carddetails.viewmodel.provideCardDetailViewModel
 import luke.koz.presentation.scaffold.DefaultScaffold
 import luke.koz.presentation.scaffold.components.ScaffoldWrapper
+import luke.koz.presentation.state.CardDetailsState
 
 @Composable
 fun CardDetailScreen(
@@ -34,7 +35,7 @@ fun CardDetailScreen(
     val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = cardId) {
-        if (cardState == luke.koz.presentation.CardDetailsState.Empty) {
+        if (cardState == CardDetailsState.Empty) {
             viewModel.getCardById(cardId)
         }
     }
