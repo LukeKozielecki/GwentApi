@@ -26,7 +26,7 @@ fun CardGalleryScreen(
     imageLoader: ImageLoader
 ) {
     val viewModel: CardGalleryViewModel = provideCardGalleryViewModel()
-    val cardState by viewModel.cardState
+    val cardState by viewModel.cardGalleryState
 
     //todo add pull from top to trigger .getAllCards() Pull to refresh https://developer.android.com/develop/ui/compose/components/pull-to-refresh
 

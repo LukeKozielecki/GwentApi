@@ -21,7 +21,7 @@ import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
 import luke.koz.domain.cardgallery.ToggleCardLikeUseCase
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.domain.repository.AuthStatusRepository
-import luke.koz.presentation.CardState
+import luke.koz.presentation.CardGalleryState
 import java.io.IOException
 
 class CardGalleryViewModel (
@@ -30,10 +30,9 @@ class CardGalleryViewModel (
     private val toggleCardLikeUseCase: ToggleCardLikeUseCase,
     private val authStatusRepository: AuthStatusRepository,
     private val networkConnectivityChecker: NetworkConnectivityChecker
-
 ) : ViewModel (){
-    private val _cardState = mutableStateOf<CardState>(CardState.Empty)
-    val cardState: State<CardState> = _cardState
+    private val _cardGalleryState = mutableStateOf<CardGalleryState>(CardGalleryState.Empty)
+    val cardGalleryState: State<CardGalleryState> = _cardGalleryState
 
     private val _rawCardsFlow = MutableStateFlow<List<CardGalleryEntry>>(emptyList())
     private val _likedCardIdsFlow = MutableStateFlow<Set<Int>>(emptySet())
@@ -45,7 +44,7 @@ class CardGalleryViewModel (
     private val _wasInternetInitiallyUnavailable = MutableStateFlow(false)
 
     init {
-        _cardState.value = CardState.Loading
+        _cardGalleryState.value = CardGalleryState.Loading
         setupDebuggingObservers()
         configureCardStateUpdates()
         observeAuthAndInternetChanges()
@@ -78,14 +77,14 @@ class CardGalleryViewModel (
         }
             .flowOn(Dispatchers.Default)
             .onEach { (combinedCards, isInitialLoadingComplete) ->
-                _cardState.value = when {
-                    !isInitialLoadingComplete -> CardState.Loading
-                    combinedCards.isEmpty() -> CardState.Empty
-                    else -> CardState.Success(combinedCards)
+                _cardGalleryState.value = when {
+                    !isInitialLoadingComplete -> CardGalleryState.Loading
+                    combinedCards.isEmpty() -> CardGalleryState.Empty
+                    else -> CardGalleryState.Success(combinedCards)
                 }
             }
             .catch { e ->
-                _cardState.value = CardState.Error("Error: ${e.message}")
+                _cardGalleryState.value = CardGalleryState.Error("Error: ${e.message}")
             }
             .launchIn(viewModelScope)
     }
@@ -123,7 +122,7 @@ class CardGalleryViewModel (
                     * Then if they reconnect to the Internet, this block prevents abrupt CardState switch from
                     * CardState.Empty -> CardState.Success with middle step of CardState.Loading
                     */
-                    if (_cardState.value == CardState.Empty) { _cardState.value = CardState.Loading }
+                    if (_cardGalleryState.value == CardGalleryState.Empty) { _cardGalleryState.value = CardGalleryState.Loading }
 
                     _wasInternetInitiallyUnavailable.value = false
                     Log.d("CardGalleryVM", "Internet reconnected after initial offline state, triggering refresh.")
@@ -161,7 +160,7 @@ class CardGalleryViewModel (
     fun getAllCards(forceRefresh: Boolean = false) {
         Log.d("CardGalleryVM", "viewModelScope.launch: getAllCards")
         viewModelScope.launch {
-            _cardState.value = CardState.Loading
+            _cardGalleryState.value = CardGalleryState.Loading
             _isInitialLoadingComplete.value = false
 
             try {
@@ -188,7 +187,7 @@ class CardGalleryViewModel (
                 Log.d("CardGalleryVM", "_isInitialLoadingComplete set to true.")
 
             } catch (e: Exception) {
-                _cardState.value = CardState.Error(e.message ?: "Failed to load cards")
+                _cardGalleryState.value = CardGalleryState.Error(e.message ?: "Failed to load cards")
                 _isInitialLoadingComplete.value = true
                 Log.e("CardGalleryVM", "Error in getAllCards: ${e.message}", e)
             }
@@ -213,7 +212,7 @@ class CardGalleryViewModel (
 
     fun toggleLike(cardId: Int, isCurrentlyLiked: Boolean) {
         val userId = _currentUserId.value ?: run {
-            _cardState.value = CardState.Error("Authentication required")
+            _cardGalleryState.value = CardGalleryState.Error("Authentication required")
             return
         }
 

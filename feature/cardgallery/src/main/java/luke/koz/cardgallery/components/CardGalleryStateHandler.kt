@@ -6,13 +6,13 @@ import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.statusscreen.CardListNew
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
-import luke.koz.presentation.CardState
+import luke.koz.presentation.CardGalleryState
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.ErrorStatusScreen
 
 @Composable
 fun CardGalleryStateHandler(
-    state: CardState,
+    state: CardGalleryState,
     onCardClick: (Int) -> Unit,
     onToggleLike: (Int, Boolean) -> Unit,
     onRefreshClick : () -> Unit,
@@ -48,16 +48,16 @@ fun CardGalleryStateHandler(
 
 @Composable
 private fun CardGalleryStateHandlerInternal(
-    state: CardState,
+    state: CardGalleryState,
     onEmpty: @Composable () -> Unit,
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (List<CardGalleryEntry>) -> Unit,
     onError: @Composable (String) -> Unit = { ErrorStatusScreen(message = it) {} }
 ) {
     when (state) {
-        is CardState.Empty -> onEmpty()
-        is CardState.Loading -> onLoading()
-        is CardState.Success -> onSuccess(state.cards)
-        is CardState.Error -> onError(state.message)
+        is CardGalleryState.Empty -> onEmpty()
+        is CardGalleryState.Loading -> onLoading()
+        is CardGalleryState.Success -> onSuccess(state.cards)
+        is CardGalleryState.Error -> onError(state.message)
     }
 }
