@@ -3,7 +3,7 @@ package luke.koz.cardgallery.components
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.presentation.statusscreen.CardListNew
+import luke.koz.presentation.card.CardList
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.state.CardGalleryState
@@ -28,7 +28,7 @@ fun CardGalleryStateHandler(
         onSuccess = { cards ->
             SuccessStatusScreen(
                 content = {
-                    CardListNew(
+                    CardList(
                         cards = cards,
                         onCardClick = onCardClick,
                         onToggleLike = onToggleLike,

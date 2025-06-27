@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.CardImageWithBorder
-import luke.koz.presentation.statusscreen.CardListNew
+import luke.koz.presentation.card.CardList
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 import luke.koz.presentation.state.SearchState
 
@@ -143,7 +143,7 @@ private fun SuccessStateContent(
     //todo rework this to not have this button
     SuccessStatusScreen(
         content = {
-            CardListNew(
+            CardList(
                 cards = cards,
                 onCardClick = onCardClick,
                 onToggleLike = { _, _ ->
