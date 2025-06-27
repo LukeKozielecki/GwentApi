@@ -16,7 +16,10 @@ fun CardList(
     imageLoader: ImageLoader
 ) {
     if (cards.isEmpty()) {
-        EmptyState()
+        EmptyState(
+            emptyStateDescription = "No cards found",
+            toastMessage = "Please try checking internet connection"
+        )
     } else {
         LazyColumn {
             items(cards) { card ->

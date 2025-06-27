@@ -1,6 +1,5 @@
 package luke.koz.cardgallery.components
 
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
@@ -20,7 +19,10 @@ fun CardGalleryStateHandler(
 ) {
     CardGalleryStateHandlerInternal(
         state = state,
-        onEmpty = { EmptyState() },
+        onEmpty = { EmptyState(
+            emptyStateDescription = "No cards found",
+            toastMessage = "Please try checking internet connection"
+        ) },
         onLoading = { CardLoadingScreen() },
         onSuccess = { cards ->
             CardList(
