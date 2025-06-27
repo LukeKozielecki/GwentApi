@@ -4,12 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.search.SearchCardsUseCase
 import luke.koz.presentation.state.SearchState
 
