@@ -3,12 +3,12 @@ package luke.koz.cardgallery.components
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.presentation.CardListNew
-import luke.koz.presentation.SuccessStatusScreen
-import luke.koz.presentation.LoadingStatusScreen
+import luke.koz.presentation.statusscreen.CardListNew
+import luke.koz.presentation.statusscreen.SuccessStatusScreen
+import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.CardState
-import luke.koz.presentation.NoDataStatusScreen
-import luke.koz.presentation.ErrorStatusScreen
+import luke.koz.presentation.statusscreen.NoDataStatusScreen
+import luke.koz.presentation.statusscreen.ErrorStatusScreen
 
 @Composable
 fun CardGalleryStateHandler(

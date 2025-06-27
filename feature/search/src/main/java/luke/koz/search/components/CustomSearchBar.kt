@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.CardImageWithBorder
-import luke.koz.presentation.CardListNew
-import luke.koz.presentation.SuccessStatusScreen
+import luke.koz.presentation.statusscreen.CardListNew
+import luke.koz.presentation.statusscreen.SuccessStatusScreen
 import luke.koz.presentation.state.SearchState
 
 @Composable

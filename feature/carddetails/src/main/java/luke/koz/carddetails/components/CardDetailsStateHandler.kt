@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardDetailsEntry
 import luke.koz.presentation.CardDetailsState
-import luke.koz.presentation.LoadingStatusScreen
-import luke.koz.presentation.ErrorStatusScreen
+import luke.koz.presentation.statusscreen.LoadingStatusScreen
+import luke.koz.presentation.statusscreen.ErrorStatusScreen
 
 @Composable
 fun CardDetailsStateHandler(

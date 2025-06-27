@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.statusscreen
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -6,6 +6,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
+import luke.koz.presentation.CardItem
 
 
 @Composable

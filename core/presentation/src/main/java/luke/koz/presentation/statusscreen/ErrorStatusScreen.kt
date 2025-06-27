@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.statusscreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.statusscreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import luke.koz.presentation.R
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable

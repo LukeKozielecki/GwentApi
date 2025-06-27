@@ -1,4 +1,4 @@
-package luke.koz.presentation
+package luke.koz.presentation.statusscreen
 
 import android.content.Context
 import android.widget.Toast
@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import luke.koz.presentation.R
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
