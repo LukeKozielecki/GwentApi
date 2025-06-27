@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
-fun EmptyState(emptyStateDescription: String, toastMessage: String) {
+fun NoDataStatusScreen(emptyStateDescription: String, toastMessage: String) {
     val context = LocalContext.current
 
     Column(
@@ -65,9 +65,9 @@ private fun showHelpfulToast(context: Context, toastMessage: String) : Unit{
 
 @Preview (showBackground = true)
 @Composable
-private fun EmptyStatePrev() {
+private fun NoDataStatusScreenPrev() {
     GwentApiTheme {
-        EmptyState(
+        NoDataStatusScreen(
             emptyStateDescription = "No cards found",
             toastMessage = "Please try checking internet connection"
         )

@@ -3,11 +3,12 @@ package luke.koz.cardgallery.components
 import androidx.compose.runtime.Composable
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
-import luke.koz.presentation.CardList
-import luke.koz.presentation.CardLoadingScreen
+import luke.koz.presentation.CardListNew
+import luke.koz.presentation.SuccessStatusScreen
+import luke.koz.presentation.LoadingStatusScreen
 import luke.koz.presentation.CardState
-import luke.koz.presentation.EmptyState
-import luke.koz.presentation.ErrorMessage
+import luke.koz.presentation.NoDataStatusScreen
+import luke.koz.presentation.ErrorStatusScreen
 
 @Composable
 fun CardGalleryStateHandler(
@@ -19,21 +20,25 @@ fun CardGalleryStateHandler(
 ) {
     CardGalleryStateHandlerInternal(
         state = state,
-        onEmpty = { EmptyState(
+        onEmpty = { NoDataStatusScreen(
             emptyStateDescription = "No cards found",
             toastMessage = "Please try checking internet connection"
         ) },
-        onLoading = { CardLoadingScreen() },
+        onLoading = { LoadingStatusScreen() },
         onSuccess = { cards ->
-            CardList(
-                cards = cards,
-                onCardClick = onCardClick,
-                onToggleLike = onToggleLike,
-                imageLoader = imageLoader
+            SuccessStatusScreen(
+                content = {
+                    CardListNew(
+                        cards = cards,
+                        onCardClick = onCardClick,
+                        onToggleLike = onToggleLike,
+                        imageLoader = imageLoader
+                    )
+                }
             )
         },
         onError = {
-            ErrorMessage(
+            ErrorStatusScreen(
                 message = it,
                 onRefreshClick = onRefreshClick
             )
@@ -47,7 +52,7 @@ private fun CardGalleryStateHandlerInternal(
     onEmpty: @Composable () -> Unit,
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (List<CardGalleryEntry>) -> Unit,
-    onError: @Composable (String) -> Unit = { ErrorMessage(message = it) {} }
+    onError: @Composable (String) -> Unit = { ErrorStatusScreen(message = it) {} }
 ) {
     when (state) {
         is CardState.Empty -> onEmpty()

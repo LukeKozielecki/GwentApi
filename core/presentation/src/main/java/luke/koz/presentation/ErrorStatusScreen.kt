@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 // this [ErrorMessage] should be: refactored into toast or the user should be navigated
 // to logging in / register screen with a toast telling them what is going on
 @Composable
-fun ErrorMessage(message: String, onRefreshClick : () -> Unit) {
+fun ErrorStatusScreen(message: String, onRefreshClick : () -> Unit) {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,

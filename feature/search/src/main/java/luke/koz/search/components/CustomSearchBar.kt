@@ -21,13 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.presentation.CardImageWithBorder
-import luke.koz.presentation.CardList
+import luke.koz.presentation.CardListNew
+import luke.koz.presentation.SuccessStatusScreen
 import luke.koz.presentation.state.SearchState
 
 @Composable
@@ -141,13 +141,17 @@ private fun SuccessStateContent(
     imageLoader: ImageLoader
 ) {
     //todo rework this to not have this button
-    CardList(
-        cards = cards,
-        onCardClick = onCardClick,
-        onToggleLike = { _, _ ->
+    SuccessStatusScreen(
+        content = {
+            CardListNew(
+                cards = cards,
+                onCardClick = onCardClick,
+                onToggleLike = { _, _ ->
 
-        },
-        imageLoader = imageLoader
+                },
+                imageLoader = imageLoader
+            )
+        }
     )
 }
 

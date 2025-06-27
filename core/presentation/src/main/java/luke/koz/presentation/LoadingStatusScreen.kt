@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
-fun CardLoadingScreen(modifier: Modifier = Modifier) {
+fun LoadingStatusScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -26,8 +26,8 @@ fun CardLoadingScreen(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-private fun CardLoadingScreenPrev() {
+private fun LoadingStatusScreenPrev() {
     GwentApiTheme {
-        CardLoadingScreen()
+        LoadingStatusScreen()
     }
 }
