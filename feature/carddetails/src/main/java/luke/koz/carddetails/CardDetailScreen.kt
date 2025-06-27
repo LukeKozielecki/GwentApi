@@ -1,12 +1,15 @@
 package luke.koz.carddetails
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import coil3.ImageLoader
@@ -40,12 +43,17 @@ fun CardDetailScreen(
         navController = navController,
         scaffold = scaffold
     ) {
-        Column(modifier = Modifier.verticalScroll(scrollState)) {
-            CardDetailsStateHandler(
-                state = cardState,
-                onCardClick = { },
-                imageLoader = imageLoader
-            )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(modifier = Modifier.verticalScroll(scrollState)) {
+                CardDetailsStateHandler(
+                    state = cardState,
+                    onCardClick = { },
+                    imageLoader = imageLoader
+                )
+            }
         }
     }
 }

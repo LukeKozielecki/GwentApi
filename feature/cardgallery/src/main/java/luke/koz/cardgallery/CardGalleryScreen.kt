@@ -1,8 +1,13 @@
 package luke.koz.cardgallery
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -39,13 +44,19 @@ fun CardGalleryScreen(
         navController = navController,
         scaffold = scaffold
     ) {
-        CardGalleryStateHandler(
-            state = cardState,
-            onCardClick = onCardClick,
-            onToggleLike = viewModel::toggleLike,
-            onRefreshClick = viewModel::getAllCards,
-            imageLoader = imageLoader
-        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CardGalleryStateHandler(
+                state = cardState,
+                onCardClick = onCardClick,
+                onToggleLike = viewModel::toggleLike,
+                onRefreshClick = viewModel::getAllCards,
+                imageLoader = imageLoader
+            )
+        }
     }
 }
 

@@ -59,20 +59,13 @@ fun NavigationHost(
             )
         }
         composable<CardGalleryDestination> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                CardGalleryScreen(
-//                    cardId = 201729,
-                    onCardClick = { cardId ->
-                        navController.navigate(CardDetailDestination(cardId))
-                    },
-                    navController = navController,
-                    imageLoader = imageLoader
-                )
-            }
+            CardGalleryScreen(
+                onCardClick = { cardId ->
+                    navController.navigate(CardDetailDestination(cardId))
+                },
+                navController = navController,
+                imageLoader = imageLoader
+            )
         }
         composable<CardDetailDestination> { backStackEntry ->
             val args = backStackEntry.toRoute<CardDetailDestination>()
