@@ -31,11 +31,12 @@ internal fun CardItem(
     onToggleLike: (Int, Boolean) -> Unit,
     imageLoader: ImageLoader
 ) {
-    Box(Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier
-                .clickable { onCardClick(card.id) }
-        ) {
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .clickable { onCardClick(card.id) }
+    ) {
+        Row {
             CardImageWithBorder(card.artId, card.color, imageLoader)
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(text = card.name, style = MaterialTheme.typography.titleMedium)
