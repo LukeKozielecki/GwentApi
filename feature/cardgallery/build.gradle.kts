@@ -53,12 +53,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.navigation.compose)
 
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.1.0")
+    implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     implementation(project(":core:presentation"))
     implementation(project(":core:di"))
     implementation(project(":domain"))
-    implementation(project(":feature:search"))//todo this is needed for facilitating of search , but this couples the modules and makes modularization redundant; move search functionality to domain searchusecase and have SearchViewModel and CardGalleyViewModel depend on it
 }
