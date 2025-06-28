@@ -16,7 +16,7 @@ kotlin {
 dependencies{
     implementation(libs.kotlinx.coroutines.core)
 
-    implementation(platform(libs.androidx.compose.bom.v20250601))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.runtime)
     implementation(libs.androidx.compose.ui.ui)
 }

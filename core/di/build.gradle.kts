@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    implementation(platform(libs.androidx.compose.bom.v20250601))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.runtime)
     implementation(libs.ui)
 }
