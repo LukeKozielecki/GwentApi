@@ -36,7 +36,6 @@ class GwentApplication : Application(), AppDependencyProvider {
                     appContainer.registerUseCase,
                     appContainer.logoutUseCase
                 )
-            // todo add other ViewModel factories
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
