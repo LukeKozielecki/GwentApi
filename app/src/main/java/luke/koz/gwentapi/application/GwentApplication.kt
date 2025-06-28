@@ -10,7 +10,6 @@ import luke.koz.carddetails.viewmodel.CardDetailViewModel
 import luke.koz.carddetails.viewmodel.CardDetailViewModelFactory
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModelFactory
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
-import luke.koz.di.AppContainer
 import luke.koz.di.AppDependencyProvider
 import luke.koz.search.viewmodel.SearchViewModel
 import luke.koz.search.viewmodel.SearchViewModelFactory

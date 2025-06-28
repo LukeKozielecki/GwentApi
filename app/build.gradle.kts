@@ -93,7 +93,6 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":infrastructure"))
     implementation(project(":navigation"))
-    implementation(project(":di"))
     implementation(project(":data"))
     implementation(project(":core:presentation"))
     implementation(project(":core:di"))

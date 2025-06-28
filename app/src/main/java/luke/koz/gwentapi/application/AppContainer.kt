@@ -1,4 +1,4 @@
-package luke.koz.di
+package luke.koz.gwentapi.application
 
 import android.content.Context
 import coil3.ImageLoader
@@ -31,11 +31,11 @@ import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCase
 import luke.koz.domain.cardgallery.RefreshCardGalleryDataUseCaseImpl
 import luke.koz.domain.cardgallery.ToggleCardLikeUseCase
 import luke.koz.domain.cardgallery.ToggleCardLikeUseCaseImpl
+import luke.koz.domain.repository.AuthRepository
+import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.repository.CardDetailsRepository
 import luke.koz.domain.repository.CardGalleryRepository
 import luke.koz.domain.repository.UserLikesDataSource
-import luke.koz.domain.repository.AuthRepository
-import luke.koz.domain.repository.AuthStatusRepository
 import luke.koz.domain.search.SearchCardsUseCaseImpl
 import luke.koz.infrastructure.PersistentImageLoader
 import retrofit2.Retrofit
