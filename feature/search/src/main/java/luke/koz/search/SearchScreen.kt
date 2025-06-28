@@ -63,16 +63,6 @@ fun SearchScreen(
     }
 }
 
-@Composable
-private fun ActionIconButton(action : () -> Unit, imageVector: ImageVector, contentDescription: String) {
-    IconButton(onClick = action) {
-        Icon(
-            imageVector = imageVector,
-            contentDescription = contentDescription,
-        )
-    }
-}
-
 @Preview
 @Composable
 private fun PreviewSearchScreen() {
