@@ -60,5 +60,4 @@ dependencies {
     implementation(project(":core:presentation"))
     implementation(project(":core:di"))
     implementation(project(":domain"))
-    implementation(project(":feature:search"))//todo this is needed for facilitating of search , but this couples the modules and makes modularization redundant; move search functionality to domain searchusecase and have SearchViewModel and CardGalleyViewModel depend on it
 }
