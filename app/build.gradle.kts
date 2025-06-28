@@ -42,9 +42,9 @@ android {
     }
     packaging {
         resources {
-            exclude ("META-INF/INDEX.LIST")
-            exclude ("META-INF/DEPENDENCIES")
-            exclude ("META-INF/io.netty.versions.properties")
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/io.netty.versions.properties")
         }
     }
 }
