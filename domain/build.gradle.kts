@@ -14,9 +14,9 @@ kotlin {
 }
 
 dependencies{
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation(libs.kotlinx.coroutines.core)
 
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
-    implementation("androidx.compose.runtime:runtime")
-    implementation("androidx.compose.ui:ui")
+    implementation(platform(libs.androidx.compose.bom.v20250601))
+    implementation(libs.runtime)
+    implementation(libs.androidx.compose.ui.ui)
 }
