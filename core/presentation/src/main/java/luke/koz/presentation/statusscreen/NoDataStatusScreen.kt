@@ -2,6 +2,7 @@ package luke.koz.presentation.statusscreen
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +26,7 @@ import luke.koz.presentation.R
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
-fun NoDataStatusScreen(emptyStateDescription: String, toastMessage: String) {
+fun NoDataStatusScreen(emptyStateDescription: String, toastMessage: String?) {
     val context = LocalContext.current
 
     Column(
@@ -35,15 +36,20 @@ fun NoDataStatusScreen(emptyStateDescription: String, toastMessage: String) {
     ) {
         Column(
             modifier = Modifier
-                .clickable { showHelpfulToast(context, toastMessage = toastMessage) }
-                .padding(horizontal = 8.dp, vertical = 48.dp),
+                .then(
+                    if (toastMessage != null) {
+                        Modifier.clickable { showHelpfulToast(context, toastMessage = toastMessage) }
+                    } else {
+                        Modifier
+                    }
+                )                .padding(horizontal = 8.dp, vertical = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
+            Image(
                 painter = painterResource(R.drawable.gwent_one_api_app_icon_96x96),
                 contentDescription = null,
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier.size(64.dp).align(Alignment.CenterHorizontally)
             )
             Spacer(Modifier.height(16.dp))
             Text(

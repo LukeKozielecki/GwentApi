@@ -2,13 +2,16 @@ package luke.koz.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,12 +40,13 @@ fun SearchScreen(
     closeSearch: () -> Unit,
     imageLoader: ImageLoader,
     navController: NavHostController,
+    //todo this screen takes parameters navController and scaffold which it doesn't need in current iteration, rethink this composable and rework/remove unused props
     scaffold: @Composable (NavHostController, @Composable (PaddingValues) -> Unit) -> Unit = { nav, content ->
         DefaultScaffold(navController = nav, content = content)
     }
 ) {
-    ScaffoldWrapper(navController, scaffold) {
-        Column {
+    Scaffold { innerPadding ->
+        Column(Modifier.padding(innerPadding)) {
             CustomSearchBar(
                 query = query.value,
                 searchState = searchState,

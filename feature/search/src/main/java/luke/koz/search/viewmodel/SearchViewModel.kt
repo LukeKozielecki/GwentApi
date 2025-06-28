@@ -38,10 +38,10 @@ class SearchViewModel (
                     _searchState.value = SearchState.Error("Search error: ${e.message}")
                 }
                 .collectLatest { results ->
-                    _searchState.value = if (results.isEmpty() || _query.value.isEmpty()){
-                        SearchState.Empty
-                    } else {
-                        SearchState.Success(results)
+                    _searchState.value = when {
+                        _query.value.isEmpty() -> SearchState.Idle
+                        results.isEmpty() -> SearchState.Empty
+                        else -> SearchState.Success(results)
                     }
                 }
         }
