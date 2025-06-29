@@ -158,7 +158,7 @@ private fun SearchContent(
         )
         is SearchState.Loading -> LoadingStatusScreen()
         is SearchState.Empty -> NoDataStatusScreen(
-            emptyStateDescription = "No cards found for searched query",
+            emptyStateDescription = "No cards found for provided\nquery and selection",
             toastMessage = null
         )
         is SearchState.Success -> SuccessStatusScreen {
