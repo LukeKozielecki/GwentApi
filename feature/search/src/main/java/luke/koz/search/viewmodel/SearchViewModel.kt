@@ -35,6 +35,8 @@ class SearchViewModel (
     private val _combinedResults = MutableStateFlow<List<CardGalleryEntry>>(emptyList())
     val combinedResults = _combinedResults.asStateFlow()
 
+    private var lastFetchedSearchResult: CardSearchResult? = null
+
     private var searchJob: Job? = null
 
     fun updateQuery(newQuery: String){
@@ -43,17 +45,18 @@ class SearchViewModel (
             getCardByQuery()
         } else {
             _searchState.value = SearchState.Idle
+            lastFetchedSearchResult = null
         }
     }
 
     fun toggleExactMatches(show: Boolean) {
         _showExactMatches.value = show
-        updateCombinedResults()
+        handleSearchState(lastFetchedSearchResult)
     }
 
     fun toggleApproximateMatches(show: Boolean) {
         _showApproximateMatches.value = show
-        updateCombinedResults()
+        handleSearchState(lastFetchedSearchResult)
     }
 
     private fun getCardByQuery() {
@@ -66,41 +69,77 @@ class SearchViewModel (
                     _searchState.value = SearchState.Error("Search error: ${e.message}")
                 }
                 .collectLatest { searchResult ->
+                    lastFetchedSearchResult = searchResult
                     if (_query.value.isEmpty()) {
                         _searchState.value = SearchState.Idle
                     } else {
-                        handleSearchResult(searchResult)
+                        handleSearchState(lastFetchedSearchResult)
                     }
                 }
         }
     }
 
-    private fun handleSearchResult(searchResult: CardSearchResult) {
-        _searchState.value = when {
-            searchResult.exactMatches.isEmpty() && searchResult.approximateMatches.isEmpty() ->
-                SearchState.Empty
-            else ->
-                SearchState.Success(searchResult)
+    /**
+     * Processes the raw search results and updates the UI [SearchState] accordingly.
+     *
+     * When there are no search results or the search [_query] is empty, it sets the search state to [SearchState.Idle].
+     * Than it checks user preferences for displaying exact and approximate matches
+     * ([_showExactMatches] and [_showApproximateMatches]). Based on these preferences and the presence of matches
+     * in the [searchResult], it updates [_searchState] to either [SearchState.Empty] or [SearchState.Success].
+     *
+     * Finally, it triggers an update to the combined results display.
+     *
+     * @param searchResult The raw search results fetched from the use case.
+     */
+    private fun handleSearchState(searchResult: CardSearchResult?) {
+        if (searchResult == null || _query.value.isEmpty()) {
+            _searchState.value = SearchState.Idle
+            return
         }
 
-        updateCombinedResults()
+        val showExactIsEnabled = _showExactMatches.value
+        val showApproximateIsEnabled = _showApproximateMatches.value
+
+        val shouldShowNone = !showExactIsEnabled && !showApproximateIsEnabled
+        val shouldShowExactMatches = showExactIsEnabled && searchResult.exactMatches.isNotEmpty()
+        val shouldShowApproximateMatches = showApproximateIsEnabled && searchResult.approximateMatches.isNotEmpty()
+
+        _searchState.value = when {
+            shouldShowNone -> SearchState.Empty
+            shouldShowExactMatches || shouldShowApproximateMatches -> SearchState.Success(searchResult)
+            else -> SearchState.Empty
+        }
+
+        updateCombinedResults(lastFetchedSearchResult)
     }
 
-    private fun updateCombinedResults() {
-        val currentState = _searchState.value
-        if (currentState !is SearchState.Success) {
+    /**
+     * Combines and updates the displayed search results, [_combinedResults], based on user preferences.
+     *
+     * If there's no [searchResult] or the [_query] is empty, the [_combinedResults] are cleared.
+     * Than it checks user preferences for displaying exact and approximate matches
+     * ([_showExactMatches] and [_showApproximateMatches]), and proceeds to populate local
+     * variable with the result for selection.
+     *
+     * Finally it assigns the result to [_combinedResults]
+     *
+     * @param searchResult The raw search results fetched from the use case.
+     */
+    private fun updateCombinedResults(searchResult: CardSearchResult?) {
+        if (searchResult == null || _query.value.isEmpty()) {
             _combinedResults.value = emptyList()
             return
         }
 
-        val searchResult = currentState.searchResults
         val combined = mutableListOf<CardGalleryEntry>()
+        val showExact = _showExactMatches.value
+        val showApproximate = _showApproximateMatches.value
 
-        if (_showExactMatches.value && searchResult.exactMatches.isNotEmpty()) {
+        if (showExact && searchResult.exactMatches.isNotEmpty()) {
             combined.addAll(searchResult.exactMatches)
         }
 
-        if (_showApproximateMatches.value && searchResult.approximateMatches.isNotEmpty()) {
+        if (showApproximate && searchResult.approximateMatches.isNotEmpty()) {
             combined.addAll(searchResult.approximateMatches)
         }
 
