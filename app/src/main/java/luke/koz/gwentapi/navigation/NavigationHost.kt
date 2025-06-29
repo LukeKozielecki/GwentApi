@@ -4,20 +4,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import luke.koz.search.viewmodel.provideSearchGalleryViewModel
 import luke.koz.auth.AuthScreen
 import luke.koz.carddetails.CardDetailScreen
 import luke.koz.cardgallery.CardGalleryScreen
@@ -28,6 +23,7 @@ import luke.koz.navigation.CardGalleryDestination
 import luke.koz.navigation.SearchDestination
 import luke.koz.search.SearchScreen
 import luke.koz.search.viewmodel.SearchViewModel
+import luke.koz.search.viewmodel.provideSearchGalleryViewModel
 
 @Composable
 fun NavigationHost(
@@ -80,18 +76,13 @@ fun NavigationHost(
         composable<SearchDestination> {
             val searchViewModel: SearchViewModel =
                 provideSearchGalleryViewModel()
-            val searchState by searchViewModel.searchState
             SearchScreen(
-                query = searchViewModel.query,
-                updateQuery = { searchViewModel.updateQuery(it) },
-                getCardByQuery = { searchViewModel.getCardByQuery() },
-                searchState = searchState,
+                viewModel = searchViewModel,
                 onCardClick = { cardId ->
                     navController.navigate(CardDetailDestination(cardId))
                 },
                 closeSearch = { navController.popBackStack() },
                 imageLoader = imageLoader,
-                navController = navController
             )
         }
     }

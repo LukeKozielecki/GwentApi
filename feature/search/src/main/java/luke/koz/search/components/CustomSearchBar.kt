@@ -1,5 +1,6 @@
 package luke.koz.search.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -38,6 +40,11 @@ fun CustomSearchBar(
     onClose: () -> Unit,
     onCardClick: (Int) -> Unit,
     imageLoader: ImageLoader,
+    combinedResults: List<CardGalleryEntry>,
+    showExactMatches: Boolean,
+    showApproximateMatches: Boolean,
+    onToggleExactMatches: (Boolean) -> Unit,
+    onToggleApproximateMatches: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -45,13 +52,18 @@ fun CustomSearchBar(
             query = query,
             onQueryChanged = onQueryChange,
             onClearQuery = onClearQuery,
-            onClose = onClose
+            onClose = onClose,
+            showExactMatches = showExactMatches,
+            showApproximateMatches = showApproximateMatches,
+            onToggleExactMatches = onToggleExactMatches,
+            onToggleApproximateMatches = onToggleApproximateMatches
         )
 
         SearchContent(
             searchState = searchState,
             onCardClick = onCardClick,
-            imageLoader = imageLoader
+            imageLoader = imageLoader,
+            combinedResults = combinedResults
         )
     }
 }
@@ -61,43 +73,73 @@ private fun SearchHeader(
     query: String,
     onQueryChanged: (String) -> Unit,
     onClearQuery: () -> Unit,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    showExactMatches: Boolean,
+    showApproximateMatches: Boolean,
+    onToggleExactMatches: (Boolean) -> Unit,
+    onToggleApproximateMatches: (Boolean) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(16.dp)
-    ) {
-        BasicTextField(
-            value = query,
-            onValueChange = onQueryChanged,
-            modifier = Modifier.weight(1f),
-            textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-            keyboardActions = KeyboardActions(onSearch = null),
-            decorationBox = { innerTextField ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    if (query.isEmpty()) {
-                        Text(
-                            text = "Start typing to search...",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+    Column {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            BasicTextField(
+                value = query,
+                onValueChange = onQueryChanged,
+                modifier = Modifier.weight(1f),
+                textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = null),
+                decorationBox = { innerTextField ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        if (query.isEmpty()) {
+                            Text(
+                                text = "Start typing to search...",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        innerTextField()
                     }
-                    innerTextField()
                 }
-            }
-        )
+            )
 
-        // Clear & Close Buttons
-        IconButton(onClick = onClearQuery, enabled = query.isNotEmpty()) {
-            Icon(Icons.Default.Close, "Clear query")
+            // Clear & Close Buttons
+            IconButton(onClick = onClearQuery, enabled = query.isNotEmpty()) {
+                Icon(Icons.Default.Close, "Clear query")
+            }
+            IconButton(onClick = onClose) {
+                Icon(Icons.AutoMirrored.Default.ArrowBack, "Close search")
+            }
         }
-        IconButton(onClick = onClose) {
-            Icon(Icons.AutoMirrored.Default.ArrowBack, "Close search")
+
+        // Toggle for exact and approximate matches
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = showExactMatches,
+                    onCheckedChange = onToggleExactMatches
+                )
+                Text("Exact Matches")
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = showApproximateMatches,
+                    onCheckedChange = onToggleApproximateMatches
+                )
+                Text("Approximate Matches")
+            }
         }
     }
 }
@@ -106,7 +148,8 @@ private fun SearchHeader(
 private fun SearchContent(
     searchState: SearchState,
     onCardClick: (Int) -> Unit,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    combinedResults: List<CardGalleryEntry>
 ) {
     when (searchState) {
         is SearchState.Idle -> NoDataStatusScreen(
@@ -120,9 +163,9 @@ private fun SearchContent(
         )
         is SearchState.Success -> SuccessStatusScreen {
             SearchResultsList(
-                searchState.results,
-                onCardClick,
-                imageLoader
+                cards = combinedResults,
+                onCardClick = onCardClick,
+                imageLoader = imageLoader
             )
         }
         is SearchState.Error -> ErrorStatusScreen(
