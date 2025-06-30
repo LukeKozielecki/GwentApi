@@ -61,16 +61,6 @@ fun CustomSearchBar(
             onNavigateBack = onClose,
             modifier = Modifier
         )
-//        SearchHeader(
-//            query = query,
-//            onQueryChanged = onQueryChange,
-//            onClearQuery = onClearQuery,
-//            onClose = onClose,
-//            showExactMatches = showExactMatches,
-//            showApproximateMatches = showApproximateMatches,
-//            onToggleExactMatches = onToggleExactMatches,
-//            onToggleApproximateMatches = onToggleApproximateMatches
-//        )
 
         SearchFilterToggles(
             showExactMatches = showExactMatches,
@@ -84,76 +74,6 @@ fun CustomSearchBar(
             onCardClick = onCardClick,
             imageLoader = imageLoader,
             combinedResults = combinedResults
-        )
-    }
-}
-
-@Composable
-private fun SearchHeader(
-    query: String,
-    onQueryChanged: (String) -> Unit,
-    onClearQuery: () -> Unit,
-    onClose: () -> Unit,
-    showExactMatches: Boolean,
-    showApproximateMatches: Boolean,
-    onToggleExactMatches: (Boolean) -> Unit,
-    onToggleApproximateMatches: (Boolean) -> Unit
-) {
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    LaunchedEffect(Unit) {
-        if (query.isBlank()) {
-            focusRequester.requestFocus()
-            keyboardController?.show()
-        }
-    }
-
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            BasicTextField(
-                value = query,
-                onValueChange = onQueryChanged,
-                modifier = Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester),
-                textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) }),
-                decorationBox = { innerTextField ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        if (query.isEmpty()) {
-                            Text(
-                                text = "Start typing to search...",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        innerTextField()
-                    }
-                }
-            )
-
-            // Clear & Close Buttons
-            IconButton(onClick = onClearQuery, enabled = query.isNotEmpty()) {
-                Icon(Icons.Default.Close, "Clear query")
-            }
-            IconButton(onClick = onClose) {
-                Icon(Icons.AutoMirrored.Default.ArrowBack, "Close search")
-            }
-        }
-
-        SearchFilterToggles(
-            showExactMatches = showExactMatches,
-            showApproximateMatches = showApproximateMatches,
-            onToggleExactMatches = onToggleExactMatches,
-            onToggleApproximateMatches = onToggleApproximateMatches
         )
     }
 }
