@@ -12,7 +12,7 @@ internal fun FilteredCardList(
     onCardClick: (Int) -> Unit,
     imageLoader: ImageLoader
 ) {
-    //todo rework this to not have this button
+    //Todo(low-priority): this could have like-submit database functionality
     SuccessStatusScreen(
         content = {
             CardList(
@@ -21,7 +21,8 @@ internal fun FilteredCardList(
                 onToggleLike = { _, _ ->
 
                 },
-                imageLoader = imageLoader
+                imageLoader = imageLoader,
+                shouldShowLikeButton = false
             )
         }
     )
