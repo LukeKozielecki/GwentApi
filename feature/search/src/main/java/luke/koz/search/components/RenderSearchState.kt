@@ -27,7 +27,7 @@ internal fun RenderSearchState(
             toastMessage = null
         )
         is SearchState.Success -> SuccessStatusScreen {
-            SearchResultsList(
+            FilteredCardList(
                 cards = combinedResults,
                 onCardClick = onCardClick,
                 imageLoader = imageLoader

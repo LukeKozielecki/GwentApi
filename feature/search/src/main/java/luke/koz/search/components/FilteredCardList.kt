@@ -7,7 +7,7 @@ import luke.koz.presentation.card.CardList
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 
 @Composable
-internal fun SearchResultsList(
+internal fun FilteredCardList(
     cards: List<CardGalleryEntry>,
     onCardClick: (Int) -> Unit,
     imageLoader: ImageLoader
