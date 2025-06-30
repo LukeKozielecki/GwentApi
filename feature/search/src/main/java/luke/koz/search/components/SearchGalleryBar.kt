@@ -71,8 +71,15 @@ fun SearchGalleryBar(
                         }
                     },
                     trailingIcon = {
-                        IconButton(onClick = onClearQuery) {
-                            Icon(Icons.Default.Close, "Clear query")
+                        if (query.isNotBlank()) {
+                            IconButton(
+                                onClick = onClearQuery,
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Clear search query"
+                                )
+                            }
                         }
                     },
                     interactionSource = null,
