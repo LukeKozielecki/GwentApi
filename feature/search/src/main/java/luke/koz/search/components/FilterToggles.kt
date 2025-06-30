@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
  * Composable for displaying and toggling search filter options: Exact Matches and Approximate Matches.
  */
 @Composable
-internal fun SearchFilterToggles(
+internal fun FilterToggles(
     showExactMatches: Boolean,
     showApproximateMatches: Boolean,
     onToggleExactMatches: (Boolean) -> Unit,

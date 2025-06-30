@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.search.components.RenderSearchState
-import luke.koz.search.components.SearchFilterToggles
+import luke.koz.search.components.FilterToggles
 import luke.koz.search.components.SearchGalleryBar
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
@@ -61,7 +61,7 @@ internal fun SearchScreenLayout(
         }
 
         if (uiState.showFilters) {
-            SearchFilterToggles(
+            FilterToggles(
                 showExactMatches = uiState.showExactMatches,
                 showApproximateMatches = uiState.showApproximateMatches,
                 onToggleExactMatches = actions.onToggleExactMatches,
