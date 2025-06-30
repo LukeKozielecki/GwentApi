@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
-import luke.koz.search.components.SearchContent
+import luke.koz.search.components.RenderSearchState
 import luke.koz.search.components.SearchFilterToggles
 import luke.koz.search.components.SearchGalleryBar
 import luke.koz.search.model.SearchScreenContentActions
@@ -74,7 +74,7 @@ internal fun SearchScreenLayout(
 
         HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
-        SearchContent(
+        RenderSearchState(
             searchState = uiState.searchState,
             onCardClick = actions.onCardClick,
             imageLoader = imageLoader,

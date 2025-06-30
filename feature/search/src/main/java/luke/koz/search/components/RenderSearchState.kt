@@ -10,7 +10,7 @@ import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
 
 @Composable
-internal fun SearchContent(
+internal fun RenderSearchState(
     searchState: SearchState,
     onCardClick: (Int) -> Unit,
     imageLoader: ImageLoader,
