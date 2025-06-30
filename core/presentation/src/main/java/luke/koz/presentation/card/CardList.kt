@@ -12,7 +12,8 @@ fun CardList(
     cards: List<CardGalleryEntry>,
     onCardClick: (Int) -> Unit,
     onToggleLike: (Int, Boolean) -> Unit,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    shouldShowLikeButton: Boolean = true
 ) {
     LazyColumn {
         items(cards) { card ->
@@ -20,7 +21,8 @@ fun CardList(
                 card = card,
                 onCardClick = onCardClick,
                 onToggleLike = onToggleLike,
-                imageLoader = imageLoader
+                imageLoader = imageLoader,
+                shouldShowLikeButton = shouldShowLikeButton
             )
             HorizontalDivider()
         }
