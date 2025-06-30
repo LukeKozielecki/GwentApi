@@ -81,7 +81,7 @@ fun NavigationHost(
                 onCardClick = { cardId ->
                     navController.navigate(CardDetailDestination(cardId))
                 },
-                closeSearch = { navController.popBackStack() },
+                onPopBackStack = { navController.popBackStack() },
                 imageLoader = imageLoader,
             )
         }

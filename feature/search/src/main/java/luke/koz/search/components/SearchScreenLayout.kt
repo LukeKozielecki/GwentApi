@@ -28,23 +28,14 @@ import luke.koz.presentation.statusscreen.ErrorStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
+import luke.koz.search.model.SearchScreenContentActions
+import luke.koz.search.model.SearchScreenContentUiState
 
 @Composable
-fun SearchScreenLayout(
-    query: String,
-    searchState: SearchState,
-    onQueryChange: (String) -> Unit,
-    onClearQuery: () -> Unit,
-    onClose: () -> Unit,
-    onCardClick: (Int) -> Unit,
+internal fun SearchScreenLayout(
+    uiState: SearchScreenContentUiState,
+    actions: SearchScreenContentActions,
     imageLoader: ImageLoader,
-    combinedResults: List<CardGalleryEntry>,
-    showExactMatches: Boolean,
-    showApproximateMatches: Boolean,
-    showFilters: Boolean,
-    onToggleExactMatches: (Boolean) -> Unit,
-    onToggleApproximateMatches: (Boolean) -> Unit,
-    onToggleFiltersMatches: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -53,35 +44,35 @@ fun SearchScreenLayout(
             verticalAlignment = Alignment.CenterVertically
         ){
             SearchGalleryBar(
-                query = query,
-                onQueryChange = onQueryChange,
+                query = uiState.query,
+                onQueryChange = actions.onQueryChange,
                 onSearch = { KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) }) },
-                onClearQuery = onClearQuery,
-                onNavigateBack = onClose,
+                onClearQuery = actions.onClearQuery,
+                onNavigateBack = actions.onPopBackStack,
                 modifier = Modifier.weight(1f)
             )
 
             Spacer(Modifier.size(4.dp))
 
             OutlinedIconButton(
-                onClick = { onToggleFiltersMatches(showFilters) },
+                onClick = { actions.onToggleFiltersMatches(uiState.showFilters) },
                 modifier = Modifier
                     .size(48.dp)
                     .offset(y = (20).dp)//this is the best method to get approximate alignment for this i can get
             ) {
                 Icon(
                     painter = painterResource(luke.koz.presentation.R.drawable.outline_filter_list_24),
-                    contentDescription = if (showFilters) "Hide filters" else "Show filters"
+                    contentDescription = if (uiState.showFilters) "Hide filters" else "Show filters"
                 )
             }
         }
 
-        if (showFilters) {
+        if (uiState.showFilters) {
             SearchFilterToggles(
-                showExactMatches = showExactMatches,
-                showApproximateMatches = showApproximateMatches,
-                onToggleExactMatches = onToggleExactMatches,
-                onToggleApproximateMatches = onToggleApproximateMatches,
+                showExactMatches = uiState.showExactMatches,
+                showApproximateMatches = uiState.showApproximateMatches,
+                onToggleExactMatches = actions.onToggleExactMatches,
+                onToggleApproximateMatches = actions.onToggleApproximateMatches,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -91,10 +82,10 @@ fun SearchScreenLayout(
         HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
         SearchContent(
-            searchState = searchState,
-            onCardClick = onCardClick,
+            searchState = uiState.searchState,
+            onCardClick = actions.onCardClick,
             imageLoader = imageLoader,
-            combinedResults = combinedResults
+            combinedResults = uiState.combinedResults
         )
     }
 }
