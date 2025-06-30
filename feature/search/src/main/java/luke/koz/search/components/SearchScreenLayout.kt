@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,10 +28,9 @@ import luke.koz.presentation.statusscreen.ErrorStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
-import luke.koz.search.R
 
 @Composable
-fun CustomSearchBar(
+fun SearchScreenLayout(
     query: String,
     searchState: SearchState,
     onQueryChange: (String) -> Unit,

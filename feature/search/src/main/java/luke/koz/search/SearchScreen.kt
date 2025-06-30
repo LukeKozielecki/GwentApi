@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
-import luke.koz.search.components.CustomSearchBar
+import luke.koz.search.components.SearchScreenLayout
 import luke.koz.search.viewmodel.SearchViewModel
 
 @Composable
@@ -26,7 +26,7 @@ fun SearchScreen(
     val showFilters by viewModel.showFilters.collectAsState()
     Scaffold { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
-            CustomSearchBar(
+            SearchScreenLayout(
                 query = query,
                 searchState = searchState,
                 onQueryChange = {
