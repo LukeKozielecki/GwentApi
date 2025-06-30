@@ -1,4 +1,4 @@
-package luke.koz.search.components
+package luke.koz.search
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +28,7 @@ import luke.koz.presentation.statusscreen.ErrorStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
+import luke.koz.search.components.SearchGalleryBar
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
 

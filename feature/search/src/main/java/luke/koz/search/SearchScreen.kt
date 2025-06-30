@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
-import luke.koz.search.components.SearchScreenLayout
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
 import luke.koz.search.viewmodel.SearchViewModel
