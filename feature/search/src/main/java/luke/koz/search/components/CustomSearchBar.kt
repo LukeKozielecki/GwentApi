@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
@@ -29,6 +30,7 @@ import luke.koz.presentation.statusscreen.ErrorStatusScreen
 import luke.koz.presentation.statusscreen.LoadingStatusScreen
 import luke.koz.presentation.statusscreen.NoDataStatusScreen
 import luke.koz.presentation.statusscreen.SuccessStatusScreen
+import luke.koz.search.R
 
 @Composable
 fun CustomSearchBar(
@@ -71,7 +73,7 @@ fun CustomSearchBar(
                     .offset(y = (20).dp)//this is the best method to get approximate alignment for this i can get
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Build,
+                    painter = painterResource(luke.koz.presentation.R.drawable.outline_filter_list_24),
                     contentDescription = if (showFilters) "Hide filters" else "Show filters"
                 )
             }
