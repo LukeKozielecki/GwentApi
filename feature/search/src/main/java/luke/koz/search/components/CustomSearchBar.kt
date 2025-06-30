@@ -18,8 +18,13 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
@@ -48,11 +53,26 @@ fun CustomSearchBar(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SearchHeader(
+        SearchGalleryBar(
             query = query,
-            onQueryChanged = onQueryChange,
+            onQueryChange = onQueryChange,
+            onSearch = {KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) })},
             onClearQuery = onClearQuery,
-            onClose = onClose,
+            onNavigateBack = onClose,
+            modifier = Modifier
+        )
+//        SearchHeader(
+//            query = query,
+//            onQueryChanged = onQueryChange,
+//            onClearQuery = onClearQuery,
+//            onClose = onClose,
+//            showExactMatches = showExactMatches,
+//            showApproximateMatches = showApproximateMatches,
+//            onToggleExactMatches = onToggleExactMatches,
+//            onToggleApproximateMatches = onToggleApproximateMatches
+//        )
+
+        SearchFilterToggles(
             showExactMatches = showExactMatches,
             showApproximateMatches = showApproximateMatches,
             onToggleExactMatches = onToggleExactMatches,
@@ -79,6 +99,15 @@ private fun SearchHeader(
     onToggleExactMatches: (Boolean) -> Unit,
     onToggleApproximateMatches: (Boolean) -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(Unit) {
+        if (query.isBlank()) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+    }
+
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -87,11 +116,13 @@ private fun SearchHeader(
             BasicTextField(
                 value = query,
                 onValueChange = onQueryChanged,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester),
                 textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colorScheme.onSurface),
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                keyboardActions = KeyboardActions(onSearch = null),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) }),
                 decorationBox = { innerTextField ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -118,34 +149,52 @@ private fun SearchHeader(
             }
         }
 
-        // Toggle for exact and approximate matches
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = showExactMatches,
-                    onCheckedChange = onToggleExactMatches
-                )
-                Text("Exact Matches")
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = showApproximateMatches,
-                    onCheckedChange = onToggleApproximateMatches
-                )
-                Text("Approximate Matches")
-            }
+        SearchFilterToggles(
+            showExactMatches = showExactMatches,
+            showApproximateMatches = showApproximateMatches,
+            onToggleExactMatches = onToggleExactMatches,
+            onToggleApproximateMatches = onToggleApproximateMatches
+        )
+    }
+}
+
+/**
+ * Composable for displaying and toggling search filter options: Exact Matches and Approximate Matches.
+ */
+@Composable
+private fun SearchFilterToggles(
+    showExactMatches: Boolean,
+    showApproximateMatches: Boolean,
+    onToggleExactMatches: (Boolean) -> Unit,
+    onToggleApproximateMatches: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showExactMatches,
+                onCheckedChange = onToggleExactMatches
+            )
+            Text("Exact Matches")
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showApproximateMatches,
+                onCheckedChange = onToggleApproximateMatches
+            )
+            Text("Approximate Matches")
         }
     }
 }
 
 @Composable
-private fun SearchContent(
+fun SearchContent(
     searchState: SearchState,
     onCardClick: (Int) -> Unit,
     imageLoader: ImageLoader,
