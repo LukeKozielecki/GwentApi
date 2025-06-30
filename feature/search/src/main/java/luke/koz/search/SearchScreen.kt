@@ -23,6 +23,7 @@ fun SearchScreen(
     val combinedResults by viewModel.combinedResults.collectAsState()
     val showExact by viewModel.showExactMatches.collectAsState()
     val showApproximate by viewModel.showApproximateMatches.collectAsState()
+    val showFilters by viewModel.showFilters.collectAsState()
     Scaffold { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
             CustomSearchBar(
@@ -38,8 +39,10 @@ fun SearchScreen(
                 onCardClick = onCardClick,
                 showExactMatches = showExact,
                 showApproximateMatches = showApproximate,
+                showFilters = showFilters,
                 onToggleExactMatches = { viewModel.toggleExactMatches(it) },
-                onToggleApproximateMatches = { viewModel.toggleApproximateMatches(it) }
+                onToggleApproximateMatches = { viewModel.toggleApproximateMatches(it) },
+                onToggleFiltersMatches = { viewModel.toggleFilters(it) }
             )
         }
     }

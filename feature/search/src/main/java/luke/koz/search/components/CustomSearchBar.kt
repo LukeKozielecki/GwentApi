@@ -3,28 +3,22 @@ package luke.koz.search.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
@@ -48,26 +42,54 @@ fun CustomSearchBar(
     combinedResults: List<CardGalleryEntry>,
     showExactMatches: Boolean,
     showApproximateMatches: Boolean,
+    showFilters: Boolean,
     onToggleExactMatches: (Boolean) -> Unit,
     onToggleApproximateMatches: (Boolean) -> Unit,
+    onToggleFiltersMatches: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        SearchGalleryBar(
-            query = query,
-            onQueryChange = onQueryChange,
-            onSearch = {KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) })},
-            onClearQuery = onClearQuery,
-            onNavigateBack = onClose,
-            modifier = Modifier
-        )
+        Row(
+            modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            SearchGalleryBar(
+                query = query,
+                onQueryChange = onQueryChange,
+                onSearch = { KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) }) },
+                onClearQuery = onClearQuery,
+                onNavigateBack = onClose,
+                modifier = Modifier.weight(1f)
+            )
 
-        SearchFilterToggles(
-            showExactMatches = showExactMatches,
-            showApproximateMatches = showApproximateMatches,
-            onToggleExactMatches = onToggleExactMatches,
-            onToggleApproximateMatches = onToggleApproximateMatches
-        )
+            Spacer(Modifier.size(4.dp))
+
+            OutlinedIconButton(
+                onClick = { onToggleFiltersMatches(showFilters) },
+                modifier = Modifier
+                    .size(48.dp)
+                    .offset(y = (20).dp)//this is the best method to get approximate alignment for this i can get
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Build,
+                    contentDescription = if (showFilters) "Hide filters" else "Show filters"
+                )
+            }
+        }
+
+        if (showFilters) {
+            SearchFilterToggles(
+                showExactMatches = showExactMatches,
+                showApproximateMatches = showApproximateMatches,
+                onToggleExactMatches = onToggleExactMatches,
+                onToggleApproximateMatches = onToggleApproximateMatches,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+
+        HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
         SearchContent(
             searchState = searchState,
@@ -92,7 +114,7 @@ private fun SearchFilterToggles(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(top = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround
     ) {

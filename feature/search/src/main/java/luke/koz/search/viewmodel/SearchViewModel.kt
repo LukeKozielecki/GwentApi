@@ -31,6 +31,9 @@ class SearchViewModel (
     private val _showApproximateMatches = MutableStateFlow(true)
     val showApproximateMatches = _showApproximateMatches.asStateFlow()
 
+    private val _showFilters = MutableStateFlow(false)
+    val showFilters = _showFilters.asStateFlow()
+
     // Combined results state
     private val _combinedResults = MutableStateFlow<List<CardGalleryEntry>>(emptyList())
     val combinedResults = _combinedResults.asStateFlow()
@@ -56,6 +59,11 @@ class SearchViewModel (
 
     fun toggleApproximateMatches(show: Boolean) {
         _showApproximateMatches.value = show
+        handleSearchState(lastFetchedSearchResult)
+    }
+
+    fun toggleFilters(show: Boolean) {
+        _showFilters.value = !show
         handleSearchState(lastFetchedSearchResult)
     }
 
