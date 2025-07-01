@@ -4,6 +4,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,8 +36,20 @@ fun CardGalleryScreen(
     Scaffold (
         topBar = {
             GwentTopAppBar(
-                onProfileClicked = onProfileClicked,
-                onSearchClicked = onSearchClicked
+                actions = {
+                    IconButton(onClick = onSearchClicked) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "Search"
+                        )
+                    }
+                    IconButton(onClick = onProfileClicked) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = "User Profile"
+                        )
+                    }
+                }
             )
         }
     ) { innerPadding ->

@@ -37,10 +37,7 @@ fun CardDetailScreen(
 
     Scaffold(
         topBar = {
-            GwentTopAppBar(
-                onProfileClicked = {},
-                onSearchClicked = {}
-            )
+            GwentTopAppBar()
         }
     ) { innerPadding ->
         Box(
