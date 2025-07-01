@@ -41,8 +41,7 @@ internal fun SearchScreenLayout(
                 uiState = uiState,
                 actions = actions,
                 focusManager = focusManager,
-                focusRequester = focusRequester,
-                modifier = modifier
+                focusRequester = focusRequester
             )
         }
     ) { innerPadding ->
