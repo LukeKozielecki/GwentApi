@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
-fun AuthTextField(
+internal fun AuthTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,

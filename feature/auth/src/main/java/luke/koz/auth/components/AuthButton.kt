@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AuthButton(
+internal fun AuthButton(
     text: String,
     onClick: () -> Unit,
     enabled: Boolean,

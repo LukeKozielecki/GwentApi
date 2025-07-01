@@ -49,8 +49,7 @@ fun NavigationHost(
                         }
                         launchSingleTop = true
                     }
-                },
-                modifier = Modifier.fillMaxSize()
+                }
             )
         }
         composable<CardGalleryDestination> {

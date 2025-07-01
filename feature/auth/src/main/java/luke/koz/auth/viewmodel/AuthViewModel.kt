@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import luke.koz.auth.model.AuthState
 import luke.koz.domain.auth.AuthResult
 import luke.koz.domain.auth.usecase.LoginUseCase
 import luke.koz.domain.auth.LogoutResult
@@ -110,12 +111,4 @@ class AuthViewModel(
             }
         }
     }
-}
-
-//todo extract AuthState to model
-sealed class AuthState {
-    object Idle : AuthState()
-    object Loading : AuthState()
-    data class Success(val user: AuthUserModel) : AuthState()
-    data class Error(val message: String) : AuthState()
 }
