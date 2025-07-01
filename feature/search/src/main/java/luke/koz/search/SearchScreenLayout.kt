@@ -52,6 +52,7 @@ internal fun SearchScreenLayout(
                 modifier = Modifier
                     .size(48.dp)
                     .align(Alignment.CenterVertically)
+                    .offset(y = 3.dp)// this is not a concrete number; fixes `SearchBar` and `OutlinedIconButton` differently defining `Alignment.CenterVertically`
             ) {
                 Icon(
                     painter = painterResource(luke.koz.presentation.R.drawable.outline_filter_list_24),
