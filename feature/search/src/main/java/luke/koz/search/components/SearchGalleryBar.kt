@@ -3,8 +3,8 @@ package luke.koz.search.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 /**
@@ -66,11 +67,10 @@ fun SearchGalleryBar(
                     expanded = expanded,
                     onExpandedChange = onExpandedChange,
                     enabled = true,
-                    placeholder = { Text("Start typing to browse gallery...") },
-                    leadingIcon = {
-                        IconButton(onClick = onNavigateBack) {
-                            Icon(Icons.AutoMirrored.Default.ArrowBack, "Close search")
-                        }
+                    placeholder = { Text(
+                        text = "Search the gallery",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis)
                     },
                     trailingIcon = {
                         if (query.isNotBlank()) {
@@ -89,11 +89,12 @@ fun SearchGalleryBar(
             },
             expanded = expanded,
             onExpandedChange = onExpandedChange,
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = (-4).dp),// the offset was moved here
+            //i don't know why this is necessary. otherwise, there is ~4.dp padding towards top
             shape = SearchBarDefaults.inputFieldShape,
             tonalElevation = SearchBarDefaults.TonalElevation,
             shadowElevation = SearchBarDefaults.ShadowElevation,
-            windowInsets = WindowInsets(top = 0.dp),
+            windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
         ) { /* Content block
              * As per current implementation this searchbar performs filtering functionality via
              * provided properties.
