@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,18 +26,9 @@ import luke.koz.presentation.theme.GwentApiTheme
 @Composable
 fun GwentTopAppBar(
     onProfileClicked: () -> Unit,
-    onSearchClicked: () -> Unit,
-    onMenuClicked: () -> Unit = {},
+    onSearchClicked: () -> Unit
 ) {
     TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onMenuClicked) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = "Menu"
-                )
-            }
-        },
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -78,8 +68,7 @@ private fun GwentTopAppBarPrev() {
     GwentApiTheme {
         GwentTopAppBar(
             onProfileClicked = { },
-            onSearchClicked = { },
-            onMenuClicked = { }
+            onSearchClicked = { }
         )
     }
 }

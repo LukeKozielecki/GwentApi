@@ -24,8 +24,7 @@ fun DefaultScaffold(
         topBar = {
             GwentTopAppBar(
                 onProfileClicked = onProfileClicked,
-                onSearchClicked = onSearchClicked,
-                onMenuClicked = {}
+                onSearchClicked = onSearchClicked
             )
         }
     ) { innerPadding ->
