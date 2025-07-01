@@ -10,12 +10,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import luke.koz.auth.components.AuthBlock
-import luke.koz.auth.components.ProfileScreen
+import luke.koz.auth.model.AuthScreenContentActions
+import luke.koz.auth.model.AuthScreenContentUiState
 import luke.koz.auth.viewmodel.AuthState
 import luke.koz.auth.viewmodel.AuthViewModel
 import luke.koz.auth.viewmodel.provideAuthViewModel
@@ -28,9 +27,6 @@ fun AuthScreen(
     val viewModel: AuthViewModel = provideAuthViewModel()
     val authState = viewModel.authState.value
     val context = LocalContext.current
-
-    val currentUser by viewModel.currentUser.collectAsState()
-    val isUserCheckComplete by viewModel.isUserCheckComplete.collectAsState()
 
     LaunchedEffect(authState) {
         when (authState) {
@@ -45,35 +41,30 @@ fun AuthScreen(
         }
     }
 
-    LaunchedEffect(isUserCheckComplete, currentUser) {
-        if (isUserCheckComplete) {
-            if (currentUser != null) {
-                Log.d("AuthScreenDebug", "User found on initial check: ${currentUser?.email ?: "error"}")
-            } else {
-                Log.d("AuthScreenDebug", "No user found on initial check. Showing login screen.")
-            }
-        } else {
-            Log.d("AuthScreenDebug", "Initial user check still in progress...")
-        }
-    }
-
     Scaffold { innerPadding ->
         Column(modifier = Modifier
-            .fillMaxSize()
             .padding(innerPadding)
+            .fillMaxSize()
             .padding(16.dp), verticalArrangement = Arrangement.Center) {
-            if (currentUser == null) {
-                AuthBlock(
-                    viewModel = viewModel,
+            AuthScreenLayout(
+                uiState = AuthScreenContentUiState(
+                    email = viewModel.email,
+                    password = viewModel.password,
+                    isEmailValid = viewModel.isEmailValid,
+                    isPasswordValid = viewModel.isPasswordValid,
+                    isFormValid = viewModel.isFormValid,
                     authState = authState,
-                    modifier = modifier
-                )
-            } else if (currentUser != null) {
-                ProfileScreen(
-                    user = currentUser!!,
-                    onLogout = { viewModel.logout() }
-                )
-            }
+                    currentUser = viewModel.currentUser.collectAsState().value,
+                ),
+                actions = AuthScreenContentActions(
+                    onEmailChange = viewModel::onEmailChange,
+                    onPasswordChange = viewModel::onPasswordChange,
+                    onLogin = viewModel::login,
+                    onRegister = viewModel::register,
+                    onLogout = viewModel::logout
+                ),
+                modifier = modifier
+            )
         }
     }
 }
