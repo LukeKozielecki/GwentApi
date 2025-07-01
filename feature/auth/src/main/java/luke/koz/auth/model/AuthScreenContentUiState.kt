@@ -1,7 +1,6 @@
 package luke.koz.auth.model
 
 import luke.koz.auth.AuthScreenLayout
-import luke.koz.auth.viewmodel.AuthState
 import luke.koz.domain.auth.AuthUserModel
 
 /**

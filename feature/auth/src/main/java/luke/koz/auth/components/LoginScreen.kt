@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import luke.koz.auth.model.AuthScreenContentActions
 import luke.koz.auth.model.AuthScreenContentUiState
-import luke.koz.auth.viewmodel.AuthState
+import luke.koz.auth.model.AuthState
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable

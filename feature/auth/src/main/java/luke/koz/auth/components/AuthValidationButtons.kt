@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import luke.koz.auth.model.AuthScreenContentActions
 import luke.koz.auth.model.AuthScreenContentUiState
-import luke.koz.auth.viewmodel.AuthState
+import luke.koz.auth.model.AuthState
 
 @Composable
 internal fun AuthValidationButton(

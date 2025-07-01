@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import luke.koz.auth.model.AuthScreenContentActions
 import luke.koz.auth.model.AuthScreenContentUiState
-import luke.koz.auth.viewmodel.AuthState
+import luke.koz.auth.model.AuthState
 import luke.koz.auth.viewmodel.AuthViewModel
 import luke.koz.auth.viewmodel.provideAuthViewModel
 
