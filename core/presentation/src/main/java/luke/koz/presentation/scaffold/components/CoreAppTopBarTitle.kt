@@ -21,12 +21,12 @@ fun CoreTopAppBarTitle(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.gwent_one_api_favicon_96x96),
+            painter = painterResource(id = R.drawable.gwent_one_api_app_icon_96x96),
             contentDescription = "App Logo",
             modifier = Modifier.size(32.dp)
         )
         Text(
-            text = "Gwent API",
+            text = "GwentApi Compendium",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(start = 8.dp)
         )
