@@ -50,7 +50,6 @@ fun NavigationHost(
                         launchSingleTop = true
                     }
                 },
-                navController = navController,
                 modifier = Modifier.fillMaxSize()
             )
         }
