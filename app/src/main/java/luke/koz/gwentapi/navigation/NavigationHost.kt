@@ -59,7 +59,8 @@ fun NavigationHost(
                 onCardClick = { cardId ->
                     navController.navigate(CardDetailDestination(cardId))
                 },
-                navController = navController,
+                onProfileClicked = { navController.navigate(AuthDestination) },
+                onSearchClicked = { navController.navigate(SearchDestination) },
                 imageLoader = imageLoader
             )
         }

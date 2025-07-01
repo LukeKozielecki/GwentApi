@@ -2,40 +2,44 @@ package luke.koz.cardgallery
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import coil3.ImageLoader
 import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
-import luke.koz.presentation.scaffold.DefaultScaffold
-import luke.koz.presentation.scaffold.components.ScaffoldWrapper
+import luke.koz.presentation.scaffold.GwentTopAppBar
 
 @Composable
 fun CardGalleryScreen(
     onCardClick: (Int) -> Unit,
-    navController: NavHostController,
-    scaffold: @Composable (NavHostController, @Composable (PaddingValues) -> Unit) -> Unit = { nav, content ->
-        DefaultScaffold(navController = nav, content = content)
-    },
+    onProfileClicked: () -> Unit,
+    onSearchClicked: () -> Unit,
     imageLoader: ImageLoader
 ) {
     val viewModel: CardGalleryViewModel = provideCardGalleryViewModel()
     val cardState by viewModel.cardGalleryState
 
-    //todo add pull from top to trigger .getAllCards() Pull to refresh https://developer.android.com/develop/ui/compose/components/pull-to-refresh
+    //todo add pull from top to trigger .getAllCards() Pull to refresh
+    // https://developer.android.com/develop/ui/compose/components/pull-to-refresh
 
-    ScaffoldWrapper(
-        navController = navController,
-        scaffold = scaffold
-    ) {
+    Scaffold (
+        topBar = {
+            GwentTopAppBar(
+                onProfileClicked = onProfileClicked,
+                onSearchClicked = onSearchClicked
+            )
+        }
+    ) { innerPadding ->
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -47,5 +51,6 @@ fun CardGalleryScreen(
                 imageLoader = imageLoader
             )
         }
+
     }
 }
