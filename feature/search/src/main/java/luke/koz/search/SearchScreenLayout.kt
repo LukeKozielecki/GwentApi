@@ -20,6 +20,22 @@ import luke.koz.search.components.SearchScreenTopAppBar
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
 
+/**
+ * An internal composable that defines the overall layout structure of the Search Screen.
+ *
+ * This composable acts as the primary UI layer for the search feature, orchestrating
+ * the arrangement of its sub-components: the dynamic [SearchScreenTopAppBar],
+ * the [FilterToggles] section, and the [RenderSearchState] area for displaying
+ * search results or status messages.
+ *
+ * @param uiState The current UI state ([SearchScreenContentUiState]) containing all
+ * the data and flags required to render the search screen's various elements.
+ * @param actions The set of actions ([SearchScreenContentActions]) that define how
+ * user interactions are communicated to the ViewModel.
+ * @param imageLoader An [ImageLoader] instance used for loading and displaying
+ * images within the search results.
+ * @param modifier An optional [Modifier] to be applied to the root [Column] of this composable.
+ */
 @Composable
 internal fun SearchScreenLayout(
     uiState: SearchScreenContentUiState,
