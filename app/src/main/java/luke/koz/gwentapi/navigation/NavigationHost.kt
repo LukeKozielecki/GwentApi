@@ -68,7 +68,6 @@ fun NavigationHost(
             CardDetailScreen(
                 cardId = args.cardId,
                 onBack = { navController.popBackStack() },
-                navController = navController,
                 imageLoader = imageLoader
             )
         }
