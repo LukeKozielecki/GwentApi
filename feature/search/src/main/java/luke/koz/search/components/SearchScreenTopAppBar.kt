@@ -86,7 +86,7 @@ internal fun SearchScreenTopAppBar(
                     )
                 } else {
                     Box(modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
-                        CoreTopAppBarTitle(modifier.fillMaxHeight())
+                        CoreTopAppBarTitle()
                     }
                 }
             }

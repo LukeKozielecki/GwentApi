@@ -16,7 +16,7 @@ import luke.koz.presentation.R
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
-fun CoreTopAppBarTitle(modifier: Modifier = Modifier) {
+fun CoreTopAppBarTitle() {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
