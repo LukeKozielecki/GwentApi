@@ -79,10 +79,6 @@ internal fun SearchScreenTopAppBar(
                             focusManager.clearFocus()
                         },
                         onClearQuery = actions.onClearQuery,
-                        onNavigateBack = {
-                            actions.onToggleSearchBarActive(false)
-                            focusManager.clearFocus()
-                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(64.dp)

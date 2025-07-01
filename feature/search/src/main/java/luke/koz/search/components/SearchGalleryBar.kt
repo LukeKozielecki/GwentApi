@@ -30,12 +30,10 @@ import androidx.compose.ui.unit.dp
  *
  * @param query The current text query displayed in the search bar.
  * @param onQueryChange Callback invoked when the user types or modifies the search query.
- * @param onSearch Callback invoked when the user explicitly triggers a search action (e.g., presses Enter),
- * followed by hardcoded hiding of keyboard and focus clearance.
+ * @param onSearch Callback invoked when the user explicitly triggers a search action
+ * followed by automatic hiding of keyboard and focus clearance.
  * @param onClearQuery Callback invoked when the user clicks the "clear query" icon,
  * requesting the input field to be emptied.
- * @param onNavigateBack Callback invoked when the user clicks the "navigate back" (arrow) icon,
- * typically indicating a desire to exit the current search context.
  * @param modifier Optional modifier to be applied to the root [Box] of this composable.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,7 +43,6 @@ fun SearchGalleryBar(
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onClearQuery: () -> Unit,
-    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val expanded = false
