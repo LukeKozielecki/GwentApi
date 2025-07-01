@@ -8,5 +8,6 @@ internal data class SearchScreenContentActions (
     val onPopBackStack: () -> Unit,
     val onToggleFiltersMatches: (Boolean) -> Unit,
     val onToggleExactMatches: (Boolean) -> Unit,
-    val onToggleApproximateMatches: (Boolean) -> Unit
+    val onToggleApproximateMatches: (Boolean) -> Unit,
+    val onToggleSearchBarActive: (Boolean) -> Unit
 )

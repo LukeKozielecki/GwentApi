@@ -3,8 +3,8 @@ package luke.koz.search.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
 /**
@@ -29,12 +30,10 @@ import androidx.compose.ui.unit.dp
  *
  * @param query The current text query displayed in the search bar.
  * @param onQueryChange Callback invoked when the user types or modifies the search query.
- * @param onSearch Callback invoked when the user explicitly triggers a search action (e.g., presses Enter),
- * followed by hardcoded hiding of keyboard and focus clearance.
+ * @param onSearch Callback invoked when the user explicitly triggers a search action
+ * followed by automatic hiding of keyboard and focus clearance.
  * @param onClearQuery Callback invoked when the user clicks the "clear query" icon,
  * requesting the input field to be emptied.
- * @param onNavigateBack Callback invoked when the user clicks the "navigate back" (arrow) icon,
- * typically indicating a desire to exit the current search context.
  * @param modifier Optional modifier to be applied to the root [Box] of this composable.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +43,6 @@ fun SearchGalleryBar(
     onQueryChange: (String) -> Unit,
     onSearch: () -> Unit,
     onClearQuery: () -> Unit,
-    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val expanded = false
@@ -66,11 +64,10 @@ fun SearchGalleryBar(
                     expanded = expanded,
                     onExpandedChange = onExpandedChange,
                     enabled = true,
-                    placeholder = { Text("Start typing to browse gallery...") },
-                    leadingIcon = {
-                        IconButton(onClick = onNavigateBack) {
-                            Icon(Icons.AutoMirrored.Default.ArrowBack, "Close search")
-                        }
+                    placeholder = { Text(
+                        text = "Search the gallery",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis)
                     },
                     trailingIcon = {
                         if (query.isNotBlank()) {
@@ -89,11 +86,12 @@ fun SearchGalleryBar(
             },
             expanded = expanded,
             onExpandedChange = onExpandedChange,
-            modifier = Modifier.align(Alignment.TopCenter),
+            modifier = Modifier.align(Alignment.TopCenter).offset(y = (-4).dp),// the offset was moved here
+            //i don't know why this is necessary. otherwise, there is ~4.dp padding towards top
             shape = SearchBarDefaults.inputFieldShape,
             tonalElevation = SearchBarDefaults.TonalElevation,
             shadowElevation = SearchBarDefaults.ShadowElevation,
-            windowInsets = WindowInsets(top = 0.dp),
+            windowInsets = WindowInsets(top = 0.dp, bottom = 0.dp),
         ) { /* Content block
              * As per current implementation this searchbar performs filtering functionality via
              * provided properties.

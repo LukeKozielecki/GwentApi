@@ -30,6 +30,9 @@ class SearchViewModel (
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
+    private val _isSearchBarActive = MutableStateFlow(false)
+    val isSearchBarActive: StateFlow<Boolean> = _isSearchBarActive.asStateFlow()
+
     // State for match type toggles
     private val _showExactMatches = MutableStateFlow(true)
     val showExactMatches = _showExactMatches.asStateFlow()
@@ -57,6 +60,10 @@ class SearchViewModel (
             _searchState.value = SearchState.Idle
             lastFetchedSearchResult = null
         }
+    }
+
+    fun toggleSearchBarActive(active: Boolean) {
+        _isSearchBarActive.value = active
     }
 
     fun toggleExactMatches(show: Boolean) {

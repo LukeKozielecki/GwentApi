@@ -4,7 +4,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -22,23 +22,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import luke.koz.auth.components.AuthContainer
 import luke.koz.auth.components.AuthHeader
 import luke.koz.auth.viewmodel.AuthState
 import luke.koz.auth.viewmodel.AuthViewModel
 import luke.koz.auth.viewmodel.provideAuthViewModel
 import luke.koz.domain.auth.AuthUserModel
-import luke.koz.presentation.scaffold.components.ScaffoldWrapper
 
 @Composable
 fun AuthScreen(
     onAuthSuccess: () -> Unit,
-    navController: NavHostController,
-    modifier: Modifier = Modifier,
-    scaffold: @Composable (NavHostController, @Composable (PaddingValues) -> Unit) -> Unit = { _, content ->
-        content(PaddingValues())
-    }
+    modifier: Modifier = Modifier
 ) {
     val viewModel: AuthViewModel = provideAuthViewModel()
     val authState = viewModel.authState.value
@@ -72,12 +66,10 @@ fun AuthScreen(
         }
     }
 
-    ScaffoldWrapper(
-        navController = navController,
-        scaffold = scaffold
-    ) {
+    Scaffold { innerPadding ->
         Column(modifier = Modifier
             .fillMaxSize()
+            .padding(innerPadding)
             .padding(16.dp), verticalArrangement = Arrangement.Center) {
             if (currentUser == null) {
                 AuthBlock(

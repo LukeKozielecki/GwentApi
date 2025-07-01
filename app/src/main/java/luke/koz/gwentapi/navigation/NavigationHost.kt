@@ -50,7 +50,6 @@ fun NavigationHost(
                         launchSingleTop = true
                     }
                 },
-                navController = navController,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -59,7 +58,8 @@ fun NavigationHost(
                 onCardClick = { cardId ->
                     navController.navigate(CardDetailDestination(cardId))
                 },
-                navController = navController,
+                onProfileClicked = { navController.navigate(AuthDestination) },
+                onSearchClicked = { navController.navigate(SearchDestination) },
                 imageLoader = imageLoader
             )
         }
@@ -68,7 +68,6 @@ fun NavigationHost(
             CardDetailScreen(
                 cardId = args.cardId,
                 onBack = { navController.popBackStack() },
-                navController = navController,
                 imageLoader = imageLoader
             )
         }
