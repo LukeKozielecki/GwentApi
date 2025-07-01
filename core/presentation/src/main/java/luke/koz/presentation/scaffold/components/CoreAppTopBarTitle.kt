@@ -13,8 +13,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import luke.koz.presentation.R
+import luke.koz.presentation.scaffold.CoreTopAppBar
 import luke.koz.presentation.theme.GwentApiTheme
 
+/**
+ *  A composable that represents the application's consistent primary title content
+ *  for use within the `title` slot of a [CoreTopAppBar].
+ *
+ *  It displays the application's logo ([R.drawable.gwent_one_api_app_icon_96x96]) alongside
+ *  the static text "GwentApi Compendium",
+ */
 @Composable
 fun CoreTopAppBarTitle() {
     Row(
