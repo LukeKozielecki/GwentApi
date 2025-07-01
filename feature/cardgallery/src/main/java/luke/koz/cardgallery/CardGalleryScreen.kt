@@ -18,7 +18,7 @@ import coil3.ImageLoader
 import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
-import luke.koz.presentation.scaffold.GwentTopAppBar
+import luke.koz.presentation.scaffold.CoreTopAppBar
 
 @Composable
 fun CardGalleryScreen(
@@ -35,7 +35,7 @@ fun CardGalleryScreen(
 
     Scaffold (
         topBar = {
-            GwentTopAppBar(
+            CoreTopAppBar(
                 actions = {
                     IconButton(onClick = onSearchClicked) {
                         Icon(

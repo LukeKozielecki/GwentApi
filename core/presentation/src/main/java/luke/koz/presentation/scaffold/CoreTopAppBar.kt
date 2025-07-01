@@ -22,7 +22,7 @@ import luke.koz.presentation.theme.GwentApiTheme
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GwentTopAppBar(
+fun CoreTopAppBar(
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = { CoreTopAppBarTitle() },
     navigationIcon: @Composable () -> Unit = {},
@@ -38,9 +38,9 @@ fun GwentTopAppBar(
 
 @Preview
 @Composable
-private fun GwentTopAppBarPrev() {
+private fun CoreTopAppBarPrev() {
     GwentApiTheme {
-        GwentTopAppBar(
+        CoreTopAppBar(
             modifier = Modifier,
             title = { CoreTopAppBarTitle() },
         )

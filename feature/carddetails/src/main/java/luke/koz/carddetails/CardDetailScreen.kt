@@ -16,7 +16,7 @@ import coil3.ImageLoader
 import luke.koz.carddetails.components.CardDetailsStateHandler
 import luke.koz.carddetails.viewmodel.CardDetailViewModel
 import luke.koz.carddetails.viewmodel.provideCardDetailViewModel
-import luke.koz.presentation.scaffold.GwentTopAppBar
+import luke.koz.presentation.scaffold.CoreTopAppBar
 import luke.koz.presentation.state.CardDetailsState
 
 @Composable
@@ -37,7 +37,7 @@ fun CardDetailScreen(
 
     Scaffold(
         topBar = {
-            GwentTopAppBar()
+            CoreTopAppBar()
         }
     ) { innerPadding ->
         Box(
