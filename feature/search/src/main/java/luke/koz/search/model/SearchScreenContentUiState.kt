@@ -9,5 +9,6 @@ internal data class SearchScreenContentUiState(
     val combinedResults: List<CardGalleryEntry>,
     val showFilters: Boolean,
     val showExactMatches: Boolean,
-    val showApproximateMatches: Boolean
+    val showApproximateMatches: Boolean,
+    val isSearchBarActive: Boolean
 )

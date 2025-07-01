@@ -1,26 +1,22 @@
 package luke.koz.search
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedIconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
-import luke.koz.search.components.RenderSearchState
+import luke.koz.presentation.state.SearchState
 import luke.koz.search.components.FilterToggles
-import luke.koz.search.components.SearchGalleryBar
+import luke.koz.search.components.RenderSearchState
+import luke.koz.search.components.SearchScreenTopAppBar
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
 
@@ -31,55 +27,48 @@ internal fun SearchScreenLayout(
     imageLoader: ImageLoader,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
-        Row(
-            modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            SearchGalleryBar(
-                query = uiState.query,
-                onQueryChange = actions.onQueryChange,
-                onSearch = { KeyboardActions(onSearch = { defaultKeyboardAction(ImeAction.Done) }) },
-                onClearQuery = actions.onClearQuery,
-                onNavigateBack = actions.onPopBackStack,
-                modifier = Modifier.weight(1f)
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect (Unit){
+        if (uiState.searchState == SearchState.Idle) {
+            actions.onToggleSearchBarActive(true)
+        }
+    }
+    Scaffold(
+        topBar = {
+            SearchScreenTopAppBar(
+                uiState = uiState,
+                actions = actions,
+                focusManager = focusManager,
+                focusRequester = focusRequester,
+                modifier = modifier
             )
-
-            Spacer(Modifier.size(4.dp))
-
-            OutlinedIconButton(
-                onClick = { actions.onToggleFiltersMatches(uiState.showFilters) },
-                modifier = Modifier
-                    .size(48.dp)
-                    .align(Alignment.CenterVertically)
-                    .offset(y = 3.dp)// this is not a concrete number; fixes `SearchBar` and `OutlinedIconButton` differently defining `Alignment.CenterVertically`
-            ) {
-                Icon(
-                    painter = painterResource(luke.koz.presentation.R.drawable.outline_filter_list_24),
-                    contentDescription = if (uiState.showFilters) "Hide filters" else "Show filters"
+        }
+    ) { innerPadding ->
+        Column(modifier = modifier.padding(innerPadding)) {
+            if (uiState.showFilters) {
+                HorizontalDivider(Modifier.padding(vertical = 2.dp))
+                FilterToggles(
+                    showExactMatches = uiState.showExactMatches,
+                    showApproximateMatches = uiState.showApproximateMatches,
+                    onToggleExactMatches = actions.onToggleExactMatches,
+                    onToggleApproximateMatches = actions.onToggleApproximateMatches,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
                 )
             }
-        }
 
-        if (uiState.showFilters) {
-            FilterToggles(
-                showExactMatches = uiState.showExactMatches,
-                showApproximateMatches = uiState.showApproximateMatches,
-                onToggleExactMatches = actions.onToggleExactMatches,
-                onToggleApproximateMatches = actions.onToggleApproximateMatches,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+            HorizontalDivider(Modifier.padding(vertical = 2.dp))
+
+            RenderSearchState(
+                searchState = uiState.searchState,
+                onCardClick = actions.onCardClick,
+                imageLoader = imageLoader,
+                combinedResults = uiState.combinedResults
             )
         }
 
-        HorizontalDivider(Modifier.padding(vertical = 8.dp))
-
-        RenderSearchState(
-            searchState = uiState.searchState,
-            onCardClick = actions.onCardClick,
-            imageLoader = imageLoader,
-            combinedResults = uiState.combinedResults
-        )
     }
 }
