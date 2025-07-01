@@ -1,6 +1,7 @@
 package luke.koz.search.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.unit.dp
 
 /**
  * Material 3 custom implementation of [SearchBar] for purpose of browsing Card Gallery data.
@@ -91,7 +93,7 @@ fun SearchGalleryBar(
             shape = SearchBarDefaults.inputFieldShape,
             tonalElevation = SearchBarDefaults.TonalElevation,
             shadowElevation = SearchBarDefaults.ShadowElevation,
-            windowInsets = SearchBarDefaults.windowInsets,
+            windowInsets = WindowInsets(top = 0.dp),
         ) { /* Content block
              * As per current implementation this searchbar performs filtering functionality via
              * provided properties.

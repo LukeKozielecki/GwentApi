@@ -51,7 +51,7 @@ internal fun SearchScreenLayout(
                 onClick = { actions.onToggleFiltersMatches(uiState.showFilters) },
                 modifier = Modifier
                     .size(48.dp)
-                    .offset(y = (20).dp)//this is the best method to get approximate alignment for this i can get
+                    .align(Alignment.CenterVertically)
             ) {
                 Icon(
                     painter = painterResource(luke.koz.presentation.R.drawable.outline_filter_list_24),
