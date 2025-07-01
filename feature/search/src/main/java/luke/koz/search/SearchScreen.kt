@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import coil3.ImageLoader
+import kotlinx.coroutines.launch
 import luke.koz.search.model.SearchScreenContentActions
 import luke.koz.search.model.SearchScreenContentUiState
 import luke.koz.search.viewmodel.SearchViewModel
@@ -18,6 +20,7 @@ fun SearchScreen(
     onPopBackStack: () -> Unit,
     imageLoader: ImageLoader
 ) {
+    val scope = rememberCoroutineScope()
     Scaffold { innerPadding ->
         Column(Modifier.padding(innerPadding)) {
             SearchScreenLayout(
@@ -36,8 +39,16 @@ fun SearchScreen(
                     onClearQuery = { viewModel.updateQuery("") },
                     onPopBackStack = onPopBackStack,
                     onToggleFiltersMatches = { viewModel.toggleFilters(it) },
-                    onToggleExactMatches = { viewModel.toggleExactMatches(it) },
-                    onToggleApproximateMatches = { viewModel.toggleApproximateMatches(it) },
+                    onToggleExactMatches = { scope
+                        .launch {
+                            viewModel.toggleExactMatches(it)
+                        }
+                    },
+                    onToggleApproximateMatches = { scope
+                        .launch {
+                            viewModel.toggleApproximateMatches(it)
+                        }
+                    },
                 ),
                 imageLoader = imageLoader
             )

@@ -1,18 +1,24 @@
 package luke.koz.search.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import luke.koz.domain.model.CardGalleryEntry
 import luke.koz.domain.model.CardSearchResult
 import luke.koz.domain.search.SearchCardsUseCase
 import luke.koz.presentation.state.SearchState
+import kotlin.coroutines.cancellation.CancellationException
+
+private const val SMOOTH_TRANSITION_DEBOUNCE : Long = 300L
 
 class SearchViewModel (
     private val searchCardsUseCase: SearchCardsUseCase
@@ -41,6 +47,7 @@ class SearchViewModel (
     private var lastFetchedSearchResult: CardSearchResult? = null
 
     private var searchJob: Job? = null
+    private var smoothTransitionJob: Job? = null
 
     fun updateQuery(newQuery: String){
         _query.value = newQuery
@@ -54,17 +61,16 @@ class SearchViewModel (
 
     fun toggleExactMatches(show: Boolean) {
         _showExactMatches.value = show
-        handleSearchState(lastFetchedSearchResult)
+        smoothUiTransition()
     }
 
     fun toggleApproximateMatches(show: Boolean) {
         _showApproximateMatches.value = show
-        handleSearchState(lastFetchedSearchResult)
+        smoothUiTransition()
     }
 
     fun toggleFilters(show: Boolean) {
         _showFilters.value = !show
-        handleSearchState(lastFetchedSearchResult)
     }
 
     private fun getCardByQuery() {
@@ -119,6 +125,46 @@ class SearchViewModel (
         }
 
         updateCombinedResults(lastFetchedSearchResult)
+    }
+
+    /**
+     * Initiates a debounced, simulated loading sequence for UI responsiveness and improved UX.
+     *
+     * It immediately transitions the UI to a loading state, holds for a brief period, defined in
+     * [SMOOTH_TRANSITION_DEBOUNCE], and then resolves to the final display state based on the latest data.
+     *
+     * Any previously ongoing transition is cancelled and managed by [smoothTransitionJob]
+     * to prevent race conditions and ensure UI consistency.
+     */
+    private fun smoothUiTransition()  {
+        smoothTransitionJob?.cancel()
+
+        if (lastFetchedSearchResult == null) { return }
+
+        smoothTransitionJob = viewModelScope.launch {
+            try {
+                when (_searchState.value) {
+                    SearchState.Loading, SearchState.Empty, is SearchState.Success -> {
+                        _searchState.value = SearchState.Loading
+                        delay(SMOOTH_TRANSITION_DEBOUNCE)
+                        if (!isActive) {
+                            Log.d("SmoothUiTransition", "Job cancelled during delay or before success update.")
+                            return@launch
+                        }
+                        handleSearchState(lastFetchedSearchResult!!)
+                    }
+                    else -> { // SearchState.Idle or SearchState.Error
+                        // The job implicitly completes without further action.
+                    }
+                }
+            } catch (e: CancellationException) {
+                Log.d("SmoothUiTransition", "Smooth UI transition job explicitly cancelled.")
+            } catch (e: Exception) {
+                Log.e("SmoothUiTransition", "Error during smooth UI transition: ${e.message}", e)
+            } finally {
+                smoothTransitionJob = null
+            }
+        }
     }
 
     /**
