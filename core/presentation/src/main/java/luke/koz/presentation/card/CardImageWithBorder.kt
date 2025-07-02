@@ -2,6 +2,8 @@ package luke.koz.presentation.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,10 +24,22 @@ import luke.koz.presentation.theme.GwentApiTheme
 fun CardImageWithBorder(
     cardId: Int,
     cardColor: String,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    shouldFillMaxSize : Boolean = false,
+    imageQuality: String = "low"
 ) {
     val context = LocalContext.current
-    Box(modifier = Modifier.size(150.dp, 215.dp)) {
+    Box(modifier = Modifier
+        .then(
+            if (shouldFillMaxSize) {
+                Modifier
+                    .fillMaxSize()
+                    .aspectRatio(150f / 215f)
+            } else {
+                Modifier.size(150.dp, 215.dp)
+            }
+        )
+    ) {
         Image(
             painter = painterResource(R.drawable.gwent_one_api_favicon_96x96),
             contentDescription = null,
@@ -33,7 +47,7 @@ fun CardImageWithBorder(
         )
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data("https://gwent.one/image/gwent/assets/card/art/low/${cardId}.jpg")
+                .data("https://gwent.one/image/gwent/assets/card/art/${imageQuality}/${cardId}.jpg")
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
             contentDescription = null,
