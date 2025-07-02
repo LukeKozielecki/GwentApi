@@ -13,7 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import luke.koz.auth.AuthScreen
-import luke.koz.cardartshowcase.ArtShowCaseScreen
+import luke.koz.cardartshowcase.ArtShowcaseScreen
 import luke.koz.carddetails.CardDetailScreen
 import luke.koz.cardgallery.CardGalleryScreen
 import luke.koz.gwentapi.application.GwentApplication
@@ -89,7 +89,7 @@ fun NavigationHost(
 
         composable<CardArtShowcaseDestination> { backStackEntry ->
             val args = backStackEntry.toRoute<CardArtShowcaseDestination>()
-            ArtShowCaseScreen(
+            ArtShowcaseScreen(
                 cardArtId = args.cardArtId,
                 cardColor = args.cardColor,
                 imageLoader = imageLoader

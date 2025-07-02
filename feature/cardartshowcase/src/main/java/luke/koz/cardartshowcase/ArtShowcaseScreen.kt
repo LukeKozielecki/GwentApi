@@ -7,14 +7,14 @@ import androidx.compose.ui.Modifier
 import coil3.ImageLoader
 
 @Composable
-fun ArtShowCaseScreen(
+fun ArtShowcaseScreen(
     cardArtId: Int,
     cardColor: String,
     imageLoader: ImageLoader,
 ) {
 
     Scaffold { innerPadding ->
-        ArtScreenShowcaseLayout(
+        ArtShowcaseScreenLayout(
             cardArtId = cardArtId,
             cardColor = cardColor,
             imageLoader = imageLoader,

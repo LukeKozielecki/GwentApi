@@ -24,7 +24,7 @@ import luke.koz.presentation.statusscreen.LoadingStatusScreen
 private const val MAX_ZOOM_MULTIPLIER: Float = 4f
 
 @Composable
-internal fun ArtScreenShowcaseLayout(
+internal fun ArtShowcaseScreenLayout(
     cardArtId: Int,
     cardColor: String,
     imageLoader: ImageLoader,
