@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
 import luke.koz.presentation.card.CardImageWithBorder
+import luke.koz.presentation.model.CardImageQuality
 
 @Composable
 internal fun ArtScreenShowcaseLayout(
@@ -28,7 +29,7 @@ internal fun ArtScreenShowcaseLayout(
             cardColor = cardColor,
             imageLoader = imageLoader,
             shouldFillMaxSize = true,
-            imageQuality = "high"
+            cardImageQuality = CardImageQuality.HIGH
         )
     }
 }

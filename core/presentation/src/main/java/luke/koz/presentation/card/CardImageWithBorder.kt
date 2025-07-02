@@ -18,6 +18,7 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import luke.koz.presentation.R
+import luke.koz.presentation.model.CardImageQuality
 import luke.koz.presentation.theme.GwentApiTheme
 
 @Composable
@@ -26,7 +27,7 @@ fun CardImageWithBorder(
     cardColor: String,
     imageLoader: ImageLoader,
     shouldFillMaxSize : Boolean = false,
-    imageQuality: String = "low"
+    cardImageQuality: CardImageQuality = CardImageQuality.LOW
 ) {
     val context = LocalContext.current
     Box(modifier = Modifier
@@ -47,7 +48,7 @@ fun CardImageWithBorder(
         )
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data("https://gwent.one/image/gwent/assets/card/art/${imageQuality}/${cardId}.jpg")
+                .data("https://gwent.one/image/gwent/assets/card/art/${cardImageQuality.value}/${cardId}.jpg")
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
             contentDescription = null,
