@@ -10,7 +10,7 @@ import luke.koz.presentation.statusscreen.ErrorStatusScreen
 @Composable
 fun CardDetailsStateHandler(
     state: CardDetailsState,
-    onCardClick: (Int) -> Unit,
+    onCardClick: (Int, String) -> Unit,
     imageLoader: ImageLoader
 ) {
     CardDetailsStateHandlerInternal(

@@ -4,7 +4,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,10 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import luke.koz.auth.AuthScreen
+import luke.koz.cardartshowcase.ArtShowcaseScreen
 import luke.koz.carddetails.CardDetailScreen
 import luke.koz.cardgallery.CardGalleryScreen
 import luke.koz.gwentapi.application.GwentApplication
 import luke.koz.navigation.AuthDestination
+import luke.koz.navigation.CardArtShowcaseDestination
 import luke.koz.navigation.CardDetailDestination
 import luke.koz.navigation.CardGalleryDestination
 import luke.koz.navigation.SearchDestination
@@ -67,6 +68,8 @@ fun NavigationHost(
             CardDetailScreen(
                 cardId = args.cardId,
                 onBack = { navController.popBackStack() },
+                onCardClick = { artId, cardColor ->
+                    navController.navigate(CardArtShowcaseDestination(artId, cardColor)) },
                 imageLoader = imageLoader
             )
         }
@@ -81,6 +84,15 @@ fun NavigationHost(
                 },
                 onPopBackStack = { navController.popBackStack() },
                 imageLoader = imageLoader,
+            )
+        }
+
+        composable<CardArtShowcaseDestination> { backStackEntry ->
+            val args = backStackEntry.toRoute<CardArtShowcaseDestination>()
+            ArtShowcaseScreen(
+                cardArtId = args.cardArtId,
+                cardColor = args.cardColor,
+                imageLoader = imageLoader
             )
         }
     }

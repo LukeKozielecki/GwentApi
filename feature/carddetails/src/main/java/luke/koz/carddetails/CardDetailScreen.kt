@@ -22,6 +22,7 @@ import luke.koz.presentation.state.CardDetailsState
 @Composable
 fun CardDetailScreen(
     cardId : Int,
+    onCardClick : (Int, String) -> Unit,
     onBack : () -> Unit,
     imageLoader: ImageLoader
 ) {
@@ -49,7 +50,7 @@ fun CardDetailScreen(
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 CardDetailsStateHandler(
                     state = cardState,
-                    onCardClick = { },
+                    onCardClick = onCardClick,
                     imageLoader = imageLoader
                 )
             }

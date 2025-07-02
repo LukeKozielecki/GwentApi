@@ -1,24 +1,18 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp")
-    alias(libs.plugins.kotlin.serialization)
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "luke.koz.gwentapi"
+    namespace = "luke.koz.cardartshowcase"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "luke.koz.gwentapi"
         minSdk = 28
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -36,16 +30,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-    }
-    packaging {
-        resources {
-            excludes.add("META-INF/INDEX.LIST")
-            excludes.add("META-INF/DEPENDENCIES")
-            excludes.add("META-INF/io.netty.versions.properties")
-        }
     }
 }
 
@@ -67,34 +51,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation (libs.retrofit)
-    implementation (libs.converter.gson)
-
-    implementation (libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-    implementation (libs.androidx.room.ktx)
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
-
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    implementation(libs.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.database.ktx)
-
-    implementation(project(":feature:carddetails"))
-    implementation(project(":feature:cardgallery"))
-    implementation(project(":feature:cardartshowcase"))
-    implementation(project(":feature:auth"))
-    implementation(project(":feature:search"))
-    implementation(project(":domain"))
-    implementation(project(":infrastructure"))
-    implementation(project(":navigation"))
-    implementation(project(":data"))
     implementation(project(":core:presentation"))
-    implementation(project(":core:di"))
 }

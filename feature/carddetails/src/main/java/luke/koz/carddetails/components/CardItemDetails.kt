@@ -27,7 +27,7 @@ import luke.koz.presentation.card.CardImageWithBorder
 @Composable
 fun CardItemDetails(
     card: CardDetailsEntry?,
-    onCardClick: (Int) -> Unit,
+    onCardClick: (Int, String) -> Unit,
     imageLoader: ImageLoader
 ) {
     Column(
@@ -38,7 +38,7 @@ fun CardItemDetails(
     ) {
         if (card != null) {
             // Clickable card image
-            Box(Modifier.clickable { onCardClick(card.cardId) }) {
+            Box(Modifier.clickable { onCardClick(card.artId, card.color) }) {
                 CardImageWithBorder(
                     card.artId,
                     card.color,

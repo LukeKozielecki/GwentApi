@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="Gwent_Api.di" target="21" />
+      <module name="Gwent_Api.feature.cardartshowcase" target="21" />
     </bytecodeTargetLevel>
   </component>
 </project>
