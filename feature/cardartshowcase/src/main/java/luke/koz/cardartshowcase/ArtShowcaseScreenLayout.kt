@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.ImageLoader
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import luke.koz.presentation.card.CardImageWithBorder
 import luke.koz.presentation.model.CardImageQuality
@@ -43,24 +44,15 @@ internal fun ArtScreenShowcaseLayout(
     val scope = rememberCoroutineScope()
 
     val transformableState = rememberTransformableState { zoomChange, offsetChange, _ ->
-        val newScale = (currentScaleAnimated.value * zoomChange)
-            .coerceIn(1f, MAX_ZOOM_MULTIPLIER)
-
-        val maxTranslateX = (containerSize.width * newScale - containerSize.width) / 2f
-        val maxTranslateY = (containerSize.height * newScale - containerSize.height) / 2f
-
-        val currentOffsetX = currentOffsetAnimated.value.x + offsetChange.x * newScale
-        val currentOffsetY = currentOffsetAnimated.value.y + offsetChange.y * newScale
-
-        val calculatedCurrentOffset = Offset(
-            x = currentOffsetX.coerceIn(-maxTranslateX, maxTranslateX),
-            y = currentOffsetY.coerceIn(-maxTranslateY, maxTranslateY)
+        handleTransformGesture(
+            zoomChange = zoomChange,
+            offsetChange = offsetChange,
+            currentScaleAnimated = currentScaleAnimated,
+            currentOffsetAnimated = currentOffsetAnimated,
+            containerSize = containerSize,
+            scope = scope,
+            maxZoomMultiplier = MAX_ZOOM_MULTIPLIER
         )
-
-        scope.launch {
-            currentScaleAnimated.snapTo(newScale)
-            currentOffsetAnimated.snapTo(calculatedCurrentOffset)
-        }
     }
 
     Box(
@@ -104,5 +96,34 @@ internal fun ArtScreenShowcaseLayout(
                 cardImageQuality = CardImageQuality.HIGH
             )
         }
+    }
+}
+
+private fun handleTransformGesture(
+    zoomChange: Float,
+    offsetChange: Offset,
+    currentScaleAnimated: Animatable<Float, *>,
+    currentOffsetAnimated: Animatable<Offset, *>,
+    containerSize: IntSize,
+    scope: CoroutineScope,
+    maxZoomMultiplier: Float
+) {
+    val newScale = (currentScaleAnimated.value * zoomChange)
+        .coerceIn(1f, maxZoomMultiplier)
+
+    val maxTranslateX = (containerSize.width * newScale - containerSize.width) / 2f
+    val maxTranslateY = (containerSize.height * newScale - containerSize.height) / 2f
+
+    val currentOffsetX = currentOffsetAnimated.value.x + offsetChange.x * newScale
+    val currentOffsetY = currentOffsetAnimated.value.y + offsetChange.y * newScale
+
+    val calculatedCurrentOffset = Offset(
+        x = currentOffsetX.coerceIn(-maxTranslateX, maxTranslateX),
+        y = currentOffsetY.coerceIn(-maxTranslateY, maxTranslateY)
+    )
+
+    scope.launch {
+        currentScaleAnimated.snapTo(newScale)
+        currentOffsetAnimated.snapTo(calculatedCurrentOffset)
     }
 }
