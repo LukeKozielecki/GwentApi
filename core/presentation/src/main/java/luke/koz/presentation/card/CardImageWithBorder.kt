@@ -27,7 +27,10 @@ fun CardImageWithBorder(
     cardColor: String,
     imageLoader: ImageLoader,
     shouldFillMaxSize : Boolean = false,
-    cardImageQuality: CardImageQuality = CardImageQuality.LOW
+    cardImageQuality: CardImageQuality = CardImageQuality.LOW,
+    borderImageQuality: CardImageQuality = CardImageQuality.MEDIUM,
+    onLoadSuccess: (() -> Unit)? = null,
+    onLoadError: (() -> Unit)? = null
 ) {
     val context = LocalContext.current
     Box(modifier = Modifier
@@ -54,11 +57,13 @@ fun CardImageWithBorder(
             contentDescription = null,
             imageLoader = imageLoader,
             contentScale = ContentScale.FillBounds,
+            onSuccess = { onLoadSuccess?.invoke() },
+            onError = { onLoadError?.invoke() },
             modifier = Modifier.matchParentSize()
         )
         AsyncImage(
             model = ImageRequest.Builder(context)
-                .data("https://gwent.one/image/gwent/assets/card/other/medium/border_${cardColor.lowercase()}.png")
+                .data("https://gwent.one/image/gwent/assets/card/other/${borderImageQuality.value}/border_${cardColor.lowercase()}.png")
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
             contentDescription = null,
