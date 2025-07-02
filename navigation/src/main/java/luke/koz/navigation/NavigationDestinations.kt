@@ -13,3 +13,6 @@ object SearchDestination
 
 @Serializable
 object AuthDestination
+
+@Serializable
+data class CardArtShowcaseDestination (val cardArtId: Int, val cardColor: String)

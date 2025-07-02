@@ -88,6 +88,7 @@ dependencies {
 
     implementation(project(":feature:carddetails"))
     implementation(project(":feature:cardgallery"))
+    implementation(project(":feature:cardartshowcase"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:search"))
     implementation(project(":domain"))
