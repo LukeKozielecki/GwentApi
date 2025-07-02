@@ -23,6 +23,17 @@ import luke.koz.presentation.statusscreen.LoadingStatusScreen
 
 private const val MAX_ZOOM_MULTIPLIER: Float = 4f
 
+/**
+ * Layout composable for displaying a card art showcase with interactive zoom and pan.
+ *
+ * This composable manages the overall UI state for image loading and gestures,
+ * delegating the display of the interactive image to [SuccessScreen] once loaded.
+ *
+ * @param cardArtId The ID of the card art to be displayed.
+ * @param cardColor The color string for the card border. Those are defined with strings in API.
+ * @param imageLoader The Coil [ImageLoader] instance used for fetching images.
+ * @param modifier The modifier to be applied to the [SuccessScreen] layout.
+ */
 @Composable
 internal fun ArtShowcaseScreenLayout(
     cardArtId: Int,
@@ -83,6 +94,21 @@ internal fun ArtShowcaseScreenLayout(
     }
 }
 
+/**
+ * Handles the logic for transform gestures zoom and pan. Calculating
+ * the new scale and offset values and updating the animated state.
+ *
+ * The offset is clamped to prevent the content from panning too far outside
+ * the container boundaries at the current zoom level.
+ *
+ * @param zoomChange The change in zoom scale from the gesture.
+ * @param offsetChange The change in offset from the gesture.
+ * @param currentScaleAnimated The [Animatable] representing the current animated scale.
+ * @param currentOffsetAnimated The [Animatable] representing the current animated offset.
+ * @param containerSize The [IntSize] of the container holding the transformable content.
+ * @param scope The [CoroutineScope] used to launch suspend function snapTo [Animatable.snapTo].
+ * @param maxZoomMultiplier The maximum allowed zoom level.
+ */
 private fun handleTransformGesture(
     zoomChange: Float,
     offsetChange: Offset,

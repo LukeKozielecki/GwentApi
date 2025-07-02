@@ -23,6 +23,28 @@ import kotlinx.coroutines.launch
 import luke.koz.presentation.card.CardImageWithBorder
 import luke.koz.presentation.model.CardImageQuality
 
+/**
+ * A Composable that displays the successfully loaded card art with interactive zoom and pan
+ * functionalities.
+ *
+ * This component is invoked for happy path where the image content is ready to be displayed
+ * and provides the UI for gestures and animations.
+ * It receives all necessary state and callback handlers from its parent.
+ *
+ * @param containerSize A [MutableState] holding the [IntSize] of the container, allowing this
+ * composable to update it when its size changes via [Modifier.onSizeChanged].
+ * @param currentScaleAnimated An [Animatable] controlling the current zoom scale of the content.
+ * @param currentOffsetAnimated An [Animatable] controlling the current pan offset of the content.
+ * @param scope The [CoroutineScope] used for launching animation coroutines.
+ * @param transformableState The [TransformableState] that handles and applies gesture input for
+ * zoom and pan.
+ * @param cardArtId The ID of the card art to be displayed.
+ * @param cardColor The color string for the card border. Those are defined with strings in API.
+ * @param imageLoader The Coil [ImageLoader] instance used by [CardImageWithBorder] to fetch images.
+ * @param onSuccessLoad A callback invoked when the primary image inside [CardImageWithBorder]
+ * successfully loads. This is used to signal the parent that the content is fully ready.
+ * @param modifier Optional modifier to be applied to the root layout of this composable.
+ */
 @Composable
 internal fun SuccessScreen(
     containerSize: MutableState<IntSize>,
