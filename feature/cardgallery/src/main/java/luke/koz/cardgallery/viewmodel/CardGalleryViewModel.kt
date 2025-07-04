@@ -6,7 +6,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -42,6 +45,9 @@ class CardGalleryViewModel (
     private val _currentUserId = MutableStateFlow<String?>(null)
     private val _hasInitialAuthResolved = MutableStateFlow(false)
     private val _wasInternetInitiallyUnavailable = MutableStateFlow(false)
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing : StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     init {
         _cardGalleryState.value = CardGalleryState.Loading
@@ -239,6 +245,39 @@ class CardGalleryViewModel (
                     }
                     Log.e("CardGalleryVM", "Like update for card $cardId failed: $errorMessage", e)
                 }
+        }
+    }
+
+    // todo this COULD ask user with an Alert Dialog what user wishes to refresh - likes cards or all
+    /**
+     * This function is intended to be called on `Pull to refresh` user action collected.
+     * Function stores the [CardGalleryState] it originated from, in case it cant fetch data it
+     * reverts to the previous state. Than it attempts to call [refreshCardGalleryDataUseCase]
+     * to fetch the most up to date data.
+     * On exception it logs the error and reverts [cardGalleryState] to the previous state.
+     */
+    fun onPullToRefresh() {
+        val initialCardState = _cardGalleryState.value
+        /* This _isRefreshing is required because otherwise the indicator won't clear*/
+        _isRefreshing.value = true
+        _cardGalleryState.value = CardGalleryState.Loading
+        viewModelScope.launch {
+            try {
+                /* This delay and _isRefreshing is here because otherwise the indicator won't clear */
+                delay(10)
+                _isRefreshing.value = false
+
+                // Force refresh cards
+                val cardGalleryData = refreshCardGalleryDataUseCase.invoke(forceRefreshCards = true)
+                _rawCardsFlow.value = cardGalleryData.rawCards
+                _likedCardIdsFlow.value = cardGalleryData.likedCardIds
+                _allCardLikesFlow.value = cardGalleryData.allCardLikes
+            } catch (e: Exception) {
+                Log.e("CardGalleryVM", "Refresh failed: ${e.message}", e)
+            } finally {
+                //todo add Toast to user to communicate what has happened
+                _cardGalleryState.value = initialCardState
+            }
         }
     }
 }

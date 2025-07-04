@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +21,7 @@ import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.presentation.scaffold.CoreTopAppBar
 import luke.koz.presentation.state.CardGalleryState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CardGalleryScreenLayout(
     cardState: CardGalleryState,
@@ -25,12 +29,12 @@ internal fun CardGalleryScreenLayout(
     onProfileClicked: () -> Unit,
     onSearchClicked: () -> Unit,
     onToggleLike: (Int, Boolean) -> Unit,
-    onRefreshClick: () -> Unit,
+    onPullToRefresh: () -> Unit,
+    onErrorRefreshRequest: () -> Unit,
+    isRefreshing: Boolean,
+    pullToRefreshState: PullToRefreshState,
     imageLoader: ImageLoader
 ) {
-    //todo add pull from top to trigger .getAllCards() Pull to refresh
-    // https://developer.android.com/develop/ui/compose/components/pull-to-refresh
-
     Scaffold (
         topBar = {
             CoreTopAppBar(
@@ -51,21 +55,28 @@ internal fun CardGalleryScreenLayout(
             )
         }
     ) { innerPadding ->
-        Column(
+        PullToRefreshBox(
+            state = pullToRefreshState,
+            onRefresh = { onPullToRefresh() },
+            isRefreshing = isRefreshing,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(innerPadding)
         ) {
-            CardGalleryStateHandler(
-                state = cardState,
-                onCardClick = onCardClick,
-                onToggleLike = onToggleLike,
-                onRefreshClick = onRefreshClick,
-                imageLoader = imageLoader
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CardGalleryStateHandler(
+                    state = cardState,
+                    onCardClick = onCardClick,
+                    onToggleLike = onToggleLike,
+                    onRefreshClick = onErrorRefreshRequest,
+                    imageLoader = imageLoader
+                )
+            }
         }
-
     }
 }

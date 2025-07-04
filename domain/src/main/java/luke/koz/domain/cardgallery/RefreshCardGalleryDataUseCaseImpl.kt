@@ -16,7 +16,7 @@ class RefreshCardGalleryDataUseCaseImpl(
     private val networkConnectivityChecker: NetworkConnectivityChecker
 ) : RefreshCardGalleryDataUseCase {
 
-    override suspend fun invoke(forceRefreshCards: Boolean): CardGalleryData { // Change return type
+    override suspend fun invoke(forceRefreshCards: Boolean): CardGalleryData {
         val currentUser = authStatusRepository.observeCurrentUser().first()
         val currentUserId = currentUser?.id
 
@@ -28,7 +28,6 @@ class RefreshCardGalleryDataUseCaseImpl(
 
         val allCardLikes = userLikesDataSource.getLikesForAllCards()
 
-        // Construct and return the custom data class
         return CardGalleryData(rawCards, likedCardIds, allCardLikes)
     }
 
