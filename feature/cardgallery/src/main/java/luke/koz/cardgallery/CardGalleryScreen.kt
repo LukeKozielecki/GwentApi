@@ -1,25 +1,15 @@
 package luke.koz.cardgallery
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import coil3.ImageLoader
-import luke.koz.cardgallery.components.CardGalleryStateHandler
 import luke.koz.cardgallery.viewmodel.CardGalleryViewModel
 import luke.koz.cardgallery.viewmodel.provideCardGalleryViewModel
-import luke.koz.presentation.scaffold.CoreTopAppBar
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardGalleryScreen(
     onCardClick: (Int) -> Unit,
@@ -29,45 +19,19 @@ fun CardGalleryScreen(
 ) {
     val viewModel: CardGalleryViewModel = provideCardGalleryViewModel()
     val cardState by viewModel.cardGalleryState
+    val pullToRefreshState = rememberPullToRefreshState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
 
-    //todo add pull from top to trigger .getAllCards() Pull to refresh
-    // https://developer.android.com/develop/ui/compose/components/pull-to-refresh
-
-    Scaffold (
-        topBar = {
-            CoreTopAppBar(
-                actions = {
-                    IconButton(onClick = onSearchClicked) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
-                        )
-                    }
-                    IconButton(onClick = onProfileClicked) {
-                        Icon(
-                            imageVector = Icons.Default.AccountCircle,
-                            contentDescription = "User Profile"
-                        )
-                    }
-                }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CardGalleryStateHandler(
-                state = cardState,
-                onCardClick = onCardClick,
-                onToggleLike = viewModel::toggleLike,
-                onRefreshClick = viewModel::getAllCards,
-                imageLoader = imageLoader
-            )
-        }
-
-    }
+    CardGalleryScreenLayout(
+        cardState = cardState,
+        onCardClick = onCardClick,
+        onProfileClicked = onProfileClicked,
+        onSearchClicked = onSearchClicked,
+        onToggleLike = viewModel::toggleLike,
+        onPullToRefresh = viewModel::onPullToRefresh,
+        onErrorRefreshRequest = viewModel::getAllCards,
+        pullToRefreshState = pullToRefreshState,
+        isRefreshing = isRefreshing,
+        imageLoader = imageLoader
+    )
 }
